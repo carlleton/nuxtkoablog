@@ -20,11 +20,12 @@ module.exports = {
   /*
   ** Customize the progress-bar color
   */
-  loading: { color: '#3B8070' },
+  loading: '~/components/loading.vue',
   /*
    ** Build configuration
    */
   build: {
+    vendor: ['axios'],
     /*
      ** Run ESLINT on save
      */
@@ -37,6 +38,14 @@ module.exports = {
           exclude: /(node_modules)/
         })
       }
+    }
+  },
+  render: {
+    bundleRenderer: {
+      cache: require('lru-cache')({
+        max: 1000,
+        maxAge: 1000 * 60 * 15
+      })
     }
   }
 }

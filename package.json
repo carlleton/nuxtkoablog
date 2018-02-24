@@ -12,8 +12,10 @@
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore ."
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "cross-env": "^5.0.1",
     "koa": "^2.4.1",
+    "lru-cache": "^4.1.1",
     "mysql": "^2.15.0",
     "nuxt": "latest",
     "source-map-support": "^0.4.15"

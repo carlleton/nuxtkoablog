@@ -9,7 +9,14 @@
     </nuxt-link>
   </section>
 </template>
-
+<script>
+  export default {
+    serverCacheKey() {
+      // Will change every 10 minutes
+      return Math.floor(Date.now() / 600000)
+    }
+  }
+</script>
 <style scoped>
 .title
 {
