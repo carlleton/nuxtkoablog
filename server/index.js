@@ -3,8 +3,16 @@ import { Nuxt, Builder } from 'nuxt'
 
 async function start () {
   const app = new Koa()
+  const bodyParser = require('koa-bodyparser')
+  const router = require('koa-router')()
   const host = process.env.HOST || '127.0.0.1'
   const port = process.env.PORT || 3001
+
+  app.use(bodyParser)
+
+  let api = require('./api/index')
+  router.use('/api', apiRouter.routes())
+  app.use(router.routes())
 
   // Import and Set Nuxt.js options
   let config = require('../nuxt.config.js')

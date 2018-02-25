@@ -25,3 +25,8 @@ using a prerelease version of Node (i.e. v7.6.0-rc.1) you will need to either:
   2. Run `yarn` with a standard release of Node and then switch back
 
 For detailed explanation on how things work, checkout the [Nuxt.js docs](https://github.com/nuxt/nuxt.js).
+
+参考：
+* [akoa](https://github.com/alwxkxk/akoa)
+* [koa2-note](https://github.com/chenshenhai/koa2-note)
+* [justyeh.com](https://github.com/justyeh/justyeh.com)
