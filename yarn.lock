@@ -3627,6 +3627,10 @@ jsprim@^1.2.2:
     json-schema "0.2.3"
     verror "1.10.0"
 
+jwt-simple@^0.5.1:
+  version "0.5.1"
+  resolved "http://registry.npm.taobao.org/jwt-simple/download/jwt-simple-0.5.1.tgz#79ea01891b61de6b68e13e67c0b4b5bda937b294"
+
 keygrip@~1.0.2:
   version "1.0.2"
   resolved "http://registry.npm.taobao.org/keygrip/download/keygrip-1.0.2.tgz#ad3297c557069dea8bcfe7a4fa491b75c5ddeb91"

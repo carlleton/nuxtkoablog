@@ -1,18 +1,18 @@
 import Koa from 'koa'
 import { Nuxt, Builder } from 'nuxt'
+import bodyParser from 'koa-bodyparser'
+
+const app = new Koa()
+const host = process.env.HOST || '127.0.0.1'
+const port = process.env.PORT || 3001
+
+app.use(bodyParser())
+
+let api = require('./api/index')
+app.use(api.routes())
+app.listen(port, host)
 
 async function start () {
-  const app = new Koa()
-  const bodyParser = require('koa-bodyparser')
-  const router = require('koa-router')()
-  const host = process.env.HOST || '127.0.0.1'
-  const port = process.env.PORT || 3001
-
-  app.use(bodyParser)
-
-  let api = require('./api/index')
-  router.use('/api', apiRouter.routes())
-  app.use(router.routes())
 
   // Import and Set Nuxt.js options
   let config = require('../nuxt.config.js')
@@ -44,4 +44,4 @@ async function start () {
   console.log('Server listening on ' + host + ':' + port) // eslint-disable-line no-console
 }
 
-start()
+// start()

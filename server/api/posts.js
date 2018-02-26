@@ -1,16 +1,70 @@
+import Posts from '../models/Posts'
 const router = require('koa-router')()
 const db = require('../../util/db')
 
-router.get('/list', (ctx, next) => {
+let postsModel = new Posts()
 
+router.get('/:id', async (ctx, next) => {
+  var id = ctx.params.id
+  var result = await postsModel.findOne(id)
+  ctx.status = 200
+  ctx.body = result.result
 })
 
-router.post('/add', (ctx, next) => {
-
+router.get('/list/:pageNum', async (ctx, next) => {
+  var params = {
+    scope: ctx.query.scope || '',
+    pageNum: ctx.params.pageNum || 0
+  }
+  var result = await postsModel.list(params)
+  if (result.err) {
+    ctx.status = 404
+    ctx.body = { code: 404, message: 'no result' }
+  } else {
+    ctx.status = 200
+    ctx.body = result.result
+  }
 })
 
-router.post('/update', (ctx, next) => {
+router.post('/add', async (ctx, next) => {
+  var body = ctx.request.body
+  var params = {
+    title: body.title,
+    content: body.content,
+    cid: body.cid,
+    status: body.status
+  }
+  var result = await postsModel.add(params)
+  if (result.error) {
+    ctx.status = 404
+    ctx.body = { code: 404, message: 'no result' }
+  } else {
+    ctx.status = 200
+    ctx.body = {
+      id: result.result.insertId
+    }
+  }
+})
 
+router.post('/update', async (ctx, next) => {
+  var body = ctx.request.body
+  var params = {
+    id:body.id,
+    title: body.title,
+    content: body.content,
+    cid: body.cid,
+    status: body.status
+  }
+  var result = await postsModel.update(params)
+  if (result.error) {
+    ctx.status = 404
+    ctx.body = { code: 404, message: 'no result' }
+  } else {
+    ctx.status = 200
+    ctx.body = {
+      changedRows: result.result.changedRows
+    }
+  }
 })
 
 module.exports = router

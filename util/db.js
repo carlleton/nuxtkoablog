@@ -10,28 +10,39 @@ pool.on('connection', function (connection) {
   })
 })
 
-function query (sql, params, callback) {
-  try {
-    pool.getConnection((err, connection) => {
-      if (err) {
-        console.log(err)
-        return callback(true)
-      }
-      //链接
-      connection.query(sql, params, (err, result) => {
-        //释放链接
-        connection.release()
+function query (sql, params) {
+  return new Promise((resolve, reject) => {
+    try {
+      pool.getConnection((err, connection) => {
         if (err) {
-          console.error('db error17:' + err)
-          return callback(true)
+          console.log(err)
+          return resolve({
+            err: true
+          })
         }
-        callback(false, result)
+        //链接
+        connection.query(sql, params, (err, result) => {
+          //释放链接
+          connection.release()
+          if (err) {
+            console.error('db error17:' + err)
+            return resolve({
+              err: true
+            })
+          }
+          resolve({
+            err: false,
+            result: result
+          })
+        })
       })
-    })
-  } catch (err) {
-    console.error('db error24:' + err)
-    return callback(true)
-  }
+    } catch (err) {
+      console.error('db error24:' + err)
+      return resolve({
+        err: true
+      })
+    }
+  })
 }
 
 module.exports.query = query
