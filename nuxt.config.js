@@ -25,7 +25,7 @@ module.exports = {
    ** Build configuration
    */
   build: {
-    vendor: ['axios'],
+    vendor: ['axios','iview'],
     /*
      ** Run ESLINT on save
      */
