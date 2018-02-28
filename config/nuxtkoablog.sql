@@ -1,5 +1,5 @@
 ﻿# Host: localhost  (Version: 5.5.53)
-# Date: 2018-02-26 11:27:32
+# Date: 2018-02-28 18:43:18
 # Generator: MySQL-Front 5.3  (Build 4.234)
 
 /*!40101 SET NAMES utf8 */;
@@ -21,6 +21,7 @@ CREATE TABLE `cate` (
 #
 
 /*!40000 ALTER TABLE `cate` DISABLE KEYS */;
+INSERT INTO `cate` VALUES (0,NULL,0);
 /*!40000 ALTER TABLE `cate` ENABLE KEYS */;
 
 #
@@ -37,7 +38,7 @@ CREATE TABLE `posts` (
   `addtime` bigint(20) DEFAULT NULL,
   `updatetime` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 #
 # Data for table "posts"

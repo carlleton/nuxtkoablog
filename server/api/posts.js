@@ -71,7 +71,22 @@ router.post('/update', async (ctx, next) => {
   } else {
     ctx.status = 200
     ctx.body = {
-      changedRows: result.result.changedRows
+      rows: result.result.affectedRows
+    }
+  }
+})
+
+router.post('/del', async (ctx, next) => {
+  var body = ctx.request.body
+
+  var result = await postsModel.del(body.id)
+  if (result.error) {
+    ctx.status = 404
+    ctx.body = { code: 404, message: 'no result' }
+  } else {
+    ctx.status = 200
+    ctx.body = {
+      rows: result.result.affectedRows
     }
   }
 })

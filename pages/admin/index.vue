@@ -1,6 +1,6 @@
 <template>
   <div>
-    admin
+    内容展示
   </div>
 </template>
 <script>

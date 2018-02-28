@@ -5,9 +5,9 @@ export default class Posts {
 
   // 根据页码获取当前页Post列表
   list(params) {
-    let sql = 'select * from posts'
+    let sql = 'select posts.*,cate.catename from posts,cate where (posts.cid = cate.id or posts.cid = 0)'
     if (params.scope === 'published') {
-      sql += ` where status = '${params.scope}'`
+      sql += ` and status = '${params.scope}'`
     }
     if (params.where) {
       sql += ' and ' + params.where
@@ -19,7 +19,7 @@ export default class Posts {
 
   // 根据id获取Post详情
   findOne(id) {
-    let sql = 'select * from posts where id = ?'
+    let sql = 'select posts.*,cate.catename from posts,cate where (posts.cid = cate.id or posts.cid = 0) and posts.id = ?'
     return db.query(sql, [id])
   }
 
@@ -54,5 +54,11 @@ export default class Posts {
     params.push(post.id)
 
     return db.query(sql, params)
+  }
+
+  // 删除信息
+  del(id) {
+    var sql = 'delete from posts where id = ?'
+    return db.query(sql, [id])
   }
 }

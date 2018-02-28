@@ -16,7 +16,13 @@ module.exports = {
   /*
   ** Global CSS
   */
-  css: ['~assets/css/main.css'],
+  css: [
+    '~assets/css/main.css',
+    'iview/dist/styles/iview.css'
+  ],
+  plugins: [
+    '~plugins/iview'
+  ],
   /*
   ** Customize the progress-bar color
   */
