@@ -9,6 +9,7 @@ let config = {
   needAuth: [
     '/api/posts/add',
     '/api/posts/update',
+    '/api/posts/del',
     '/api/tags/add',
   ],
   pageSize: 20

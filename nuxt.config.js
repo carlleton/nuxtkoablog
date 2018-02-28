@@ -21,7 +21,8 @@ module.exports = {
     'iview/dist/styles/iview.css'
   ],
   plugins: [
-    '~plugins/iview'
+    '~plugins/iview',
+    {src: '~plugins/mavon-editor',ssr: false}
   ],
   /*
   ** Customize the progress-bar color
@@ -31,7 +32,7 @@ module.exports = {
    ** Build configuration
    */
   build: {
-    vendor: ['axios','iview'],
+    vendor: ['axios','iview','mavon-editor'],
     /*
      ** Run ESLINT on save
      */

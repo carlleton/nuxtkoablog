@@ -5,7 +5,7 @@
 export default {
   layout: 'admin',
   head: {
-    title: '编辑'
+    title: '标签管理'
   }
 }
 </script>

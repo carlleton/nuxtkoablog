@@ -133,8 +133,5 @@ export default {
 }
 </script>
 <style scoped>
-.tabletit{
-  overflow: auto;
-  margin-bottom: 10px;
-}
+
 </style>

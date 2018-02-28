@@ -31,7 +31,7 @@ export default class Posts {
       post.content,
       post.cid,
       post.status,
-      new Date().getTime(),
+      post.addtime || new Date().getTime(),
       new Date().getTime()
     ]
     return db.query(sql, params)

@@ -21,6 +21,7 @@
     "koa-router": "^7.4.0",
     "lodash": "^4.17.5",
     "lru-cache": "^4.1.1",
+    "mavon-editor": "^2.4.16",
     "mysql": "^2.15.0",
     "nuxt": "latest",
     "source-map-support": "^0.4.15"

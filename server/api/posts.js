@@ -41,7 +41,8 @@ router.post('/add', async (ctx, next) => {
     title: body.title,
     content: body.content,
     cid: body.cid,
-    status: body.status
+    status: body.status,
+    addtime: body.addtime
   }
   var result = await postsModel.add(params)
   if (result.error) {

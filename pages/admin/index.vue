@@ -5,6 +5,9 @@
 </template>
 <script>
   export default {
-    layout: 'admin'
+    layout: 'admin',
+    head: {
+      title: '后台管理'
+    }
   }
 </script>

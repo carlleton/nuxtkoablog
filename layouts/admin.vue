@@ -31,6 +31,7 @@
   </div>
 </template>
 <script>
+import '../assets/css/admin.css'
 export default {
   data() {
     return {
@@ -39,7 +40,6 @@ export default {
           name: '内容管理',
           childs: [
             {name: '内容列表', link: '/admin/posts/list'},
-            {name: '添加', link: '/admin/posts/add'},
             {name: '分类管理', link: '/admin/posts/cates'},
             {name: '标签管理', link: '/admin/posts/tags'}
           ]
