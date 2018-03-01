@@ -62,8 +62,7 @@ export default {
                 },
                 on: {
                   click: () => {
-                    console.log('edit', params.row.id)
-                    this.$router.push('./update?id=' + params.row.id)
+                    this.$router.push('./detail?id=' + params.row.id)
                   }
                 }
               }, '编辑'),

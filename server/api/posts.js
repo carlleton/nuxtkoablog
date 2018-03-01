@@ -1,13 +1,15 @@
 import Posts from '../models/Posts'
+import Cates from '../models/Cates'
 const router = require('koa-router')()
 const db = require('../../util/db')
 const _ = require('lodash')
 
 let postsModel = new Posts()
+let catesModel = new Cates()
 
 router.get('/:id', async (ctx, next) => {
-  var id = ctx.params.id
-  if (!_.isInteger(id)) {
+  var id = _.toNumber(ctx.params.id)
+  if (!id || !_.isNumber(id)) {
     ctx.status = 404
     ctx.body = {
       code: 404,
@@ -15,9 +17,56 @@ router.get('/:id', async (ctx, next) => {
     }
     return
   }
-  var result = await postsModel.findOne(id)
+  var result = await postsModel.one(id)
   ctx.status = 200
-  ctx.body = result.result
+  var data = result.result
+  if (data.length > 0) {
+    ctx.body = data[0]
+  } else {
+    ctx.body = {}
+  }
+})
+
+router.get('/cate:cid', async (ctx, next) => {
+  var cid = ctx.params.cid
+  if (!_.isInteger(cid)) {
+    ctx.status = 404
+    ctx.body = {
+      code: 404,
+      message: 'no result'
+    }
+    return
+  }
+  var result = await postsModel.findOneByCate(cid)
+  if (!result) {
+    var cate = await catesModel.one(cid)
+    if (!cate) {
+      ctx.status = 404
+      ctx.body = {code: 404, message: 'no result'}
+      return
+    }
+    var params = {
+      title: cate.catename,
+      content: '',
+      cid: cid,
+      status: 'published',
+      addtime: new Date().getTime()
+    }
+    var resultAdd = await postsModel.add(params)
+    if (resultAdd.error) {
+      ctx.status = 404
+      ctx.body = { code: 404, message: 'no result' }
+      return
+    }
+    result = await postsModel.findOneByCate(cid)
+  }
+  ctx.status = 200
+  var data = result.result
+  if (data.length > 0) {
+    ctx.body = data[0]
+  } else {
+    ctx.body = {}
+  }
 })
 
 router.get('/list/:pageNum', async (ctx, next) => {
@@ -63,7 +112,8 @@ router.post('/update', async (ctx, next) => {
     title: body.title,
     content: body.content,
     cid: body.cid,
-    status: body.status
+    status: body.status,
+    addtime: body.addtime
   }
   var result = await postsModel.update(params)
   if (result.error) {

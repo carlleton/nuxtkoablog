@@ -1,7 +1,7 @@
 let db = require('../../util/db')
 let pageSize = require('../../config/config').pageSize
 
-export default class Posts {
+export default class Cates {
 
   // 根据页码获取当前页Post列表
   list(params) {
@@ -19,7 +19,7 @@ export default class Posts {
 
   // 根据id获取Post详情
   one(id) {
-    let sql = 'select posts.*,cates.catename from posts,cates where (posts.cid = cates.id or posts.cid = 0) and posts.id = ?'
+    let sql = 'select * from cates id = ?'
     return db.query(sql, [id])
   }
 
