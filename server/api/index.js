@@ -2,14 +2,14 @@ const router = require('koa-router')()
 
 const users = require('./users')
 const posts = require('./posts')
-const tags = require('./tags')
+const cates = require('./cates')
 
 router.prefix('/api')
 
 
 router.use('/users', users.routes())
 router.use('/posts', posts.routes(), posts.allowedMethods())
-router.use('/tags', tags.routes())
+router.use('/cates', cates.routes())
 
 router.all('/', async (ctx, next) => {
   ctx.status = 200

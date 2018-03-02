@@ -4,17 +4,32 @@ let pageSize = require('../../config/config').pageSize
 export default class Posts {
 
   // 根据页码获取当前页Post列表
-  list(params) {
-    let sql = 'select posts.*,cates.catename from posts,cates where (posts.cid = cates.id or posts.cid = 0)'
-    if (params.scope === 'published') {
-      sql += ` and status = '${params.scope}'`
+  list(obj) {
+    var sendParams = []
+    var sql = 'select * from posts where 1=1'
+    if (obj.scope === 'published') {
+      sql += ` and status = '${obj.scope}'`
     }
-    if (params.where) {
-      sql += ' and ' + params.where
+    if (obj.tag) {
+      sql += ` and concat(concat(',',tags),',') like '%,?,%'`
+      sendParams.push(obj.tag)
+    }
+    if (obj.keyword) {
+      sql += ` and title like ?`
+      sendParams.push('%' + obj.keyword + '%')
+    }
+    if (obj.cid) {
+      sql += ` and posts.cid = ?`
+      sendParams.push(obj.cid)
+    }
+    if (obj.where) {
+      sql += ' and ' + obj.where
     }
     sql += ' order by id desc'
-    sql += ` limit ${params.pageNum * pageSize}, ${pageSize}`
-    return db.query(sql, [])
+    sql += ' limit ?, ?'
+    sendParams.push(obj.pageNum * pageSize)
+    sendParams.push(pageSize)
+    return db.query(sql, sendParams)
   }
 
   // 根据id获取Post详情
@@ -31,12 +46,13 @@ export default class Posts {
 
   // 插入Post
   add(post) {
-    let sql = 'insert into posts (title,content,cid,status,addtime,updatetime) values (?, ?, ?, ?, ?, ?)'
+    let sql = 'insert into posts (title,content,cid,status,tags,addtime,updatetime) values (?, ?, ?, ?, ?, ?)'
     let params = [
       post.title,
       post.content,
       post.cid,
       post.status,
+      post.tags,
       post.addtime || new Date().getTime(),
       new Date().getTime()
     ]

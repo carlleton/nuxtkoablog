@@ -7,28 +7,25 @@ const _ = require('lodash')
 let postsModel = new Posts()
 let catesModel = new Cates()
 
-router.get('/:id', async (ctx, next) => {
-  var id = _.toNumber(ctx.params.id)
-  if (!id || !_.isNumber(id)) {
-    ctx.status = 404
-    ctx.body = {
-      code: 404,
-      message: 'no result'
-    }
-    return
+router.get('/list', async (ctx, next) => {
+  var params = {
+    scope: ctx.query.scope || '',
+    pageNum: ctx.query.page || 0,
+    cid: ctx.query.cid || '',
+    keyword: ctx.query.keyword || ''
   }
-  var result = await postsModel.one(id)
-  ctx.status = 200
-  var data = result.result
-  if (data.length > 0) {
-    ctx.body = data[0]
+  var result = await postsModel.list(params)
+  if (result.err) {
+    ctx.status = 404
+    ctx.body = { code: 404, message: 'no result list' }
   } else {
-    ctx.body = {}
+    ctx.status = 200
+    ctx.body = result.result
   }
 })
 
 router.get('/cate:cid', async (ctx, next) => {
-  var cid = ctx.params.cid
+  var cid = _.toNumber(ctx.params.cid)
   if (!_.isInteger(cid)) {
     ctx.status = 404
     ctx.body = {
@@ -66,21 +63,6 @@ router.get('/cate:cid', async (ctx, next) => {
     ctx.body = data[0]
   } else {
     ctx.body = {}
-  }
-})
-
-router.get('/list/:pageNum', async (ctx, next) => {
-  var params = {
-    scope: ctx.query.scope || '',
-    pageNum: ctx.params.pageNum || 0
-  }
-  var result = await postsModel.list(params)
-  if (result.err) {
-    ctx.status = 404
-    ctx.body = { code: 404, message: 'no result' }
-  } else {
-    ctx.status = 200
-    ctx.body = result.result
   }
 })
 
@@ -139,6 +121,26 @@ router.post('/del', async (ctx, next) => {
     ctx.body = {
       rows: result.result.affectedRows
     }
+  }
+})
+
+router.get('/:id', async (ctx, next) => {
+  var id = _.toNumber(ctx.params.id)
+  if (!id || !_.isNumber(id)) {
+    ctx.status = 404
+    ctx.body = {
+      code: 404,
+      message: 'no result'
+    }
+    return
+  }
+  var result = await postsModel.one(id)
+  ctx.status = 200
+  var data = result.result
+  if (data.length > 0) {
+    ctx.body = data[0]
+  } else {
+    ctx.body = {}
   }
 })
 

@@ -9,6 +9,17 @@
         <Button type="primary" size="small" @click="gotoadd()">添加</Button>
       </div>
     </div>
+    <div class="tabletit">
+      分类：
+      <Select v-model="search.cid" style="width:150px;">
+        <Option value="0">未分类</Option>
+        <Option v-for="cate in cates" :value="cate.id" :key="cate.id">
+          {{cateshow(cate.path)}}{{cate.catename}}
+        </Option>
+      </Select>
+      <Input v-model="search.keyword" placeholder="关键词" style="width:200px;margin-left:10px;"></Input>
+      <Button type="primary" style="margin-left:10px;" size="small" @click="goSearch()">搜索</Button>
+    </div>
     <Table stripe :columns="columns" :data="postsdata"></Table>
   </div>
 </template>
@@ -23,6 +34,10 @@ export default {
   },
   data() {
     return {
+      search: {
+        cid: '0',
+        keyword: ''
+      },
       columns: [
         {
           title: 'id',
@@ -34,7 +49,15 @@ export default {
         },
         {
           title: '分类',
-          key: 'catename'
+          key: 'catename',
+          render: (h, params) => {
+            var cate = this.cates.filter(cate => params.row.cid === cate.id)
+            var catename = '未分类'
+            if (cate.length > 0) {
+              catename = cate[0].catename
+            }
+            return h('div', catename)
+          }
         },
         {
           title: '时间',
@@ -110,23 +133,46 @@ export default {
     }
   },
   async asyncData({query}) {
-    var pageNum = query.pageNum || 0
-    var url = 'http://localhost:3001/api/posts/list/' + pageNum
+    var pageNum = query.page || 0
+    var cid = query.cid || ''
+    var url = 'http://localhost:3001/api/posts/list?page=' + pageNum + '&cid=' + cid
     let {data} = await axios.get(url)
+    let cates = await axios.get('http://localhost:3001/api/cates/list')
     return {
+      cates: cates.data,
       postsdata: data
     }
   },
   methods: {
     async getData() {
       console.log(this.$route)
-      var pageNum = this.$route.query.pageNum || 0
-      var url = 'http://localhost:3001/api/posts/list/' + pageNum
+      var pageNum = this.$route.query.page || 0
+      var cid = this.$route.query.cid || 0
+      var url = 'http://localhost:3001/api/posts/list?page=' + pageNum + '&cid=' + cid
+      let {data} = await axios.get(url)
+      this.postsdata = data
+    },
+    async goSearch() {
+      var pageNum = this.$route.query.page || 0
+      var cid = this.search.cid || ''
+      var url = 'http://localhost:3001/api/posts/list?page=' + pageNum + '&cid=' + cid + '&keyword=' + this.search.keyword
       let {data} = await axios.get(url)
       this.postsdata = data
     },
     gotoadd() {
-      this.$router.push('./add')
+      this.$router.push('./detail')
+    },
+    cateshow(value) {
+      var vals = value.split(',')
+      var str = ''
+      var deep = 3
+      if (vals.length > deep) {
+        str += new Array(vals.length - deep).join('┆')
+      }
+      if (vals.length > deep - 1) {
+        str += '└'
+      }
+      return str
     }
   }
 }

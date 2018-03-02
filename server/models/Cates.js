@@ -4,67 +4,73 @@ let pageSize = require('../../config/config').pageSize
 export default class Cates {
 
   // 根据页码获取当前页Post列表
-  list(params) {
-    let sql = 'select posts.*,cates.catename from posts,cates where (posts.cid = cates.id or posts.cid = 0)'
-    if (params.scope === 'published') {
-      sql += ` and status = '${params.scope}'`
+  list(obj) {
+    var params = []
+    var sql = 'select * from cates where 1=1'
+    if (obj.pid) {
+      sql += ' and pid = ?'
+      params.push(obj.pid)
     }
-    if (params.where) {
-      sql += ' and ' + params.where
+    if (obj.deepid) {
+      sql += ` and path like concat((select path from cates where id = ?),'%')`
+      params.push(obj.deepid)
     }
-    sql += ' order by id desc'
-    sql += ` limit ${params.pageNum * pageSize}, ${pageSize}`
-    return db.query(sql, [])
+    sql += ' order by path asc,orderid asc,id asc'
+    return db.query(sql, params)
   }
 
   // 根据id获取Post详情
   one(id) {
-    let sql = 'select * from cates id = ?'
+    var sql = 'select * from cates where id = ?'
     return db.query(sql, [id])
   }
 
-  // 根据类型id获取单个posts
-  findOneByCate(cid) {
-    let sql = 'select posts.*,cates.catename from posts,cates where posts.cid = cates.id and posts.cid = ? limit 0, 1'
-    return db.query(sql, [cid])
+  find({where,order,limit}) {
+    var sql = 'select * from cates where 1 = 1'
+    if (where) {
+      sql += ' and ' + where
+    }
+    if (order) {
+      sql += ' order by ' + order
+    }
+    if (limit) {
+      sql += ' limit ' + limit
+    }
+    return db.query(sql, [])
   }
 
   // 插入Post
-  add(post) {
-    let sql = 'insert into posts (title,content,cid,status,addtime,updatetime) values (?, ?, ?, ?, ?, ?)'
+  add(obj) {
+    let sql = 'insert into cates (catename,pid,orderid,path) values (?, ?, ?, ?)'
     let params = [
-      post.title,
-      post.content,
-      post.cid,
-      post.status,
-      post.addtime || new Date().getTime(),
-      new Date().getTime()
+      obj.catename,
+      obj.pid,
+      obj.orderid,
+      obj.path
     ]
     return db.query(sql, params)
   }
 
   // 更新信息
-  update(post) {
+  update(obj) {
     var updated = []
     var params = []
-    for (var key in post) {
+    for (var key in obj) {
       if (key === 'id') {
         continue
       }
       updated.push(key + ' = ?')
-      params.push(post[key])
+      params.push(obj[key])
     }
-    updated.push('updatetime = ?')
-    params.push(Date.now())
-    var sql = 'update posts set ' + updated.join(',') + ' where id = ?'
-    params.push(post.id)
+    var sql = 'update cates set ' + updated.join(',') + ' where id = ?'
+    params.push(obj.id)
 
     return db.query(sql, params)
   }
 
   // 删除信息
   del(id) {
-    var sql = 'delete from posts where id = ?'
+    var sql = 'delete from cates where id = ?'
     return db.query(sql, [id])
   }
 }

@@ -21,10 +21,11 @@
       </div>
       <div style="width:200px;float:left;margin-left:10px;">
         <FormItem label="分类" prop="cid" v-if="act!='cate'">
-          <Select v-model="posts.cid">
-              <Option value="beijing">New York</Option>
-              <Option value="shanghai">London</Option>
-              <Option value="shenzhen">Sydney</Option>
+          <Select v-model="posts.cid" style="width:150px;">
+            <Option value="0">未分类</Option>
+            <Option v-for="cate in cates" :value="cate.id" :key="cate.id">
+              {{cateshow(cate.path)}}{{cate.catename}}
+            </Option>
           </Select>
         </FormItem>
         <FormItem label="状态" prop="status">
@@ -48,6 +49,7 @@
 <script>
 import axios from 'axios'
 import _ from 'lodash'
+import cates from '~/components/admin/cates'
 
 export default {
   layout: 'admin',
@@ -71,7 +73,7 @@ export default {
     var title = '添加内容'
     var posts = {
       title: '',
-      cid: 0,
+      cid: '0',
       status: 'published',
       content: '',
       tags: '',
@@ -94,11 +96,13 @@ export default {
       title = '编辑' + posts.title
     } else {
       posts.addtime = Date.now()
+      posts.cid = '0'
     }
-    console.log(posts)
+    let cates = await axios.get('/api/cates/list')
     return {
       act: act,
       title: title,
+      cates: cates.data,
       posts: posts
     }
   },
@@ -141,7 +145,22 @@ export default {
     },
     handleReset() {
       this.$refs.posts.resetFields()
+    },
+    cateshow(value) {
+      var vals = value.split(',')
+      var str = ''
+      var deep = 3
+      if (vals.length > deep) {
+        str += new Array(vals.length - deep).join('┆')
+      }
+      if (vals.length > deep - 1) {
+        str += '└'
+      }
+      return str
     }
+  },
+  components: {
+    cates
   }
 }
 </script>
