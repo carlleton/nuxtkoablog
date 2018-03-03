@@ -34,7 +34,7 @@ export default class Posts {
 
   // 根据id获取Post详情
   one(id) {
-    let sql = 'select posts.*,cates.catename from posts,cates where (posts.cid = cates.id or posts.cid = 0) and posts.id = ?'
+    let sql = 'select * from posts where posts.id = ?'
     return db.query(sql, [id])
   }
 
@@ -46,7 +46,7 @@ export default class Posts {
 
   // 插入Post
   add(post) {
-    let sql = 'insert into posts (title,content,cid,status,tags,addtime,updatetime) values (?, ?, ?, ?, ?, ?)'
+    let sql = 'insert into posts (title,content,cid,status,tags,addtime,updatetime) values (?, ?, ?, ?, ?, ?, ?)'
     let params = [
       post.title,
       post.content,

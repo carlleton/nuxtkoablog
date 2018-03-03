@@ -10,7 +10,6 @@ app.use(bodyParser())
 
 let api = require('./api/index')
 app.use(api.routes())
-app.listen(port, host)
 
 async function start () {
 
@@ -44,4 +43,8 @@ async function start () {
   console.log('Server listening on ' + host + ':' + port) // eslint-disable-line no-console
 }
 
-// start()
+if (true) {
+  start()
+} else {
+  app.listen(port, host)
+}

@@ -1,20 +1,38 @@
 <template>
-  <Select v-model="cid" style="width:150px;">
-    <Option value="0">未分类</Option>
-    <Option v-for="cate in cates" :value="cate.id" :key="cate.id">
+  <el-select v-model="editid" style="width:150px;">
+    <el-option v-for="cate in cates" :value="cate.id" :label="cateshow(cate.path)+cate.catename" :key="cate.id">
       {{cateshow(cate.path)}}{{cate.catename}}
-    </Option>
-  </Select>
+    </el-option>
+  </el-select>
 </template>
 <script>
 import axios from 'axios'
 export default {
-  props: ['cid'],
-  async asyncData() {
-    let cates = await axios.get('http://localhost:3001/api/cates/list')
+  props: ['cid', 'handleChange'],
+  data() {
     return {
-      cates: cates.data
+      editid: 0,
+      cates: []
     }
+  },
+  created() {
+    this.editid = this.cid
+  },
+  watch: {
+    cid(newval, oldval) {
+      this.editid = newval
+    },
+    editid(newval, oldval) {
+      this.$emit('update:cid', newval)
+    }
+  },
+  async mounted() {
+    let cates = await axios.get('/api/cates/list')
+    this.cates = [{
+      id: 0,
+      catename: '未分类',
+      path: ''
+    }].concat(cates.data)
   },
   methods: {
     cateshow(value) {

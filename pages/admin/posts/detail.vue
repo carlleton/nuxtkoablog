@@ -1,55 +1,50 @@
 <template>
   <div>
     <div class="tabletit">
-      <Breadcrumb name="breadcrumb" separator=">" class="left">
-        <BreadcrumbItem>home</BreadcrumbItem>
-        <BreadcrumbItem to="./list">内容列表</BreadcrumbItem>
-        <BreadcrumbItem>{{this.title}}</BreadcrumbItem>
-      </Breadcrumb>
+      <el-breadcrumb name="breadcrumb" separator-class="el-icon-arrow-right" class="left">
+        <el-breadcrumb-item>home</el-breadcrumb-item>
+        <el-breadcrumb-item to="./list">内容列表</el-breadcrumb-item>
+        <el-breadcrumb-item>{{this.title}}</el-breadcrumb-item>
+      </el-breadcrumb>
     </div>
-    <Form ref="posts" :model="posts" :rules="ruleValidate" label-position="top" :label-width="0" style="overflow:auto;">
+    <el-form ref="posts" :model="posts" :rules="ruleValidate" label-position="top" label-width="0" style="overflow:auto;">
       <div style="width:800px;float:left;">
-        <FormItem label="标题" prop="title">
-          <Input v-model="posts.title" :disabled="act=='cate'"></Input>
-        </FormItem>
-        <FormItem label="内容">
+        <el-form-item label="标题" prop="title">
+          <el-input v-model="posts.title" :disabled="act=='cate'"></el-input>
+        </el-form-item>
+        <el-form-item label="内容" prop="content">
           <mavon-editor v-model="posts.content"></mavon-editor>
-        </FormItem>
-        <FormItem label="关键词" prop="tags">
-          <Input v-model="posts.tags"></Input>
-        </FormItem>
+        </el-form-item>
+        <el-form-item label="关键词" prop="tags">
+          <el-input v-model="posts.tags"></el-input>
+        </el-form-item>
       </div>
       <div style="width:200px;float:left;margin-left:10px;">
-        <FormItem label="分类" prop="cid" v-if="act!='cate'">
-          <Select v-model="posts.cid" style="width:150px;">
-            <Option value="0">未分类</Option>
-            <Option v-for="cate in cates" :value="cate.id" :key="cate.id">
-              {{cateshow(cate.path)}}{{cate.catename}}
-            </Option>
-          </Select>
-        </FormItem>
-        <FormItem label="状态" prop="status">
-          <Select v-model="posts.status">
-              <Option value="published">发布</Option>
-              <Option value="draft">草稿</Option>
-              <Option value="disabled">禁用</Option>
-          </Select>
-        </FormItem>
-        <FormItem label="添加时间" prop="addtime">
-          <DatePicker type="date" placeholder="Select date" v-model="posts.addtime"></DatePicker>
-        </FormItem>
-        <FormItem>
-          <Button type="primary" @click="handleSubmit()">提交</Button>
-          <Button type="ghost" @click="handleReset()" style="margin-left: 8px">重置</Button>
-        </FormItem>
+        <el-form-item label="分类" v-if="act!='cate'">
+          <Cates :cid.sync="posts.cid"></Cates>
+        </el-form-item>
+        <el-form-item label="状态" prop="status">
+          <el-select v-model="posts.status">
+              <el-option value="published">发布</el-option>
+              <el-option value="draft">草稿</el-option>
+              <el-option value="disabled">禁用</el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="添加时间" prop="addtime">
+          <el-date-picker type="date" size="small" placeholder="选择日期" v-model="posts.addtime"></el-date-picker>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="handleSubmit()">提交</el-button>
+          <el-button type="ghost" @click="handleReset()" style="margin-left: 8px">重置</el-button>
+        </el-form-item>
       </div>
-    </Form>
+    </el-form>
   </div>
 </template>
 <script>
 import axios from 'axios'
 import _ from 'lodash'
-import cates from '~/components/admin/cates'
+import Cates from '~/components/admin/cates'
 
 export default {
   layout: 'admin',
@@ -73,7 +68,7 @@ export default {
     var title = '添加内容'
     var posts = {
       title: '',
-      cid: '0',
+      cid: 0,
       status: 'published',
       content: '',
       tags: '',
@@ -88,15 +83,19 @@ export default {
       act = 'edit'
       title = '编辑内容'
       result = await axios.get('/api/posts/' + id)
+      console.log(result)
       posts = result.data
+      posts.addtime = new Date(posts.addtime)
+      console.log(posts)
     } else if (cid) {
       act = 'cate'
       result = await axios.get('/api/posts/cate' + cid)
       posts = result.posts
+      posts.addtime = new Date(posts.addtime)
       title = '编辑' + posts.title
     } else {
-      posts.addtime = Date.now()
-      posts.cid = '0'
+      posts.addtime = new Date()
+      posts.cid = 0
     }
     let cates = await axios.get('/api/cates/list')
     return {
@@ -116,6 +115,7 @@ export default {
           var params = _.clone(this.posts)
           params.addtime = params.addtime.getTime()
           if (this.act === 'add') {
+            console.log(params)
             url = '/api/posts/add'
             axios.post(url, params).then((res) => {
               if (res.data.id) {
@@ -160,7 +160,7 @@ export default {
     }
   },
   components: {
-    cates
+    Cates
   }
 }
 </script>

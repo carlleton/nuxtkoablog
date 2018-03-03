@@ -1,33 +1,33 @@
 <template>
   <div class="layout">
-    <Layout>
-      <Header>
-        <Menu mode="horizontal" theme="dark">
-          <Avatar icon="persion" size="large" />
-          <div class="author">
-            carlleton
-            <a href="/logout">退出</a>
-          </div>
-        </Menu>
-      </Header>
-      <Layout>
-        <Sider :style="{padding: '24px 0', minHeight: '280px',background:'#fff'}">
-          <Menu theme="light" width="auto" active-name="0-0" :open-names="['p0']">
-            <Submenu :name="'p'+pindex" v-for="(menu,pindex) in menus" :key="pindex">
+    <el-container>
+      <el-header>
+        <div class="avatar">
+          vc
+        </div>
+        <div class="author">
+          carlleton
+          <a href="/logout">退出</a>
+        </div>
+      </el-header>
+      <el-container>
+        <el-aside width="200px" style="minHeight:280px;padding:24px 0;">
+          <el-menu theme="light" width="auto" default-active="0-0" :default-openeds="['0']">
+            <el-submenu :index="pindex+''" v-for="(menu,pindex) in menus" :key="pindex">
               <template slot="title">
-                {{menu.name}}
+                <i class="el-icon-message"></i>{{menu.name}}
               </template>
-              <MenuItem :name="pindex+'-'+index" v-for="(item,index) in menu.childs" :key="index">
+              <el-menu-item :index="pindex+'-'+index" v-for="(item,index) in menu.childs" :key="index">
                 <nuxt-link :to="item.link">{{item.name}}</nuxt-link>
-              </MenuItem>
-            </Submenu>
-          </Menu>
-        </Sider>
-        <Content :style="{padding: '24px', minHeight: '280px',paddingLeft:'34px', background:'#fff'}">
+              </el-menu-item>
+            </el-submenu>
+          </el-menu>
+        </el-aside>
+        <el-main :style="{padding: '24px', minHeight: '280px',paddingLeft:'34px', background:'#fff'}">
           <nuxt/>
-        </Content>
-      </Layout>
-    </Layout>
+        </el-main>
+      </el-container>
+    </el-container>
   </div>
 </template>
 <script>
@@ -54,8 +54,29 @@ export default {
   height: 100%;
   width: 100%;
 }
+.el-header{
+  background-color: #666;
+}
+.el-aside {
+  color: #333;
+  text-align: center;
+  line-height: 200px;
+}
+.avatar{
+  overflow: hidden;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  line-height: 50px;
+  text-align: center;
+  background: #ccc;
+  display: inline-block;
+  margin-left: 5px;
+  margin-top: 5px;
+}
 .author{
   float: right;
   color: #fff;
+  line-height: 50px;
 }
 </style>

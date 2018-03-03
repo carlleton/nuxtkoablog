@@ -18,11 +18,12 @@ module.exports = {
   */
   css: [
     '~assets/css/main.css',
-    'iview/dist/styles/iview.css'
+    'element-ui/lib/theme-chalk/reset.css',
+    'element-ui/lib/theme-chalk/index.css'
   ],
   plugins: [
-    '~plugins/iview',
-    {src: '~plugins/mavon-editor',ssr: false}
+    {src: '~plugins/mavon-editor',ssr: false},
+    '~plugins/element-ui'
   ],
   /*
   ** Customize the progress-bar color
@@ -32,7 +33,7 @@ module.exports = {
    ** Build configuration
    */
   build: {
-    vendor: ['axios','iview','mavon-editor'],
+    vendor: ['axios','mavon-editor','element-ui'],
     /*
      ** Run ESLINT on save
      */

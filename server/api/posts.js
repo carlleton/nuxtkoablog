@@ -76,7 +76,7 @@ router.post('/add', async (ctx, next) => {
     addtime: body.addtime
   }
   var result = await postsModel.add(params)
-  if (result.error) {
+  if (result.err) {
     ctx.status = 404
     ctx.body = { code: 404, message: 'no result' }
   } else {

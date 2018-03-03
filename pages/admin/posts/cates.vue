@@ -1,29 +1,54 @@
 <template>
   <div>
     <div class="tabletit">
-      <Breadcrumb name="breadcrumb" separator=">" class="left">
-        <BreadcrumbItem>home</BreadcrumbItem>
-        <BreadcrumbItem>分类管理</BreadcrumbItem>
-      </Breadcrumb>
+      <el-breadcrumb name="breadcrumb" separator=">" class="left">
+        <el-breadcrumb-item>home</el-breadcrumb-item>
+        <el-breadcrumb-item>分类管理</el-breadcrumb-item>
+      </el-breadcrumb>
     </div>
     <div class="tabletit">
-      父分类：
-      <Select v-model="pid" style="width:150px;">
-        <Option value="0">未分类</Option>
-        <Option v-for="cate in cates" :value="cate.id" :key="cate.id">
-          {{cateshow(cate.path)}}{{cate.catename}}
-        </Option>
-      </Select>
-      <Input v-model="catename" placeholder="分类名称" style="width:200px;margin-left:10px;"></Input>
-      <Input v-model="orderid" placeholder="排序" style="width:50px;margin-left:10px;"></Input>
-      <Button @click="addcate()" style="margin-left:10px;" v-if="act!=='edit'">添加</Button>
-      <Button @click="updateCate()" style="margin-left:10px;" v-if="act==='edit'">保存</Button>
+      父分类：<Cates :cid.sync="pid"></Cates>
+      <el-input v-model="catename" placeholder="分类名称" style="width:200px;margin-left:10px;"></el-input>
+      <el-input v-model="orderid" placeholder="排序" style="width:75px;margin-left:10px;"></el-input>
+      <el-button @click="addcate()" style="margin-left:10px;" v-if="act!=='edit'">添加</el-button>
+      <el-button @click="updateCate()" style="margin-left:10px;" v-if="act==='edit'">保存</el-button>
     </div>
-    <Table stripe :columns="columns" :data="cates" style="width:800px;"></Table>
+    <el-table border :data="cates" style="width:800px;">
+      <el-table-column
+        prop="id"
+        label="id"
+        width="120"
+        :formatter="formatter_id">
+      </el-table-column>
+      <el-table-column
+        prop="catename"
+        label="名称">
+      </el-table-column>
+      <el-table-column
+        prop="pid"
+        label="父id">
+      </el-table-column>
+      <el-table-column
+        prop="orderid"
+        label="排序">
+      </el-table-column>
+      <el-table-column label="操作">
+        <template slot-scope="scope">
+          <el-button
+            size="mini"
+            @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+          <el-button
+            size="mini"
+            type="danger"
+            @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
   </div>
 </template>
 <script>
 import axios from 'axios'
+import Cates from '~/components/admin/cates'
 
 export default {
   layout: 'admin',
@@ -33,98 +58,10 @@ export default {
   data() {
     return {
       act: '',
-      pid: '0',
+      pid: 0,
       catename: '',
       orderid: '',
-      editid: '',
-      columns: [
-        {
-          title: 'id',
-          key: 'id',
-          render: (h, params) => {
-            var str = this.cateshow(params.row.path)
-            str += params.row.id
-            return h('div', str)
-          }
-        },
-        {
-          title: '名称',
-          key: 'catename'
-        },
-        {
-          title: '父id',
-          key: 'pid'
-        },
-        {
-          title: '排序',
-          key: 'orderid'
-        },
-        {
-          title: '操作',
-          key: 'events',
-          fixed: 'right',
-          width: 130,
-          render: (h, params) => {
-            return h('div', [
-              h('Button', {
-                props: {
-                  type: 'primary',
-                  size: 'small'
-                },
-                style: {
-                  marginRight: '5px'
-                },
-                on: {
-                  click: () => {
-                    this.act = 'edit'
-                    this.editid = params.row.id
-                    this.pid = params.row.pid
-                    this.catename = params.row.catename
-                    this.orderid = params.row.orderid
-                  }
-                }
-              }, '编辑'),
-              h('Button', {
-                props: {
-                  type: 'error',
-                  size: 'small'
-                },
-                on: {
-                  click: () => {
-                    var id = params.row.id
-                    this.$Modal.confirm({
-                      title: '删除',
-                      content: '<p>您确认要删除吗？</p>',
-                      loading: true,
-                      onOk: () => {
-                        var url = '/api/cates/del'
-                        var sendData = {
-                          id: id
-                        }
-                        axios.post(url, sendData).then((res) => {
-                          if (res.data.rows > 0) {
-                            this.$Modal.remove()
-                            this.$Message.info('删除' + res.data.rows + '条')
-                            this.getData()
-                          } else {
-                            console.log(res.data)
-                            this.$Modal.remove()
-                            this.$Message.info('删除失败')
-                          }
-                        })
-                      },
-                      onCancel: () => {
-                        this.$Message.info('delete cancel')
-                      }
-                    })
-                    console.log('delete', params.row.id)
-                  }
-                }
-              }, '删除')
-            ])
-          }
-        }
-      ]
+      editid: ''
     }
   },
   async asyncData() {
@@ -140,7 +77,7 @@ export default {
     },
     addcate() {
       if (this.catename === '') {
-        this.$Message.error('请输入分类名称')
+        this.$message.error('请输入分类名称')
         return
       }
       var url = '/api/cates/add'
@@ -151,17 +88,23 @@ export default {
       }
       axios.post(url, params).then((res) => {
         if (res.data.id) {
-          this.$Message.info({
-            content: '添加成功',
-            duration: 2,
-            onClose: () => this.getData()
+          this.$message({
+            message: '添加成功',
+            duration: 2000,
+            onClose: () => {
+              this.act = ''
+              this.catename = ''
+              this.pid = 0
+              this.orderid = ''
+              this.getData()
+            }
           })
         }
       })
     },
     updateCate() {
       if (this.catename === '') {
-        this.$Message.error('请输入分类名称')
+        this.$message.error('请输入分类名称')
         return
       }
       var url = '/api/cates/update'
@@ -173,19 +116,55 @@ export default {
       }
       axios.post(url, params).then((res) => {
         if (res.data.rows > 0) {
-          this.$Message.info({
-            content: '更新成功',
-            duration: 2,
+          this.$message({
+            message: '更新成功',
+            duration: 2000,
             onClose: () => {
               this.act = ''
               this.catename = ''
-              this.pid = '0'
+              this.pid = 0
               this.orderid = ''
               this.getData()
             }
           })
         }
       })
+    },
+    handleEdit(index, row) {
+      this.act = 'edit'
+      this.editid = row.id
+      this.pid = row.pid
+      this.catename = row.catename
+      this.orderid = row.orderid
+    },
+    handleDelete(index, row) {
+      var id = row.id
+      this.$Modal.confirm({
+        title: '删除',
+        message: '<p>您确认要删除吗？</p>',
+        loading: true,
+        onOk: () => {
+          var url = '/api/cates/del'
+          var sendData = {
+            id: id
+          }
+          axios.post(url, sendData).then((res) => {
+            if (res.data.rows > 0) {
+              this.$Modal.remove()
+              this.$message('删除' + res.data.rows + '条')
+              this.getData()
+            } else {
+              console.log(res.data)
+              this.$Modal.remove()
+              this.$message('删除失败')
+            }
+          })
+        },
+        onCancel: () => {
+          this.$message('delete cancel')
+        }
+      })
+      console.log('delete', row.id)
     },
     cateshow(value) {
       var vals = value.split(',')
@@ -198,7 +177,16 @@ export default {
         str += '└'
       }
       return str
+    },
+    // 格式化id的显示
+    formatter_id(row, column) {
+      var str = this.cateshow(row.path)
+      str += row.id
+      return str
     }
+  },
+  components: {
+    Cates
   }
 }
 </script>

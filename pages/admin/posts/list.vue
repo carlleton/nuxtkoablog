@@ -1,31 +1,57 @@
 <template>
   <div>
     <div class="tabletit">
-      <Breadcrumb name="breadcrumb" separator=">" class="left">
-        <BreadcrumbItem>home</BreadcrumbItem>
-        <BreadcrumbItem>内容列表</BreadcrumbItem>
-      </Breadcrumb>
+      <el-breadcrumb name="breadcrumb" separator=">" class="left">
+        <el-breadcrumb-item>home</el-breadcrumb-item>
+        <el-breadcrumb-item>内容列表</el-breadcrumb-item>
+      </el-breadcrumb>
       <div class="right">
-        <Button type="primary" size="small" @click="gotoadd()">添加</Button>
+        <el-button type="primary" size="small" @click="gotoadd()">添加</el-button>
       </div>
     </div>
     <div class="tabletit">
-      分类：
-      <Select v-model="search.cid" style="width:150px;">
-        <Option value="0">未分类</Option>
-        <Option v-for="cate in cates" :value="cate.id" :key="cate.id">
-          {{cateshow(cate.path)}}{{cate.catename}}
-        </Option>
-      </Select>
-      <Input v-model="search.keyword" placeholder="关键词" style="width:200px;margin-left:10px;"></Input>
-      <Button type="primary" style="margin-left:10px;" size="small" @click="goSearch()">搜索</Button>
+      分类：<Cates :cid.sync="search.cid"></Cates>
+      <el-input v-model="search.keyword" placeholder="关键词" style="width:200px;margin-left:10px;"></el-input>
+      <el-button type="primary" style="margin-left:10px;" size="small" @click="goSearch()">搜索</el-button>
     </div>
-    <Table stripe :columns="columns" :data="postsdata"></Table>
+    <el-table border :data="postsdata">
+      <el-table-column
+        prop="id"
+        label="id"
+        width="120">
+      </el-table-column>
+      <el-table-column
+        prop="title"
+        label="标题">
+      </el-table-column>
+      <el-table-column
+        prop="catename"
+        label="分类"
+        :formatter="formater_catename">
+      </el-table-column>
+      <el-table-column
+        prop="addtime"
+        label="时间"
+        :formatter="formater_addtime">
+      </el-table-column>
+      <el-table-column label="操作">
+        <template slot-scope="scope">
+          <el-button
+            size="mini"
+            @click="$router.push('./detail?id=' + scope.row.id)">编辑</el-button>
+          <el-button
+            size="mini"
+            type="danger"
+            @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
   </div>
 </template>
 <script>
 import axios from 'axios'
 import tools from '../../../util/tools'
+import Cates from '~/components/admin/cates'
 
 export default {
   layout: 'admin',
@@ -35,101 +61,9 @@ export default {
   data() {
     return {
       search: {
-        cid: '0',
+        cid: 0,
         keyword: ''
-      },
-      columns: [
-        {
-          title: 'id',
-          key: 'id'
-        },
-        {
-          title: '标题',
-          key: 'title'
-        },
-        {
-          title: '分类',
-          key: 'catename',
-          render: (h, params) => {
-            var cate = this.cates.filter(cate => params.row.cid === cate.id)
-            var catename = '未分类'
-            if (cate.length > 0) {
-              catename = cate[0].catename
-            }
-            return h('div', catename)
-          }
-        },
-        {
-          title: '时间',
-          key: 'addtime',
-          render: (h, params) => {
-            return h('div',
-              tools.Dateformat(new Date(params.row.addtime), 'yyyy-MM-dd')
-            )
-          }
-        },
-        {
-          title: '操作',
-          key: 'events',
-          fixed: 'right',
-          width: 130,
-          render: (h, params) => {
-            return h('div', [
-              h('Button', {
-                props: {
-                  type: 'primary',
-                  size: 'small'
-                },
-                style: {
-                  marginRight: '5px'
-                },
-                on: {
-                  click: () => {
-                    this.$router.push('./detail?id=' + params.row.id)
-                  }
-                }
-              }, '编辑'),
-              h('Button', {
-                props: {
-                  type: 'error',
-                  size: 'small'
-                },
-                on: {
-                  click: () => {
-                    var id = params.row.id
-                    this.$Modal.confirm({
-                      title: '删除',
-                      content: '<p>您确认要删除吗？</p>',
-                      loading: true,
-                      onOk: () => {
-                        var url = '/api/posts/del'
-                        var sendData = {
-                          id: id
-                        }
-                        axios.post(url, sendData).then((res) => {
-                          if (res.data.rows > 0) {
-                            this.$Modal.remove()
-                            this.$Message.info('删除' + res.data.rows + '条')
-                            this.getData()
-                          } else {
-                            console.log(res.data)
-                            this.$Modal.remove()
-                            this.$Message.info('删除失败')
-                          }
-                        })
-                      },
-                      onCancel: () => {
-                        this.$Message.info('delete cancel')
-                      }
-                    })
-                    console.log('delete', params.row.id)
-                  }
-                }
-              }, '删除')
-            ])
-          }
-        }
-      ]
+      }
     }
   },
   async asyncData({query}) {
@@ -144,6 +78,17 @@ export default {
     }
   },
   methods: {
+    formater_catename(row, column) {
+      var cate = this.cates.filter(cate => row.cid === cate.id)
+      var catename = '未分类'
+      if (cate.length > 0) {
+        catename = cate[0].catename
+      }
+      return catename
+    },
+    formater_addtime(row, column) {
+      return tools.Dateformat(new Date(row.addtime), 'yyyy-MM-dd')
+    },
     async getData() {
       console.log(this.$route)
       var pageNum = this.$route.query.page || 0
@@ -158,6 +103,35 @@ export default {
       var url = 'http://localhost:3001/api/posts/list?page=' + pageNum + '&cid=' + cid + '&keyword=' + this.search.keyword
       let {data} = await axios.get(url)
       this.postsdata = data
+    },
+    handleDelete(index, row) {
+      var id = row.id
+      this.$Modal.confirm({
+        title: '删除',
+        content: '<p>您确认要删除吗？</p>',
+        loading: true,
+        onOk: () => {
+          var url = '/api/posts/del'
+          var sendData = {
+            id: id
+          }
+          axios.post(url, sendData).then((res) => {
+            if (res.data.rows > 0) {
+              this.$Modal.remove()
+              this.$Message.info('删除' + res.data.rows + '条')
+              this.getData()
+            } else {
+              console.log(res.data)
+              this.$Modal.remove()
+              this.$Message.info('删除失败')
+            }
+          })
+        },
+        onCancel: () => {
+          this.$Message.info('delete cancel')
+        }
+      })
+      console.log('delete', row.id)
     },
     gotoadd() {
       this.$router.push('./detail')
@@ -174,6 +148,9 @@ export default {
       }
       return str
     }
+  },
+  components: {
+    Cates
   }
 }
 </script>
