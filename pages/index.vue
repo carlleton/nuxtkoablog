@@ -1,25 +1,71 @@
 <template>
-  <section class="container">
-    <img src="../assets/img/logo.png" alt="Nuxt.js Logo" class="logo" />
-    <h1 class="title">
-      Universal Vue.js Application Framework
-    </h1>
-    <nuxt-link class="button" to="/about">
-      About page
-    </nuxt-link>
+  <section>
+    <article v-for="post in posts" :key="post.id">
+      <div class="entry-header">
+        <h2 class="entry-title">
+          <nuxt-link :to="'/post/'+post.id">{{post.title}}</nuxt-link>
+        </h2>
+      </div>
+      <div class="entry-footer">
+        <i class="el-icon-date"></i>{{post.addtime|addtime}}
+        <i class="el-icon-document"></i>
+        <nuxt-link :to="'/cate/'+post.cid" class="cate">{{catename(post.cid)}}</nuxt-link>
+      </div>
+    </article>
   </section>
 </template>
 <script>
-  export default {
-    serverCacheKey() {
-      // Will change every 10 minutes
-      return Math.floor(Date.now() / 600000)
+import axios from 'axios'
+import {dateFormat} from '~/util/tools'
+
+export default {
+  head() {
+    return {
+      title: 'Home'
+    }
+  },
+  async asyncData({params}) {
+    let posts = await axios.get('/api/posts/list')
+    let cates = await axios.get('/api/cates/list')
+    return {
+      cates: cates.data,
+      posts: posts.data
+    }
+  },
+  methods: {
+    catename(cid) {
+      for (var i = 0, n = this.cates.length; i < n; i++) {
+        if (this.cates[i].id === cid) {
+          return this.cates[i].catename
+        }
+      }
+      return ''
+    }
+  },
+  filters: {
+    addtime(str) {
+      return dateFormat(new Date(str), 'yyyy-MM-dd')
     }
   }
+}
 </script>
 <style scoped>
-.title
-{
-  margin: 50px 0;
+.entry-header{
+  padding: 0 10%;
+  overflow: auto;
+}
+.entry-title{
+  font-size: 24px;
+  line-height: 1.2308;
+  margin-bottom: 1.2308em;
+  margin: 20px 0 10px;
+}
+.entry-footer{
+  padding: 10px 10%;
+  background: #f7f7f7;
+  color: rgba(51, 51, 51, 0.7);
+}
+.cate{
+  font-weight: bold;
 }
 </style>

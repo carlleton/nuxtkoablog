@@ -1,6 +1,6 @@
 /* eslint-disable */
 // 时间格式化输出
-function Dateformat(date,format){
+export function dateFormat(date,format){
   if(!date)return '';
   var o = {
     "M+" : date.getMonth()+1, //month
@@ -19,7 +19,43 @@ function Dateformat(date,format){
     return format;
 }
 
-export default {
-  Dateformat
+export function getCookiesInServer(req) {
+  let Cookies = {}
+  req && req.headers.cookie && req.headers.cookie.split(';').forEach(function (Cookie) {
+    let parts = Cookie.split('=')
+    Cookies[parts[0].trim()] = (parts[1] || '').trim()
+  });
+  return Cookies
+}
+
+export function setCookieInClient(name, value, minutes) {
+  let exp = new Date()
+  exp.setTime(exp.getTime() + minutes * 60 * 1000)
+  document.cookie = name + "=" + escape(value) + ";expires=" + exp.toGMTString()
+}
+
+export function removeToken() {
+  setCookieInClient('token', '', -1)
+}
+
+export function setToken(tokenValue) {
+  setCookieInClient('token', tokenValue, 60*24*7)
+}
+
+export function getCookieInClient(name) {
+  let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)")
+  if (arr = document.cookie.match(reg)) {
+    return unescape(arr[2])
+  } else {
+    return null
+  }
+}
+
+// 是否登陆
+export function isLogin() {
+  if (getCookieInClient('token')) {
+    return true
+  }
+  return false
 }
 /* eslint-enable */

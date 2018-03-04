@@ -1,15 +1,10 @@
 <template>
-  <section>
-    <article>
+  <div>
+    <article v-for="post in posts" :key="post.id">
       <div class="entry-header">
         <h2 class="entry-title">
           <nuxt-link :to="'/post/'+post.id">{{post.title}}</nuxt-link>
         </h2>
-      </div>
-      <div class="entry-content">
-        <pre>
-          {{post.content}}
-        </pre>
       </div>
       <div class="entry-footer">
         <i class="el-icon-date"></i>{{post.addtime|addtime}}
@@ -17,7 +12,7 @@
         <nuxt-link :to="'/cate/'+post.cid" class="cate">{{catename(post.cid)}}</nuxt-link>
       </div>
     </article>
-  </section>
+  </div>
 </template>
 <script>
 import axios from 'axios'
@@ -30,16 +25,23 @@ export default {
     }
   },
   validate({ params }) {
-    return /^\d+$/.test(params.id)
+    return /^\d+$/.test(params.cid)
   },
   async asyncData({params}) {
-    let postdata = await axios.get('/api/posts/' + params.id)
-    let post = postdata.data
+    var cid = params.cid
+    let posts = await axios.get('/api/posts/list?cid=' + cid)
     let cates = await axios.get('/api/cates/list')
+    var catename
+    for (var i = 0, n = cates.length; i < n; i++) {
+      if (cates[i].id === cid) {
+        catename = cates[i].catename
+        break
+      }
+    }
     return {
-      title: post.title,
+      title: catename,
       cates: cates.data,
-      post: post
+      posts: posts.data
     }
   },
   methods: {

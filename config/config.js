@@ -10,7 +10,9 @@ let config = {
     '/api/posts/add',
     '/api/posts/update',
     '/api/posts/del',
-    '/api/tags/add',
+    '/api/cates/add',
+    '/api/cates/update',
+    '/api/cates/del'
   ],
   pageSize: 20
 }

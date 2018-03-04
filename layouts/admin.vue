@@ -2,12 +2,13 @@
   <div class="layout">
     <el-container>
       <el-header>
-        <div class="avatar">
-          vc
+        <div class="admin_tit">
+          <nuxt-link to="/admin">后台管理</nuxt-link>
+          <nuxt-link class="fontpage" to="/" target="_blank">前台页面</nuxt-link>
         </div>
         <div class="author">
           carlleton
-          <a href="/logout">退出</a>
+          <a class="logout" @click="logout()">退出</a>
         </div>
       </el-header>
       <el-container>
@@ -32,6 +33,7 @@
 </template>
 <script>
 import '../assets/css/admin.css'
+import { removeToken } from '../util/tools'
 export default {
   data() {
     return {
@@ -46,6 +48,12 @@ export default {
         }
       ]
     }
+  },
+  methods: {
+    logout() {
+      removeToken()
+      this.$router.push('/')
+    }
   }
 }
 </script>
@@ -56,6 +64,19 @@ export default {
 }
 .el-header{
   background-color: #666;
+}
+.admin_tit{
+  font-size: 20px;
+  color: #fff;
+  float: left;
+  line-height: 50px;
+}
+.admin_tit a{
+  color: #fff;
+}
+.admin_tit .fontpage{
+  font-size: 14px;
+  margin-left: 20px;
 }
 .el-aside {
   color: #333;
@@ -78,5 +99,8 @@ export default {
   float: right;
   color: #fff;
   line-height: 50px;
+}
+.logout{
+  cursor: pointer;
 }
 </style>

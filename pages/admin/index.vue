@@ -6,6 +6,7 @@
 <script>
   export default {
     layout: 'admin',
+    name: 'admin',
     head: {
       title: '后台管理'
     }

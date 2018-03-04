@@ -6,6 +6,7 @@ html, body
   font-family: "Source Sans Pro", Arial, sans-serif;
   height: 100vh;
   margin: 0;
+  font-size: 14px;
 }
 
 footer
@@ -13,11 +14,18 @@ footer
   padding: 20px;
   text-align: center;
   border-top: 1px solid #ddd;
+  background: #fff;
+  border-radius: 0 0 1px rgba(0, 0, 0, 0.15);
 }
-
-a, a:hover, a:focus, a:visited
+a{
+  color: #333;
+}
+a:hover, a:focus, a:visited
 {
-  color: #41B883;
+  color: rgba(51, 51, 51, 0.7);
+}
+h1, h2, h3, h4, h5, h6{
+  font-weight: bold;
 }
 
 .logo {

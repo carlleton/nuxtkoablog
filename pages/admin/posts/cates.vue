@@ -61,18 +61,16 @@ export default {
       pid: 0,
       catename: '',
       orderid: '',
-      editid: ''
+      editid: '',
+      cates: []
     }
   },
-  async asyncData() {
-    let cates = await axios.get('http://localhost:3001/api/cates/list')
-    return {
-      cates: cates.data
-    }
+  created() {
+    this.getData()
   },
   methods: {
     async getData() {
-      let cates = await axios.get('http://localhost:3001/api/cates/list')
+      let cates = await axios.get('/api/cates/list')
       this.cates = cates.data
     },
     addcate() {
@@ -139,30 +137,35 @@ export default {
     },
     handleDelete(index, row) {
       var id = row.id
-      this.$Modal.confirm({
-        title: '删除',
-        message: '<p>您确认要删除吗？</p>',
-        loading: true,
-        onOk: () => {
-          var url = '/api/cates/del'
-          var sendData = {
-            id: id
-          }
-          axios.post(url, sendData).then((res) => {
-            if (res.data.rows > 0) {
-              this.$Modal.remove()
-              this.$message('删除' + res.data.rows + '条')
-              this.getData()
-            } else {
-              console.log(res.data)
-              this.$Modal.remove()
-              this.$message('删除失败')
-            }
-          })
-        },
-        onCancel: () => {
-          this.$message('delete cancel')
+      this.$confirm('您确认要删除吗？, 是否继续?', '删除', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        var url = '/api/cates/del'
+        var sendData = {
+          id: id
         }
+        axios.post(url, sendData).then((res) => {
+          if (res.data.rows > 0) {
+            this.$message({
+              type: 'success',
+              message: '删除' + res.data.rows + '条'
+            })
+            this.getData()
+          } else {
+            console.log(res.data)
+            this.$message({
+              type: 'error',
+              message: '删除失败'
+            })
+          }
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
       })
       console.log('delete', row.id)
     },

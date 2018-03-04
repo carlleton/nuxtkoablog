@@ -50,7 +50,7 @@
 </template>
 <script>
 import axios from 'axios'
-import tools from '../../../util/tools'
+import {dateFormat} from '~/util/tools'
 import Cates from '~/components/admin/cates'
 
 export default {
@@ -69,9 +69,9 @@ export default {
   async asyncData({query}) {
     var pageNum = query.page || 0
     var cid = query.cid || ''
-    var url = 'http://localhost:3001/api/posts/list?page=' + pageNum + '&cid=' + cid
+    var url = '/api/posts/list?page=' + pageNum + '&cid=' + cid
     let {data} = await axios.get(url)
-    let cates = await axios.get('http://localhost:3001/api/cates/list')
+    let cates = await axios.get('/api/cates/list')
     return {
       cates: cates.data,
       postsdata: data
@@ -87,49 +87,55 @@ export default {
       return catename
     },
     formater_addtime(row, column) {
-      return tools.Dateformat(new Date(row.addtime), 'yyyy-MM-dd')
+      return dateFormat(new Date(row.addtime), 'yyyy-MM-dd')
     },
     async getData() {
       console.log(this.$route)
       var pageNum = this.$route.query.page || 0
       var cid = this.$route.query.cid || 0
-      var url = 'http://localhost:3001/api/posts/list?page=' + pageNum + '&cid=' + cid
+      var url = '/api/posts/list?page=' + pageNum + '&cid=' + cid
       let {data} = await axios.get(url)
       this.postsdata = data
     },
     async goSearch() {
       var pageNum = this.$route.query.page || 0
       var cid = this.search.cid || ''
-      var url = 'http://localhost:3001/api/posts/list?page=' + pageNum + '&cid=' + cid + '&keyword=' + this.search.keyword
+      var url = '/api/posts/list?page=' + pageNum + '&cid=' + cid + '&keyword=' + this.search.keyword
       let {data} = await axios.get(url)
       this.postsdata = data
     },
     handleDelete(index, row) {
       var id = row.id
-      this.$Modal.confirm({
-        title: '删除',
-        content: '<p>您确认要删除吗？</p>',
+      this.$confirm('您确认要删除吗？', '删除', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
         loading: true,
-        onOk: () => {
-          var url = '/api/posts/del'
-          var sendData = {
-            id: id
-          }
-          axios.post(url, sendData).then((res) => {
-            if (res.data.rows > 0) {
-              this.$Modal.remove()
-              this.$Message.info('删除' + res.data.rows + '条')
-              this.getData()
-            } else {
-              console.log(res.data)
-              this.$Modal.remove()
-              this.$Message.info('删除失败')
-            }
-          })
-        },
-        onCancel: () => {
-          this.$Message.info('delete cancel')
+        type: 'warning'
+      }).then(() => {
+        var url = '/api/posts/del'
+        var sendData = {
+          id: id
         }
+        axios.post(url, sendData).then((res) => {
+          if (res.data.rows > 0) {
+            this.$message({
+              type: 'success',
+              message: '删除' + res.data.rows + '条'
+            })
+            this.getData()
+          } else {
+            console.log(res.data)
+            this.$message({
+              type: 'error',
+              message: '删除失败'
+            })
+          }
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
       })
       console.log('delete', row.id)
     },

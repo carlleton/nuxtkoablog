@@ -4,8 +4,10 @@ const users = require('./users')
 const posts = require('./posts')
 const cates = require('./cates')
 
-router.prefix('/api')
+let jwtAuth = require('../middleware/jwtAuth')
 
+router.prefix('/api')
+router.use('/', jwtAuth)
 
 router.use('/users', users.routes())
 router.use('/posts', posts.routes(), posts.allowedMethods())

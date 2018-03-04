@@ -4,7 +4,7 @@ const jwtSecret = config.jwtSecret
 const needAuth = config.needAuth
 
 module.exports = (ctx, next) => {
-  let path = ctx.request.originalUrl
+  // let path = ctx.req.originalUrl
 
   // 接口不需要登陆，直接next
   if (needAuth.indexOf('path') < 0) {
@@ -12,10 +12,10 @@ module.exports = (ctx, next) => {
   }
 
   // 接口需要登陆
-  var token = ctx.request.headers['authorization']
+  var token = ctx.req.headers['authorization']
   if (!token) {
-    // ctx.response.type = 'json'
-    ctx.response.body = {
+    // ctx.type = 'json'
+    ctx.body = {
       code: 401,
       message: 'you need login:there is no token'
     }
@@ -28,7 +28,7 @@ module.exports = (ctx, next) => {
 
     //校验有效期
     if (decoded.exp <= Date.now()) {
-      ctx.response.body = {
+      ctx.body = {
         code: 401,
         message: 'you need login:token is expired'
       }
@@ -36,7 +36,7 @@ module.exports = (ctx, next) => {
     next()
   } catch (err) {
     // ctx.response.type = 'json'
-    ctx.response.body = {
+    ctx.body = {
       code: 401,
       message: 'you need login:token is expired'
     }

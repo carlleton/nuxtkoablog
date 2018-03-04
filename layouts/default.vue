@@ -1,27 +1,52 @@
 <template>
-  <div>
-    <nuxt/>
-    <my-footer/>
-  </div>
+  <el-container>
+    <el-aside style="width:28.2%;">
+      <left></left>
+    </el-aside>
+    <el-main>
+      <div class="main">
+        <nuxt/>
+      </div>
+      <my-footer/>
+    </el-main>
+  </el-container>
 </template>
 
 <script>
+// import 'normalize.css'
 import MyFooter from '../components/Footer.vue'
+import left from '../components/left.vue'
 
 export default {
+  head() {
+    return {
+      titleTemplate: '%s - 蚕豆的blog'
+    }
+  },
   components: {
-    MyFooter
+    MyFooter,
+    left
   }
 }
 </script>
 
 <style>
-.container
-{
-  margin: 0;
-  width: 100%;
-  padding: 100px 0;
-  text-align: center;
+.el-container{
+  background: rgb(241, 241, 241);
+  height: 100vh;
+}
+.el-aside{
+  background: #fff;
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.15);
+  content:"";
+  width: 29.4118%;
+}
+.el-main{
+  padding: 20px 5%;
+}
+.main{
+  background: #fff;
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.15);
 }
 
 .button, .button:visited

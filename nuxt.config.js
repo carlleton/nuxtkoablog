@@ -3,11 +3,14 @@ module.exports = {
   ** Headers of the page
   */
   head: {
-    title: 'starter',
+    title: '',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: 'Nuxt.js project' }
+      { hid: 'description', name: 'description', content: 'blog source of nuxtkoablog' },
+      /*优先使用 IE 最新版本和 Chrome  */
+      { name: 'renderer', content: 'webkit' },
+      { 'http-equiv': 'X-UA-Compatible', content: 'IE=edge' },
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
@@ -22,18 +25,23 @@ module.exports = {
     'element-ui/lib/theme-chalk/index.css'
   ],
   plugins: [
-    {src: '~plugins/mavon-editor',ssr: false},
-    '~plugins/element-ui'
+    { src: '~plugins/axios' },
+    { src: '~plugins/mavon-editor', ssr: false },
+    { src: '~plugins/element-ui' }
   ],
   /*
   ** Customize the progress-bar color
   */
-  loading: '~/components/loading.vue',
+  loading: {
+    color: '#04acf7',
+    height: '4px',
+    failedColor: 'red'
+  },
   /*
    ** Build configuration
    */
   build: {
-    vendor: ['axios','mavon-editor','element-ui'],
+    vendor: ['axios','element-ui'],
     /*
      ** Run ESLINT on save
      */
@@ -47,6 +55,9 @@ module.exports = {
         })
       }
     }
+  },
+  router: {
+    middleware: 'adminAuth'
   },
   render: {
     bundleRenderer: {

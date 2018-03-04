@@ -22,6 +22,7 @@
     "lodash": "^4.17.5",
     "lru-cache": "^4.1.1",
     "mavon-editor": "^2.4.16",
+    "moment": "^2.21.0",
     "mysql": "^2.15.0",
     "nuxt": "latest",
     "source-map-support": "^0.4.15"

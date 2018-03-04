@@ -48,11 +48,26 @@ import Cates from '~/components/admin/cates'
 
 export default {
   layout: 'admin',
-  head: {
-    title: this.title
+  head() {
+    return {
+      title: this.title
+    }
   },
   data() {
     return {
+      title: '添加内容',
+      act: 'add',
+      posts: {
+        title: '',
+        cid: 0,
+        status: 'published',
+        content: '',
+        tags: '',
+        addtime: new Date(),
+        id: '',
+        updatetime: ''
+      },
+      // 校验
       ruleValidate: {
         title: [
           { required: true, message: '标题不能为空', trigger: 'blur' }
@@ -63,51 +78,30 @@ export default {
       }
     }
   },
-  async asyncData({query}) {
-    var act = 'add'
-    var title = '添加内容'
-    var posts = {
-      title: '',
-      cid: 0,
-      status: 'published',
-      content: '',
-      tags: '',
-      addtime: '',
-      id: '',
-      updatetime: ''
-    }
-    var id = query.id
-    var cid = query.cid
-    var result
-    if (id) {
-      act = 'edit'
-      title = '编辑内容'
-      result = await axios.get('/api/posts/' + id)
-      console.log(result)
-      posts = result.data
-      posts.addtime = new Date(posts.addtime)
-      console.log(posts)
-    } else if (cid) {
-      act = 'cate'
-      result = await axios.get('/api/posts/cate' + cid)
-      posts = result.posts
-      posts.addtime = new Date(posts.addtime)
-      title = '编辑' + posts.title
-    } else {
-      posts.addtime = new Date()
-      posts.cid = 0
-    }
-    let cates = await axios.get('/api/cates/list')
-    return {
-      act: act,
-      title: title,
-      cates: cates.data,
-      posts: posts
-    }
-  },
-  mounted() {
+  created() {
+    this.init()
   },
   methods: {
+    async init() {
+      var id = this.$route.query.id
+      var cid = this.$route.query.cid
+      var result
+      if (id) {
+        this.act = 'edit'
+        this.title = '编辑内容'
+        result = await axios.get('/api/posts/' + id)
+        console.log(result)
+        this.posts = result.data
+        this.posts.addtime = new Date(this.posts.addtime)
+        console.log(this.posts)
+      } else if (cid) {
+        this.act = 'cate'
+        result = await axios.get('/api/posts/cate' + cid)
+        this.posts = result.posts
+        this.posts.addtime = new Date(this.posts.addtime)
+        this.title = '编辑' + this.posts.title
+      }
+    },
     handleSubmit() {
       this.$refs.posts.validate((valid) => {
         if (valid) {
@@ -119,9 +113,9 @@ export default {
             url = '/api/posts/add'
             axios.post(url, params).then((res) => {
               if (res.data.id) {
-                this.$Message.info({
-                  content: '添加成功',
-                  duration: 2,
+                this.$message({
+                  message: '添加成功',
+                  duration: 2000,
                   onClose: () => this.$router.push('./list')
                 })
               }
@@ -130,16 +124,16 @@ export default {
             url = '/api/posts/update'
             axios.post(url, params).then((res) => {
               if (res.data.rows > 0) {
-                this.$Message.info({
-                  content: '更新成功',
-                  duration: 2,
+                this.$message({
+                  message: '更新成功',
+                  duration: 2000,
                   onClose: () => this.$router.push('./list')
                 })
               }
             })
           }
         } else {
-          this.$Message.error('校验失败!')
+          this.$message.error('校验失败!')
         }
       })
     },

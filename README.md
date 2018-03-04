@@ -1,6 +1,6 @@
 # nuxtkoablog
 
-> a blog used Nuxt,Node,Koa,Mysql
+> A blog used Nuxt,Node,Koa2,Mysql
 
 ## Build Setup
 
