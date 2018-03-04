@@ -1,6 +1,6 @@
-﻿# Host: localhost  (Version: 5.5.53)
-# Date: 2018-03-02 17:54:59
-# Generator: MySQL-Front 5.3  (Build 4.234)
+﻿# Host: localhost  (Version: 5.5.40)
+# Date: 2018-03-05 01:47:23
+# Generator: MySQL-Front 5.3  (Build 4.120)
 
 /*!40101 SET NAMES utf8 */;
 
@@ -51,6 +51,24 @@ INSERT INTO `posts` VALUES (14,'a','a',0,'published',1519833600000,1519899953565
 /*!40000 ALTER TABLE `posts` ENABLE KEYS */;
 
 #
+# Structure for table "tags"
+#
+
+DROP TABLE IF EXISTS `tags`;
+CREATE TABLE `tags` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `tagname` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+#
+# Data for table "tags"
+#
+
+/*!40000 ALTER TABLE `tags` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tags` ENABLE KEYS */;
+
+#
 # Structure for table "users"
 #
 
@@ -69,4 +87,5 @@ CREATE TABLE `users` (
 #
 
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES (1,'admin','7c4a8d09ca3762af61e59520943dc26494f8941b',1,NULL);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
