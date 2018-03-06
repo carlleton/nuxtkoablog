@@ -81,7 +81,7 @@ export default {
   font-size: 1.14rem;
 }
 .widget a{
-  color: #333;
+  /*color: #333;*/
 }
 .widget-title{
   margin: 0 0 1.5em;

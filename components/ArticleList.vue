@@ -11,17 +11,20 @@
             <i class="fa fa-folder"></i>
             <nuxt-link :to="'/cate/'+post.cid" class="cate">{{catename(post.cid)}}</nuxt-link>
           </span>
+          <i class="fa fa-tags"></i>
+          {{post.tags|tags}}
         </div>
       </div>
     </article>
     <el-pagination
       background
+      class="pages"
       layout="prev, pager, next"
       :current-page.sync="currentPage"
       :page-size="pageSize"
       :total="total"
       @current-change="handleCurrentChange"
-      v-show="total <= pageSize">
+      v-show="total > pageSize">
     </el-pagination>
   </section>
 </template>
@@ -62,20 +65,26 @@ export default {
   filters: {
     addtime(str) {
       return dateFormat(new Date(str), 'yyyy-MM-dd')
+    },
+    tags(str) {
+      if (!str) {
+        return ''
+      }
+      return str.split(',').join(' ')
     }
   }
 }
 </script>
 <style scoped>
-.entry-header{
-  padding: 0 10%;
+.entry-header, .pages{
+  padding: 0 5% 10px 5%;
   overflow: auto;
 }
 .entry-title{
   font-size: 24px;
   line-height: 1.2308;
   margin-bottom: 1.2308em;
-  margin: 20px 0 10px;
+  margin: 10px 0;
 }
 .entry-footer{
   padding: 10px;
@@ -83,6 +92,9 @@ export default {
   color: rgba(51, 51, 51, 0.7);
 }
 .cate{
-  font-weight: bold;
+  margin-left: 5px;
+}
+.pages{
+  margin-top: 10px;
 }
 </style>

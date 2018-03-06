@@ -18,7 +18,7 @@ export default class Posts {
       sendParams.push('%' + obj.keyword + '%')
     }
     if (obj.cid) {
-      sql += ` and posts.cid = ?`
+      sql += ` and posts.cid in (select id from cates where path like (select concat((select path from cates where id = ?),'%')))`
       sendParams.push(obj.cid)
     }
     if (obj.where) {

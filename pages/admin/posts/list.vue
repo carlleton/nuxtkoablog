@@ -55,6 +55,7 @@
       :size="pageSize"
       :current-page.sync="currentPage"
       @current-change="handleCurrentChange"
+      v-show="total > pageSize"
       ></el-pagination>
   </div>
 </template>

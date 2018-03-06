@@ -78,7 +78,8 @@ router.post('/add', async (ctx, next) => {
     content: body.content,
     cid: body.cid,
     status: body.status,
-    addtime: body.addtime
+    addtime: body.addtime,
+    tags: body.tags
   }
   var result = await postsModel.add(params)
   if (result.err) {
@@ -100,6 +101,7 @@ router.post('/update', async (ctx, next) => {
     content: body.content,
     cid: body.cid,
     status: body.status,
+    tags: body.tags,
     addtime: body.addtime
   }
   var result = await postsModel.update(params)
