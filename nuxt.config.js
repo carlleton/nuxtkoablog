@@ -21,6 +21,7 @@ module.exports = {
   */
   css: [
     '~assets/css/main.css',
+    '~assets/css/font-awesome.min.css',
     'element-ui/lib/theme-chalk/reset.css',
     'element-ui/lib/theme-chalk/index.css'
   ],

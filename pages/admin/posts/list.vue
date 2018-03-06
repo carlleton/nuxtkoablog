@@ -18,7 +18,7 @@
       <el-table-column
         prop="id"
         label="id"
-        width="120">
+        width="50">
       </el-table-column>
       <el-table-column
         prop="title"
@@ -27,14 +27,16 @@
       <el-table-column
         prop="catename"
         label="分类"
+        width="150"
         :formatter="formater_catename">
       </el-table-column>
       <el-table-column
         prop="addtime"
         label="时间"
+        width="100"
         :formatter="formater_addtime">
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作" width="150">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -46,12 +48,21 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-pagination
+      background
+      layout="prev, pager, next"
+      :total="total"
+      :size="pageSize"
+      :current-page.sync="currentPage"
+      @current-change="handleCurrentChange"
+      ></el-pagination>
   </div>
 </template>
 <script>
 import axios from 'axios'
 import {dateFormat} from '~/util/tools'
 import Cates from '~/components/admin/cates'
+let pageSize = require('~/config/config').pageSize
 
 export default {
   layout: 'admin',
@@ -67,43 +78,39 @@ export default {
     }
   },
   async asyncData({query}) {
-    var pageNum = query.page || 0
+    var pageNum = query.page || 1
     var cid = query.cid || ''
     var url = '/api/posts/list?page=' + pageNum + '&cid=' + cid
     let {data} = await axios.get(url)
     let cates = await axios.get('/api/cates/list')
+
     return {
       cates: cates.data,
-      postsdata: data
+      postsdata: data.data || [],
+      total: data.total || 0,
+      pageSize: pageSize,
+      currentPage: pageNum
     }
   },
   methods: {
-    formater_catename(row, column) {
-      var cate = this.cates.filter(cate => row.cid === cate.id)
-      var catename = '未分类'
-      if (cate.length > 0) {
-        catename = cate[0].catename
-      }
-      return catename
-    },
-    formater_addtime(row, column) {
-      return dateFormat(new Date(row.addtime), 'yyyy-MM-dd')
-    },
     async getData() {
-      console.log(this.$route)
-      var pageNum = this.$route.query.page || 0
+      var pageNum = this.currentPage || this.$route.query.page || 0
       var cid = this.$route.query.cid || 0
       var url = '/api/posts/list?page=' + pageNum + '&cid=' + cid
       let {data} = await axios.get(url)
-      this.postsdata = data
+      this.postsdata = data.data
     },
     async goSearch() {
       var pageNum = this.$route.query.page || 0
       var cid = this.search.cid || ''
       var url = '/api/posts/list?page=' + pageNum + '&cid=' + cid + '&keyword=' + this.search.keyword
       let {data} = await axios.get(url)
-      this.postsdata = data
+      this.postsdata = data.data
     },
+    handleCurrentChange(currentPage) {
+      this.getData()
+    },
+    // 删除操作
     handleDelete(index, row) {
       var id = row.id
       this.$confirm('您确认要删除吗？', '删除', {
@@ -142,6 +149,7 @@ export default {
     gotoadd() {
       this.$router.push('./detail')
     },
+    // 多级分类
     cateshow(value) {
       var vals = value.split(',')
       var str = ''
@@ -153,6 +161,19 @@ export default {
         str += '└'
       }
       return str
+    },
+    // 分类格式化
+    formater_catename(row, column) {
+      var cate = this.cates.filter(cate => row.cid === cate.id)
+      var catename = '未分类'
+      if (cate.length > 0) {
+        catename = cate[0].catename
+      }
+      return catename
+    },
+    // 时间格式化
+    formater_addtime(row, column) {
+      return dateFormat(new Date(row.addtime), 'yyyy-MM-dd')
     }
   },
   components: {

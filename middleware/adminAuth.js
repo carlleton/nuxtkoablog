@@ -13,7 +13,8 @@ export default function ({ isClient, isServer, route, req, res, redirect }) {
   }
   // 客户端
   if (isClient) {
-    if (route.path.indexOf('admin') > 0 && !isLogin()) {
+    var path = route.path
+    if (path.indexOf('admin') > 0 && !isLogin()) {
       redirect('login')
     }
   }

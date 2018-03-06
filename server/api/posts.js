@@ -3,6 +3,7 @@ import Cates from '../models/Cates'
 const router = require('koa-router')()
 const db = require('../../util/db')
 const _ = require('lodash')
+let pageSize = require('../../config/config').pageSize
 
 let postsModel = new Posts()
 let catesModel = new Cates()
@@ -10,7 +11,8 @@ let catesModel = new Cates()
 router.get('/list', async (ctx, next) => {
   var params = {
     scope: ctx.query.scope || '',
-    pageNum: ctx.query.page || 0,
+    pageNum: ctx.query.page || 1,
+    pageSize: pageSize,
     cid: ctx.query.cid || '',
     keyword: ctx.query.keyword || ''
   }
@@ -20,7 +22,10 @@ router.get('/list', async (ctx, next) => {
     ctx.body = { code: 404, message: 'no result list' }
   } else {
     ctx.status = 200
-    ctx.body = result.result
+    ctx.body = {
+      data: result[0],
+      total: result[1].total
+    }
   }
 })
 

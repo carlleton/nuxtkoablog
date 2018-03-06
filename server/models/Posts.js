@@ -1,12 +1,11 @@
 let db = require('../../util/db')
-let pageSize = require('../../config/config').pageSize
 
 export default class Posts {
 
   // 根据页码获取当前页Post列表
   list(obj) {
     var sendParams = []
-    var sql = 'select * from posts where 1=1'
+    var sql = ''
     if (obj.scope === 'published') {
       sql += ` and status = '${obj.scope}'`
     }
@@ -25,11 +24,37 @@ export default class Posts {
     if (obj.where) {
       sql += ' and ' + obj.where
     }
-    sql += ' order by id desc'
-    sql += ' limit ?, ?'
-    sendParams.push(obj.pageNum * pageSize)
-    sendParams.push(pageSize)
-    return db.query(sql, sendParams)
+
+    var totalsql = 'select count(id) as total from posts where 1=1' + sql
+    var listsql = 'select * from posts where 1=1' + sql
+    listsql += ' order by id desc'
+    if (obj.pageNum && obj.pageSize) {
+      listsql += ' limit ?, ?'
+      if (obj.pageNum < 1) {
+        obj.pageNum = 1
+      }
+      sendParams.push((obj.pageNum - 1) * obj.pageSize)
+      sendParams.push(obj.pageSize)
+    }
+    var listdata = new Promise((resolve, reject) => {
+      db.query(listsql, sendParams).then((res) => {
+        if (res.err) {
+          reject(err)
+        } else {
+          resolve(res.result)
+        }
+      })
+    })
+    var totaldata = new Promise((resolve, reject) => {
+      db.query(totalsql, sendParams).then((res) => {
+        if (res.err) {
+          reject(err)
+        } else {
+          resolve(res.result[0])
+        }
+      })
+    })
+    return Promise.all([listdata, totaldata])
   }
 
   // 根据id获取Post详情

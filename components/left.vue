@@ -54,7 +54,6 @@ export default {
         }
       }
       this.cates = cates.concat(temps)
-      console.log(this.cates)
     }
   }
 }

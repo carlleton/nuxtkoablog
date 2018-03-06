@@ -17,7 +17,7 @@ footer
   background: #fff;
   border-radius: 0 0 1px rgba(0, 0, 0, 0.15);
 }
-a{
+body a{
   color: #333;
 }
 a:hover, a:focus, a:visited

@@ -14,7 +14,7 @@ let config = {
     '/api/cates/update',
     '/api/cates/del'
   ],
-  pageSize: 20
+  pageSize: 10
 }
 
 module.exports = config

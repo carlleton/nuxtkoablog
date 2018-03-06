@@ -5,10 +5,11 @@
         登陆
       </div>
       <div class="form-group">
-        <el-input type="text" id="username" placeholder="登录名" auto-complete="off" v-model="username"></el-input>
+        <el-input type="text" id="username" placeholder="登录名" auto-complete="off" v-model="username" prefix-icon="fa fa-user">
+        </el-input>
       </div>
       <div class="form-group">
-        <el-input type="password" id="userpass" placeholder="密码" v-model="userpass" @keyup.enter="login"></el-input>
+        <el-input type="password" id="userpass" placeholder="密码" v-model="userpass" @keyup.enter="login" prefix-icon="fa fa-lock"></el-input>
       </div>
       <div class="form-group">
         <el-button class="btn" type="primary" v-on:keyup.enter="login" @click="login">登陆</el-button>
@@ -73,6 +74,8 @@ export default {
 }
 .formtitle{
   text-align: center;
+  font-size: 16px;
+  font-weight: bold;
 }
 label {
   position: absolute;
