@@ -12,7 +12,7 @@
 }
 .md img {
 	max-width: 100%;
-	margin: 5px auto;
+	margin: 5px;
     display: block;
 	box-shadow: 0 0 5px rgba(0,0,0,0.23);
 }
@@ -130,7 +130,7 @@
 	max-width: 100%;
 	color: #5c5d5e;
 	border: 1px solid #bbb;
-	border-collapse:collapse; 
+	border-collapse:collapse;
 	border-spacing:0;
 }
 .md table th {

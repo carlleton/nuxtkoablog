@@ -21,8 +21,10 @@
         width="50">
       </el-table-column>
       <el-table-column
-        prop="title"
         label="标题">
+        <template slot-scope="scope">
+          <nuxt-link :to="'./detail?id=' + scope.row.id">{{scope.row.title}}</nuxt-link>
+        </template>
       </el-table-column>
       <el-table-column
         prop="catename"
