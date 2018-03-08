@@ -9,6 +9,7 @@
     <div class="tabletit">
       父分类：
       <el-select v-model="pid" style="width:150px;">
+        <el-option :value="0" label="根目录">根目录</el-option>
         <el-option v-for="cate in cates" :value="cate.id" :label="cateshow(cate.path)+cate.catename" :key="cate.id">
           {{cateshow(cate.path)}}{{cate.catename}}
         </el-option>
@@ -96,7 +97,6 @@ export default {
             onClose: () => {
               this.act = ''
               this.catename = ''
-              this.pid = 0
               this.orderid = ''
               this.getData()
             }

@@ -19,6 +19,13 @@ export function dateFormat(date,format){
     return format;
 }
 
+export function getTen(num) {
+  if (num < 10) {
+    return '0' + num
+  }
+  return num
+}
+
 export function getCookiesInServer(req) {
   let Cookies = {}
   req && req.headers.cookie && req.headers.cookie.split(';').forEach(function (Cookie) {
@@ -58,4 +65,5 @@ export function isLogin() {
   }
   return false
 }
+
 /* eslint-enable */

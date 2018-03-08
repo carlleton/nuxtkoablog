@@ -92,7 +92,6 @@ export default {
             onClose: () => {
               this.act = ''
               this.catename = ''
-              this.pid = 0
               this.orderid = ''
               this.getData()
             }

@@ -1,4 +1,5 @@
 import NoteCates from '../models/NoteCates'
+import { getTen } from '../../util/tools'
 const router = require('koa-router')()
 const db = require('../../util/db')
 const _ = require('lodash')
@@ -35,15 +36,17 @@ router.post('/add', async (ctx, next) => {
       params.path = pCates.result[0].path
     }
   }
-  let maxCate = await notecatesModel.find({
-    where: 'pid = ' + body.pid,
-    order: 'orderid desc',
-    limit: '0, 1'
-  })
-  if (maxCate.result.length > 0) {
-    params.orderid = maxCate.result[0].orderid + 1
+  if (!body.orderid) {
+    let maxCate = await notecatesModel.find({
+      where: 'pid = ' + body.pid,
+      order: 'orderid desc',
+      limit: '0, 1'
+    })
+    if (maxCate.result.length > 0) {
+      params.orderid = maxCate.result[0].orderid + 1
+    }
   }
-  params.path += params.orderid + ','
+  params.path += getTen(params.orderid) + ','
   var result = await notecatesModel.add(params)
   if (result.error) {
     ctx.status = 404
@@ -74,7 +77,7 @@ router.post('/update', async (ctx, next) => {
       params.path = pCates.result[0].path
     }
   }
-  params.path += params.orderid + ','
+  params.path += getTen(params.orderid) + ','
   var result = await notecatesModel.update(params)
   if (result.error) {
     ctx.status = 404
