@@ -3,6 +3,8 @@ const router = require('koa-router')()
 const users = require('./users')
 const posts = require('./posts')
 const cates = require('./cates')
+const notes = require('./notes')
+const notecates = require('./notecates')
 
 let jwtAuth = require('../middleware/jwtAuth')
 
@@ -12,6 +14,8 @@ router.use('/', jwtAuth)
 router.use('/users', users.routes())
 router.use('/posts', posts.routes(), posts.allowedMethods())
 router.use('/cates', cates.routes())
+router.use('/notes', notes.routes())
+router.use('/notecates', notecates.routes())
 
 router.all('/', async (ctx, next) => {
   ctx.status = 200

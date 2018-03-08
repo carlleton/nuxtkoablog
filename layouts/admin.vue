@@ -39,11 +39,17 @@ export default {
     return {
       menus: [
         {
-          name: '内容管理',
+          name: '日记管理',
           childs: [
-            {name: '内容列表', link: '/admin/posts/list'},
-            {name: '分类管理', link: '/admin/posts/cates'},
-            {name: '标签管理', link: '/admin/posts/tags'}
+            {name: '日记列表', link: '/admin/notes'},
+            {name: '分类管理', link: '/admin/notes/cates'}
+          ]
+        },
+        {
+          name: '文章管理',
+          childs: [
+            {name: '文章列表', link: '/admin/posts/list'},
+            {name: '分类管理', link: '/admin/posts/cates'}
           ]
         }
       ]
