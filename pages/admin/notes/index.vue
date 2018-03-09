@@ -2,6 +2,7 @@
   <el-container>
     <el-aside width="200px" class="cates">
       <!-- 分类 -->
+      <Cates :cateid.sync="cateid"></Cates>
     </el-aside>
     <el-aside width="200px" class="articles">
       <!-- 笔记列表 -->
@@ -12,28 +13,27 @@
   </el-container>
 </template>
 <script>
-import axios from 'axios'
+import Cates from '~/components/admin/note/cates'
 
 export default {
   layout: 'admin2',
   head() {
     return {
-      title: '日记'
+      title: '笔记'
     }
   },
   data() {
     return {
+      cateid: 0,
       cates: []
     }
   },
   created() {
-    this.getCatesData()
   },
   methods: {
-    async getCatesData() {
-      let cates = await axios.get('/api/notecates/list')
-      this.cates = cates.data
-    }
+  },
+  components: {
+    Cates
   }
 }
 </script>
