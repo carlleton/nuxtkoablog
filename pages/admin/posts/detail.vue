@@ -15,9 +15,6 @@
         <el-form-item label="内容" prop="content">
           <mavon-editor v-model="posts.content"></mavon-editor>
         </el-form-item>
-        <el-form-item label="关键词" prop="tags">
-          <el-input v-model="posts.tags"></el-input>
-        </el-form-item>
       </div>
       <div style="width:200px;float:left;margin-left:10px;">
         <el-form-item label="分类" v-if="act!='cate'">
@@ -32,6 +29,9 @@
         </el-form-item>
         <el-form-item label="添加时间" prop="addtime">
           <el-date-picker type="date" size="small" placeholder="选择日期" v-model="posts.addtime"></el-date-picker>
+        </el-form-item>
+        <el-form-item label="关键词" prop="tags">
+          <el-input v-model="posts.tags"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="handleSubmit()">提交</el-button>

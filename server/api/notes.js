@@ -10,10 +10,16 @@ let notecatesModel = new NoteCates()
 
 router.get('/list', async (ctx, next) => {
   var params = {
-    pageNum: ctx.query.page || 1,
-    pageSize: pageSize,
+    pageNum: ctx.query.pageNum || 1,
+    pageSize: ctx.query.pageSize || pageSize,
     cid: ctx.query.cid || '',
     keyword: ctx.query.keyword || ''
+  }
+  if (typeof params.pageSize === 'string') {
+    params.pageSize = parseInt(params.pageSize)
+  }
+  if (typeof params.cid === 'string') {
+    params.cid = parseInt(params.cid)
   }
   var result = await notesModel.list(params)
   if (result.err) {
