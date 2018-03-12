@@ -102,7 +102,7 @@ router.get('/:id', async (ctx, next) => {
     }
     return
   }
-  var result = await postsModel.one(id)
+  var result = await notesModel.one(id)
   ctx.status = 200
   var data = result.result
   if (data.length > 0) {

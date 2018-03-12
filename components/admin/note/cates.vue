@@ -31,6 +31,10 @@ export default {
   },
   created() {
     this.getCatesData()
+    this.$on('selectFirstCate', () => {
+      var cate = this.cates[1]
+      this.selectcate(cate)
+    })
   },
   methods: {
     async getCatesData() {
