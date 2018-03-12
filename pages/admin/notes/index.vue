@@ -25,7 +25,7 @@
         <div class="notestit">
           {{catename}}
         </div>
-        <Notes :cateid="cateid" :noteid.sync="noteid"></Notes>
+        <Notes ref="notes" :cateid="cateid" :noteid.sync="noteid"></Notes>
       </el-aside>
       <el-main class="editor">
         <!-- 编辑器 -->
@@ -54,6 +54,9 @@ export default {
     }
   },
   created() {
+    this.$on('updatenotes', () => {
+      this.$refs.notes.$emit('updatenotes')
+    })
   },
   methods: {
     addNote() {

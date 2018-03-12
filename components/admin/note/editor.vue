@@ -9,7 +9,7 @@
       </div>
     </div>
     <el-input placeholder="请输入标题" v-model="note.title"></el-input>
-    <mavon-editor v-model="note.content"></mavon-editor>
+    <mavon-editor class="editor" v-model="note.content"></mavon-editor>
   </div>
 </template>
 <script>
@@ -74,6 +74,7 @@ export default {
               onClose: () => {
                 this.note.id = res.data.id
                 this.act = 'show'
+                this.$emit('updatenotes')
               }
             })
           }
@@ -87,6 +88,7 @@ export default {
               duration: 2000,
               onClose: () => {
                 this.act = 'show'
+                this.$emit('updatenotes')
               }
             })
           }
@@ -97,6 +99,9 @@ export default {
 }
 </script>
 <style scoped>
+.form{
+  height: 100%;
+}
 .inputtags{
   width: 500px;
 }
@@ -107,5 +112,8 @@ export default {
 }
 .rightbtn i{
   cursor: pointer;
+}
+.editor{
+  height: calc(100% - 80px);
 }
 </style>

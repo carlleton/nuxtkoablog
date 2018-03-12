@@ -2,7 +2,7 @@
   <div class="noteslist">
     <ul>
       <li v-for="note in notes" :key="note.id" :class="{cur:noteid==note.id}" @click="selectNote(note)">
-        <p class="itemtitle">
+        <p class="itemtitle" :title="note.title">
           {{note.title}}
         </p>
       </li>
@@ -27,6 +27,9 @@ export default {
   },
   created() {
     this.getData()
+    this.$on('updatenotes', () => {
+      this.getData()
+    })
   },
   watch: {
     cateid(newval, oldval) {
@@ -65,13 +68,14 @@ export default {
 }
 .noteslist ul{
   padding: 0;
+  margin: 5px 0;
 }
 .noteslist li{
   height: 30px !important;
   border: 0;
   border-radius: 0;
   border-bottom: 1px solid #ebeff2;
-  padding: 0 5px;
+  padding: 0 0 0 5px;
 }
 .noteslist li.cur{
   background-color: #eee;
@@ -81,7 +85,8 @@ export default {
 }
 .itemtitle{
   font-size: 16px;
-  height: 22px;
   line-height: 30px;
+  white-space: nowrap;
+  overflow: hidden;
 }
 </style>
