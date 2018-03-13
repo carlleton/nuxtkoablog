@@ -37,8 +37,9 @@ $ npm run generate
   - [ ] 定期发送数据库备份到邮箱
   - [ ] 定义一个邮箱来发送备份
   - [ ] 定义一个邮箱来接收备份
-  - [ ] 导入功能，可导入其他博客系统的日志或者md文件（倒腾各种博客必备）
+  - [x] 导入功能，可导入其他博客系统的日志或者md文件（倒腾各种博客必备）
     - [x] cmd命令行导入普通`.md`文件到数据库
+    - [x] cmd导入markdown文件，支持gitblog格式
 - [ ] 安装升级功能
   - [ ] 开始部署时需要输入ip、用户名、密码、数据库名，然后安装sql文件
   - [ ] 一开始定义好升级操作，每次版本升级更新相应内容
@@ -46,7 +47,7 @@ $ npm run generate
 PS：一些功能暂时只是为了先使用起来，后续再说优化
 
 ## 命令行工具
-* `node cmd markdown E:\WWW\folder`，导入具体目录下的markdown文件到数据库，目前只支持windows下的，还没兼容linux的
+* `node cmd.js markdown E:\WWW\folder`，导入具体目录下的markdown文件到数据库，目前只支持windows下的，还没兼容linux的
 
 ## 初衷
 * 分享原创文章，收藏转载文章

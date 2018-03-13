@@ -1,14 +1,16 @@
-let db = require('./db')
 const { promisify } = require('util');
 const { resolve } = require('path');
 const fs = require('fs');
 const readdir = promisify(fs.readdir);
 const rename = promisify(fs.rename);
 const stat = promisify(fs.stat);
+let db = require('./db')
+let gitblog = require('./mdgitblog')
 
 
 var cates = {}
 
+// 数据插入到数据库
 function add(post) {
   let sql = 'insert into notes (title,content,cid,tags,addtime,updatetime) values (?, ?, ?, ?, ?, ?)'
   let params = [
@@ -21,7 +23,7 @@ function add(post) {
   ]
   return db.query(sql, params)
 }
-
+// 获取文件列表
 async function getFiles(dir) {
   const subdirs = await readdir(dir);
   const files = await Promise.all(subdirs.map(async (subdir) => {
@@ -58,16 +60,17 @@ async function readfile(obj, basefolder) {
     addtime: addtime,
     tags: tags
   }
+  params = gitblog.deal(content, params)
   var result = await add(params)
   if (result.err) {
-    console.log('404')
+    return '404'
   } else {
-    console.log(result.result.insertId)
+    return result.result.insertId
   }
-  return
 }
 
-async function read(folder) {
+// 查询类别
+async function queryCates() {
   let catesresult = await db.query('select * from notecates order by path asc')
   var data = catesresult.result
   var tmps = []
@@ -91,11 +94,23 @@ async function read(folder) {
       }
     }
   }
-  getFiles(folder).then(files => {
-    for (let i = 0, n = files.length; i < n; i++) {
-      readfile(files[i], folder)
-    }
-  }).catch(e => console.error(e));
+}
+
+
+function read(folder) {
+  queryCates()
+    .then(() => getFiles(folder))
+    .then(async files => {
+      var proms = []
+      for (let i = 0, n = files.length; i < n; i++) {
+        var id = await readfile(files[i], folder)
+        proms.push(id)
+      }
+      Promise.all(proms).then((ids) => {
+        console.log(ids.join(','))
+      })
+    })
+    .catch(e => console.error(e))
 }
 
 module.exports.read = read
