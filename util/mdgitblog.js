@@ -1,4 +1,21 @@
-var YAML = require('yamljs')
+
+// yaml格式的字符串转换为对象
+function yaml2obj(str) {
+  var arr = str.split('\n')
+  var obj = {}
+  var name = ''
+  var content = ''
+  for (var i = 0, n = arr.length; i < n; i++) {
+    if (arr[i].indexOf(':') > -1) {
+      name = arr[i].substr(0, arr[i].indexOf(':')).trim()
+      content = arr[i].substr(arr[i].indexOf(':') + 1).trim()
+      obj[name] = content
+    } else if(i !== 0) {
+      obj[name] += '\n' + arr[i]
+    }
+  }
+  return obj
+}
 
 function deal(str, params) {
   var tmp = str.indexOf('<!--')
@@ -10,7 +27,7 @@ function deal(str, params) {
   var content = str.substr(str.indexOf('-->') + 3)
   params.content = content
 
-  titleconfig = YAML.parse(str2)
+  titleconfig = yaml2obj(str2)
 
   titleconfig.title && (params.title = titleconfig.title)
   titleconfig.tags && (params.tags = titleconfig.tags.replace(/ /g,','))

@@ -25,6 +25,15 @@ function add(post) {
 }
 // 获取文件列表
 async function getFiles(dir) {
+  var isDirectory = (await stat(dir)).isDirectory()
+  if(!isDirectory) {
+    var filename = dir.substr(dir.lastIndexOf('\\') + 1)
+    console.log(filename)
+    return [{
+      realpath: resolve(dir),
+      filename: filename
+    }]
+  }
   const subdirs = await readdir(dir);
   const files = await Promise.all(subdirs.map(async (subdir) => {
     const res = resolve(dir, subdir);
