@@ -24,7 +24,7 @@ export default class Notes {
 
     var totalsql = 'select count(id) as total from notes where 1=1' + sql
     var listsql = 'select id,title,cid,addtime,updatetime,tags from notes where 1=1' + sql
-    listsql += ' order by id desc'
+    listsql += ' order by updatetime desc'
     if (obj.pageNum && obj.pageSize) {
       listsql += ' limit ?, ?'
       if (obj.pageNum < 1) {

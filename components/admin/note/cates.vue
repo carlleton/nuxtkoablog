@@ -4,8 +4,8 @@
       <li v-for="cate in cates" :key="cate.id">
         <a :class="{cur:cateid==cate.id}" @click="selectcate(cate)">
           <template v-if="cate.childs">
-            <i class="fa fa-plus-square-o" v-show="!cate.childshow" @click="cate.childshow=true"></i>
-            <i class="fa fa-minus-square-o" v-show="cate.childshow" @click="cate.childshow=false"></i>
+            <i class="fa fa-plus-square-o" v-show="!cate.childshow" @click.stop="cate.childshow=true"></i>
+            <i class="fa fa-minus-square-o" v-show="cate.childshow" @click.stop="cate.childshow=false"></i>
           </template>
           <i class="catename" v-else></i>
           {{cate.catename}}

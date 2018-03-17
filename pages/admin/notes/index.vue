@@ -3,7 +3,7 @@
     <el-header>
       <div class="admin_tit">
         <nuxt-link to="/admin">后台管理页面</nuxt-link>
-        <nuxt-link to="/" class="page">前台页面</nuxt-link>
+        <nuxt-link to="/" class="page" target="_blank">前台页面</nuxt-link>
         <nuxt-link to="/admin/posts/list" class="page">文章列表</nuxt-link>
         <el-button plain size="mini" style="margin-left:10px;" @click="addNote">添加笔记</el-button>
       </div>
@@ -22,14 +22,11 @@
       </el-aside>
       <el-aside width="250px" class="notes">
         <!-- 笔记列表 -->
-        <div class="notestit">
-          {{catename}}
-        </div>
-        <Notes ref="notes" :cateid="cateid" :noteid.sync="noteid"></Notes>
+        <Notes ref="notes" :cateid="cateid" :catename="catename" :noteid.sync="noteid"></Notes>
       </el-aside>
       <el-main class="editor">
         <!-- 编辑器 -->
-        <Editor :cateid="cateid" :noteid="noteid"></Editor>
+        <Editor :cateid="cateid" :noteid="noteid" @updatenotes="updatenotes"></Editor>
       </el-main>
     </el-container>
   </el-container>
@@ -54,9 +51,6 @@ export default {
     }
   },
   created() {
-    this.$on('updatenotes', () => {
-      this.$refs.notes.$emit('updatenotes')
-    })
   },
   methods: {
     addNote() {
@@ -65,6 +59,9 @@ export default {
         this.$refs.cates.$emit('selectFirstCate')
       }
       this.noteid = 0
+    },
+    updatenotes() {
+      this.$refs.notes.$emit('updatenotes')
     }
   },
   components: {
@@ -123,13 +120,6 @@ export default {
   padding: 0 10px;
   background-color: rgba(255, 255, 255, 0.05);
   color: #fff;
-}
-.notestit{
-  background-color: #eee;
-  border-bottom: 1px solid #ebeff2;
-  height: 36px;
-  line-height: 36px;
-  padding: 0 10px;
 }
 .notes{
   background-color: #fff;

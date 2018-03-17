@@ -9,11 +9,30 @@
       </div>
     </div>
     <el-input placeholder="请输入标题" v-model="note.title"></el-input>
-    <mavon-editor class="editor" v-model="note.content"></mavon-editor>
+    <div class="contentshow md" v-if="act=='show'" v-html="markdownhtml"></div>
+    <mavon-editor class="editor" v-if="act!='show'" v-model="note.content"></mavon-editor>
   </div>
 </template>
 <script>
 import axios from 'axios'
+import hljs from 'highlight.js'
+import 'highlight.js/styles/default.css'
+import '~/assets/css/yeh-md-theme.css'
+
+let marked = require('marked')
+marked.setOptions({
+  renderer: new marked.Renderer(),
+  gfm: true,
+  tables: true,
+  breaks: true,
+  pedantic: false,
+  sanitize: false,
+  smartLists: true,
+  smartypants: false,
+  highlight: function (code) {
+    return hljs.highlightAuto(code).value
+  }
+})
 export default {
   props: ['cateid', 'noteid'],
   data() {
@@ -26,6 +45,11 @@ export default {
         addtime: new Date(),
         id: 0
       }
+    }
+  },
+  computed: {
+    markdownhtml() {
+      return marked(this.note.content)
     }
   },
   watch: {
@@ -112,8 +136,13 @@ export default {
 }
 .rightbtn i{
   cursor: pointer;
+  margin-right: 10px;
+  line-height: 35px;
 }
 .editor{
   height: calc(100% - 80px);
+}
+.contentshow{
+  padding: 10px;
 }
 </style>
