@@ -1,8 +1,8 @@
 <template>
   <el-container>
-    <el-header>
+    <el-header style="height:40px;">
       <div class="admin_tit">
-        <nuxt-link to="/admin">后台管理页面</nuxt-link>
+        <nuxt-link to="/admin"><< 后台管理页面</nuxt-link>
         <nuxt-link to="/" class="page" target="_blank">前台页面</nuxt-link>
         <nuxt-link to="/admin/posts/list" class="page">文章列表</nuxt-link>
         <el-button plain size="mini" style="margin-left:10px;" @click="addNote">添加笔记</el-button>
@@ -79,7 +79,7 @@ export default {
   font-size: 20px;
   color: #fff;
   float: left;
-  line-height: 50px;
+  line-height: 40px;
 }
 .admin_tit a{
   color: #fff;
@@ -91,7 +91,7 @@ export default {
 .author{
   float: right;
   color: #fff;
-  line-height: 50px;
+  line-height: 40px;
 }
 .author a{
   color: #fff;
@@ -102,8 +102,8 @@ export default {
 .main{
   position: fixed;
   width: 100%;
-  height: calc(100% - 60px);
-  top: 60px;
+  height: calc(100% - 40px);
+  top: 40px;
 }
 .editor{
   padding: 0;

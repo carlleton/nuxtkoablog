@@ -17,7 +17,7 @@
 <script>
 import axios from 'axios'
 import hljs from 'highlight.js'
-import 'highlight.js/styles/default.css'
+import 'highlight.js/styles/dark.css'
 import '~/assets/css/yeh-md-theme.css'
 
 let marked = require('marked')
@@ -196,6 +196,7 @@ export default {
 <style scoped>
 .form{
   height: 100%;
+  width: 99%;
 }
 .inputtags{
   width: 500px;

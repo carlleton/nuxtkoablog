@@ -22,7 +22,7 @@
 import hljs from 'highlight.js'
 import axios from 'axios'
 import {dateFormat} from '~/util/tools'
-import 'highlight.js/styles/default.css'
+import 'highlight.js/styles/dark.css'
 import '~/assets/css/yeh-md-theme.css'
 import '~/assets/css/ocean.min.css'
 
