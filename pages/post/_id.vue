@@ -31,7 +31,7 @@ marked.setOptions({
   renderer: new marked.Renderer(),
   gfm: true,
   tables: true,
-  breaks: false,
+  breaks: true,
   pedantic: false,
   sanitize: false,
   smartLists: true,
@@ -86,6 +86,11 @@ export default {
 }
 </script>
 <style scoped>
+article{
+  margin-bottom: 10px;
+  background: #fff;
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.15);
+}
 .entry-header{
   padding: 0 5%;
   overflow: auto;

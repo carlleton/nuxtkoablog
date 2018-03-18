@@ -1,6 +1,6 @@
-﻿# Host: localhost  (Version: 5.5.53)
-# Date: 2018-03-08 17:53:49
-# Generator: MySQL-Front 5.3  (Build 4.234)
+﻿# Host: localhost  (Version: 5.5.40)
+# Date: 2018-03-18 20:04:06
+# Generator: MySQL-Front 5.3  (Build 4.120)
 
 /*!40101 SET NAMES utf8 */;
 
@@ -45,8 +45,9 @@ CREATE TABLE `notes` (
   `addtime` bigint(20) DEFAULT NULL,
   `updatetime` bigint(20) DEFAULT NULL,
   `tags` varchar(255) DEFAULT NULL,
+  `postid` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=2641 DEFAULT CHARSET=utf8;
 
 #
 # Structure for table "posts"

@@ -17,13 +17,13 @@ export default {
     return /^\d+$/.test(params.cid)
   },
   async asyncData({params}) {
-    var cid = params.cid
+    var cid = ~~params.cid
     let posts = await axios.get('/api/posts/list?cid=' + cid)
     let cates = await axios.get('/api/cates/list')
     var catename = '未定义'
-    for (var i = 0, n = cates.length; i < n; i++) {
-      if (cates[i].id === cid) {
-        catename = cates[i].catename
+    for (var i = 0, n = cates.data.length; i < n; i++) {
+      if (cates.data[i].id === cid) {
+        catename = cates.data[i].catename
         break
       }
     }

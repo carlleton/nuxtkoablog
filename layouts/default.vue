@@ -45,8 +45,7 @@ export default {
   padding: 20px 5%;
 }
 .main{
-  background: #fff;
-  box-shadow: 0 0 1px rgba(0, 0, 0, 0.15);
+
 }
 
 .button, .button:visited

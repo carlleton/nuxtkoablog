@@ -41,7 +41,8 @@ router.post('/add', async (ctx, next) => {
     content: body.content,
     cid: body.cid,
     addtime: body.addtime,
-    tags: body.tags
+    tags: body.tags,
+    postid: body.postid
   }
   var result = await notesModel.add(params)
   if (result.err) {
@@ -59,12 +60,14 @@ router.post('/update', async (ctx, next) => {
   var body = ctx.request.body
   var params = {
     id: body.id,
-    title: body.title,
-    content: body.content,
-    cid: body.cid,
-    tags: body.tags,
-    addtime: body.addtime
+    addtime: body.addtime || (new Date()).getTime()
   }
+  body.title && (params.title = body.title)
+  body.content && (params.content = body.content)
+  body.cid && (params.cid = body.cid)
+  body.tags && (params.tags = body.tags)
+  body.postid !== undefined && (params.postid = body.postid)
+
   var result = await notesModel.update(params)
   if (result.error) {
     ctx.status = 404

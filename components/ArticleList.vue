@@ -76,6 +76,11 @@ export default {
 }
 </script>
 <style scoped>
+article{
+  margin-bottom: 10px;
+  background: #fff;
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.15);
+}
 .entry-header, .pages{
   padding: 0 5% 10px 5%;
   overflow: auto;
