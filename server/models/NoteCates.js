@@ -1,5 +1,5 @@
 let db = require('../../util/db')
-let pageSize = require('../../config/config').pageSize
+let pageSize = require('../../config').pageSize
 
 export default class NoteCates {
 

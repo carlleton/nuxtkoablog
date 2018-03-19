@@ -1,5 +1,5 @@
 import { isLogin, getCookiesInServer } from '../util/tools'
-// const needAuth = require('../config/config').needAuth
+// const needAuth = require('../config').needAuth
 
 export default function ({ isClient, isServer, route, req, res, redirect }) {
   // 服务器端判断是否需要登陆

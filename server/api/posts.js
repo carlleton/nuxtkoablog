@@ -3,7 +3,7 @@ import Cates from '../models/Cates'
 const router = require('koa-router')()
 const db = require('../../util/db')
 const _ = require('lodash')
-let pageSize = require('../../config/config').pageSize
+let pageSize = require('../../config').pageSize
 
 let postsModel = new Posts()
 let catesModel = new Cates()

@@ -31,7 +31,7 @@
 <script>
 import axios from 'axios'
 import {dateFormat} from '~/util/tools'
-let pageSize = require('~/config/config').pageSize
+let pageSize = require('~/config').pageSize
 
 export default {
   props: ['posts', 'total', 'url'],

@@ -1,6 +1,6 @@
-﻿# Host: localhost  (Version: 5.5.40)
-# Date: 2018-03-18 22:29:53
-# Generator: MySQL-Front 5.3  (Build 4.120)
+﻿# Host: localhost  (Version: 5.5.53)
+# Date: 2018-03-19 16:39:24
+# Generator: MySQL-Front 5.3  (Build 4.234)
 
 /*!40101 SET NAMES utf8 */;
 
@@ -30,7 +30,7 @@ CREATE TABLE `notecates` (
   `orderid` int(11) DEFAULT NULL,
   `path` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=40 DEFAULT CHARSET=utf8;
 
 #
 # Structure for table "notes"
@@ -50,6 +50,18 @@ CREATE TABLE `notes` (
 ) ENGINE=MyISAM AUTO_INCREMENT=2641 DEFAULT CHARSET=utf8;
 
 #
+# Structure for table "options"
+#
+
+DROP TABLE IF EXISTS `options`;
+CREATE TABLE `options` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL,
+  `value` longtext,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+#
 # Structure for table "posts"
 #
 
@@ -65,7 +77,7 @@ CREATE TABLE `posts` (
   `updatetime` bigint(20) DEFAULT NULL,
   `tags` varchar(255) DEFAULT NULL COMMENT '以,来区分',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
 
 #
 # Structure for table "users"

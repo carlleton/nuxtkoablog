@@ -3,18 +3,10 @@ let config = {
     host: 'localhost',
     user: 'root',
     password: 'root',
-    database: 'nuxtkoablog'
+    database: 'nuxtkoablog',
+    fileName: 'nuxtkoablog.sql.gz'
   },
-  jwtSecret: 'nuxtkoablog123abc',
-  needAuth: [
-    '/api/posts/add',
-    '/api/posts/update',
-    '/api/posts/del',
-    '/api/cates/add',
-    '/api/cates/update',
-    '/api/cates/del'
-  ],
-  pageSize: 10
+  jwtSecret: 'nuxtkoablog123abc'
 }
 
 module.exports = config

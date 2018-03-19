@@ -1,8 +1,22 @@
 let cmdmarkdown = require('./util/cmdmarkdown')
-var arguments = process.argv.splice(2)
-var cmd = arguments[0]
+let backup = require('./util/backup')
+
+var cmdargs = process.argv.splice(2)
+var cmd = cmdargs[0]
 
 if (cmd === 'markdown') {
-  var folder = arguments[1]
+  var folder = cmdargs[1]
   cmdmarkdown.read(folder)
+}
+if (cmd === 'backup') {
+  backup.backup((err, str) => {
+    if (err) {
+      console.log('error:', err, str)
+    } else {
+      console.log('success backup')
+    }
+  })
+}
+if (cmd === 'sendmail') {
+  backup.backupEmail()
 }

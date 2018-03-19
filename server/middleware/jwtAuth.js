@@ -1,5 +1,5 @@
 let jwt = require('jwt-simple')
-const config = require('../../config/config')
+const config = require('../../config')
 const jwtSecret = config.jwtSecret
 const needAuth = config.needAuth
 
