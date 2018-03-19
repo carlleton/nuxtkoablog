@@ -5,6 +5,7 @@ const posts = require('./posts')
 const cates = require('./cates')
 const notes = require('./notes')
 const notecates = require('./notecates')
+const options = require('./options')
 
 let jwtAuth = require('../middleware/jwtAuth')
 
@@ -16,6 +17,7 @@ router.use('/posts', posts.routes(), posts.allowedMethods())
 router.use('/cates', cates.routes())
 router.use('/notes', notes.routes())
 router.use('/notecates', notecates.routes())
+router.use('/options', options.routes())
 
 router.all('/', async (ctx, next) => {
   ctx.status = 200

@@ -13,7 +13,7 @@
       </el-header>
       <el-container>
         <el-aside width="200px" style="minHeight:280px;padding:24px 0;">
-          <el-menu theme="light" width="auto" default-active="0-0" :default-openeds="['0']">
+          <el-menu theme="light" width="auto" default-active="0-0" :default-openeds="['0']" unique-opened="true">
             <el-submenu :index="pindex+''" v-for="(menu,pindex) in menus" :key="pindex">
               <template slot="title">
                 <i class="el-icon-message"></i>{{menu.name}}
@@ -50,6 +50,13 @@ export default {
           childs: [
             {name: '文章列表', link: '/admin/posts/list'},
             {name: '分类管理', link: '/admin/posts/cates'}
+          ]
+        },
+        {
+          name: '系统设置',
+          childs: [
+            {name: '备份管理', link: '/admin/system/backup'},
+            {name: '系统设置', link: '/admin/system/set'}
           ]
         }
       ]

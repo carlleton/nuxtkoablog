@@ -28,24 +28,24 @@ module.exports.backup = function(callback){
  * @param {callback}  [回调]
  * @return {[type]}   [description]
  */
-module.exports.backupEmail = function(obj, callback) {
+module.exports.backupEmail = function(conf, obj, callback) {
   // var filepath = './out/nuxtkoablog.sql.gz'
   var filepath = obj.filepath
   var filename = filepath.substr(filepath.lastIndexOf('/') + 1)
   var nodemailer = require('nodemailer')
   var transporter = nodemailer.createTransport({
-    host: config.sendEmail.host,
+    host: conf.sendEmail.host,
     secureConnection: true,
     port: 465,
     auth: {
-      user: config.sendEmail.user,
-      pass: config.sendEmail.pass
+      user: conf.sendEmail.user,
+      pass: conf.sendEmail.pass
     }
   })
   // 发送邮件
   var option = {
-    from: config.sendEmail.from,
-    to: config.receiveEmail,
+    from: conf.sendEmail.from,
+    to: conf.receiveEmail,
     subject: obj.subject,
     html: obj.html,
     attachments: [

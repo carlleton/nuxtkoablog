@@ -1,6 +1,8 @@
+const objectAssign = require('object-assign')
+
 let config = require('./config')
-let {options} = require('./options')
+let options = require('./options')
 
-options(config)
+const result = objectAssign({}, config, options)
 
-module.exports = config
+module.exports = result
