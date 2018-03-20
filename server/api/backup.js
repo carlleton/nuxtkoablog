@@ -22,11 +22,7 @@ var sendEmail = async function(obj) {
     sendEmail,
     receiveEmail
   }
-  return new Promise((resolve, reject) => {
-    backup.email(conf, obj, (result) => {
-      resolve(result)
-    })
-  })
+  return backup.email(conf, obj)
 }
 
 router.get('/email', async (ctx, next) => {

@@ -10,7 +10,7 @@ const config = require('../config')
  * @param  {[type]}   conf     [配置]
  * @param  {Function} callback [回调]
  */
-module.exports.zip = async () => {
+module.exports.zip = () => {
   var filename = 'out/' + config.mysqlConfig.database+moment().format('YYYYMMDD')+'.sql.gz'
   return new Promise((resolve, reject) => {
     var command = 'mysqldump --user='+config.mysqlConfig.user+' --password='+config.mysqlConfig.password+' '+config.mysqlConfig.database+' | gzip > '+filename
@@ -62,9 +62,12 @@ module.exports.email = function(conf, obj, callback) {
       path: filepath
     })
   }
-  transporter.sendMail(option, function (error) {
-    callback({err: error})
+  return new Promise((resolve, reject) => {
+    transporter.sendMail(option, function (error, info) {
+      resolve({err: error, message: info.response})
+    })
   })
+
 }
 
 /* eslint-enable */
