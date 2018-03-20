@@ -3,8 +3,7 @@ let config = {
     host: 'localhost',
     user: 'root',
     password: 'root',
-    database: 'nuxtkoablog',
-    fileName: 'nuxtkoablog.sql.gz'
+    database: 'nuxtkoablog'
   },
   jwtSecret: 'nuxtkoablog123abc'
 }

@@ -1,19 +1,27 @@
-const config = require('../../config')
-const cp = require('child_process');
-console.log(config)
+/* eslint-disable */
+// 此文件只用在服务端
+const moment = require('moment')
+const cp = require('child_process')
+const nodemailer = require('nodemailer')
+const config = require('../config')
+
 /**
  * 备份数据库并压缩
  * @param  {[type]}   conf     [配置]
  * @param  {Function} callback [回调]
  */
-module.exports.backup = function(callback){
-  cp.exec('mysqldump --user='+config.mysqlConfig.user+' --password='+config.mysqlConfig.password+' '+config.mysqlConfig.database+' | gzip > out/'+config.mysqlConfig.fileName+'',
-  function(err,stdout,stderr){
-    if(err) {
-      callback('error','备份数据库发生错误:'+stderr);
-      return ;
-    }
-    callback();
+module.exports.zip = async () => {
+  var filename = 'out/' + config.mysqlConfig.database+moment().format('YYYYMMDD')+'.sql.gz'
+  return new Promise((resolve, reject) => {
+    var command = 'mysqldump --user='+config.mysqlConfig.user+' --password='+config.mysqlConfig.password+' '+config.mysqlConfig.database+' | gzip > '+filename
+    cp.exec(command, (err,stdout,stderr) => {
+      if (err) {
+        console.log('备份数据库发生错误:'+stderr)
+        reject('')
+      } else {
+        resolve(filename)
+      }
+    })
   })
 }
 
@@ -28,11 +36,7 @@ module.exports.backup = function(callback){
  * @param {callback}  [回调]
  * @return {[type]}   [description]
  */
-module.exports.backupEmail = function(conf, obj, callback) {
-  // var filepath = './out/nuxtkoablog.sql.gz'
-  var filepath = obj.filepath
-  var filename = filepath.substr(filepath.lastIndexOf('/') + 1)
-  var nodemailer = require('nodemailer')
+module.exports.email = function(conf, obj, callback) {
   var transporter = nodemailer.createTransport({
     host: conf.sendEmail.host,
     secureConnection: true,
@@ -48,14 +52,19 @@ module.exports.backupEmail = function(conf, obj, callback) {
     to: conf.receiveEmail,
     subject: obj.subject,
     html: obj.html,
-    attachments: [
-      {
-        filename: filename,
-        path: filepath
-      }
-    ]
+    attachments: []
   }
-  transporter.sendMail(option, function (error, response) {
-    callback({err: true, message: response.message})
+  if (obj.filepath) {
+    var filepath = obj.filepath
+    var filename = filepath.substr(filepath.lastIndexOf('/') + 1)
+    option.attachments.push({
+      filename: filename,
+      path: filepath
+    })
+  }
+  transporter.sendMail(option, function (error) {
+    callback({err: error})
   })
 }
+
+/* eslint-enable */

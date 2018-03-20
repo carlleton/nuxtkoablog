@@ -6,7 +6,15 @@ let options = {
     '/api/posts/del',
     '/api/cates/add',
     '/api/cates/update',
-    '/api/cates/del'
+    '/api/cates/del',
+    '/api/notes/add',
+    '/api/notes/update',
+    '/api/notes/del',
+    '/api/notecates/add',
+    '/api/notecates/update',
+    '/api/notecates/del',
+    '/api/backup/email',
+    '/api/backup/zip'
   ]
 }
 module.exports = options

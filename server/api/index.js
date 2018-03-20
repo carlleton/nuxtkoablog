@@ -6,6 +6,7 @@ const cates = require('./cates')
 const notes = require('./notes')
 const notecates = require('./notecates')
 const options = require('./options')
+const backup = require('./backup')
 
 let jwtAuth = require('../middleware/jwtAuth')
 
@@ -18,6 +19,7 @@ router.use('/cates', cates.routes())
 router.use('/notes', notes.routes())
 router.use('/notecates', notecates.routes())
 router.use('/options', options.routes())
+router.use('/backup', backup.routes())
 
 router.all('/', async (ctx, next) => {
   ctx.status = 200
