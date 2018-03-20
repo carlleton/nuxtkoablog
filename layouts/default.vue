@@ -13,7 +13,7 @@
 </template>
 
 <script>
-// import 'normalize.css'
+import axios from 'axios'
 import MyFooter from '../components/Footer.vue'
 import left from '../components/left.vue'
 
@@ -21,6 +21,36 @@ export default {
   head() {
     return {
       titleTemplate: '%s - 蚕豆的blog'
+    }
+  },
+  computed: {
+    lastBackupTime() {
+      return this.$store.state.lastBackupTime
+    }
+  },
+  mounted() {
+    this.checkBackup()
+  },
+  updated() {
+    this.checkBackup()
+  },
+  methods: {
+    async checkBackup() {
+      var lastBackupTime = this.$store.state.lastBackupTime
+      if (!lastBackupTime) {
+        var result = await axios.get('/api/options/lastBackupTime')
+        lastBackupTime = result.data
+        this.$store.commit('setLastBackupTime', lastBackupTime)
+      }
+      var now = (new Date()).getTime()
+      var timelength = 24 * 60 * 60 * 1000
+      if (now - lastBackupTime > timelength) {
+        var backupresult = await axios.get('/api/backup/zip')
+        if (!backupresult.data.err) {
+          lastBackupTime = backupresult.data.lastBackupTime
+          this.$store.commit('setLastBackupTime', lastBackupTime)
+        }
+      }
     }
   },
   components: {

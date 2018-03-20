@@ -43,10 +43,12 @@ router.get('/zip', async (ctx, next) => {
     filepath: filename
   }
   var result = await sendEmail(obj)
+  var lastBackupTime = (new Date()).getTime()
   var result_update = await optionsModel.update({
     name: 'lastBackupTime',
-    value: (new Date()).getTime()
+    value: lastBackupTime
   })
+  result.lastBackupTime = lastBackupTime
   ctx.status = 200
   ctx.body = result
 })
