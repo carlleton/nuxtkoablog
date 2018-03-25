@@ -9,6 +9,7 @@
           </template>
           <i class="catename" v-else></i>
           {{cate.catename}}
+          <i class="fa fa-cog set"></i>
         </a>
           <ul v-if="cate.childs && cate.childs.length > 0" v-show="cate.childshow">
             <li v-for="child in cate.childs" :key="child.id">
@@ -106,6 +107,16 @@ export default {
 }
 .cates li a:hover{
   background-color: rgba(0, 0, 0, 0.3);
+}
+.cates li a .set{
+  /*display: none;*/
+  float: right;
+  margin-right: 5px;
+  line-height: 35px;
+  opacity: 0.8;
+}
+.cates li a:hover .set{
+  display: inline-block;
 }
 .cates .catename{
   width: 10px;
