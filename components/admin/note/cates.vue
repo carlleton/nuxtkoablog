@@ -2,7 +2,7 @@
   <div class="cates">
     <ul>
       <li v-for="cate in cates" :key="cate.id">
-        <a :class="{cur:cateid==cate.id}" @click="selectcate(cate)">
+        <a :class="{cur:cateid==cate.id}" @click="selectcate(cate)" @contextmenu="showContextMenu(cate)">
           <template v-if="cate.childs">
             <i class="fa fa-plus-square-o" v-show="!cate.childshow" @click.stop="cate.childshow=true"></i>
             <i class="fa fa-minus-square-o" v-show="cate.childshow" @click.stop="cate.childshow=false"></i>
@@ -18,16 +18,22 @@
           </ul>
       </li>
     </ul>
+    <contextmenu ref="contextmenu" :point="contextmenuData.point" :menus="contextmenuData.menus"></contextmenu>
   </div>
 </template>
 <script>
 import axios from 'axios'
+import contextmenu from '~/components/contextmenu'
 
 export default {
   props: ['cateid', 'catename'],
   data() {
     return {
-      cates: []
+      cates: [],
+      contextmenuData: {
+        point: {},
+        menus: []
+      }
     }
   },
   created() {
@@ -64,10 +70,33 @@ export default {
         catename: '最新'
       }].concat(cates.concat(temps))
     },
+    // 选择某一项
     selectcate(cate) {
       this.$emit('update:cateid', cate.id)
       this.$emit('update:catename', cate.catename)
+    },
+    showContextMenu(cate) {
+      if (cate.id === 0) {
+        return
+      }
+      console.log(cate)
+      event.preventDefault()
+      event.stopPropagation()
+      var x = event.clientX
+      var y = event.clientY
+      this.contextmenuData.point = {
+        x: x,
+        y: y
+      }
+      this.contextmenuData.menus = [
+        {name: '上移', ico: 'fa fa-arrow-up', fnHandler: null},
+        {name: '下移', ico: 'fa fa-arrow-down', fnHandler: null},
+        {name: '删除', ico: 'fa fa-remove', fnHandler: null}
+      ]
     }
+  },
+  components: {
+    contextmenu
   }
 }
 </script>
