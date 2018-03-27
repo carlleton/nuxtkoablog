@@ -3,18 +3,20 @@
     <ul>
       <li v-for="cate in cates" :key="cate.id">
         <a :class="{cur:cateid==cate.id}" @click="selectcate(cate)" @contextmenu="showContextMenu(cate)">
-          <template v-if="cate.childs">
-            <i class="fa fa-plus-square-o" v-show="!cate.childshow" @click.stop="cate.childshow=true"></i>
-            <i class="fa fa-minus-square-o" v-show="cate.childshow" @click.stop="cate.childshow=false"></i>
-          </template>
-          <i class="catename" v-else></i>
-          {{cate.catename}}
+          <span>
+            <template v-if="cate.childs">
+              <i class="fa fa-plus-square-o" v-show="!cate.childshow" @click.stop="cate.childshow=true"></i>
+              <i class="fa fa-minus-square-o" v-show="cate.childshow" @click.stop="cate.childshow=false"></i>
+            </template>
+            <i class="catename" v-else></i>
+            {{cate.catename}}
+          </span>
           <i class="fa fa-cog set" @click="showContextMenu(cate)" v-if="cate.id!=0"></i>
         </a>
           <ul v-if="cate.childs && cate.childs.length > 0" v-show="cate.childshow">
             <li v-for="child in cate.childs" :key="child.id" @contextmenu="showContextMenu(child)">
               <a :class="{cur:cateid==child.id}" @click="selectcate(child)">
-              {{child.catename}}
+              <span>{{child.catename}}</span>
               <i class="fa fa-cog set" @click="showContextMenu(child)"></i>
               </a>
             </li>
@@ -227,13 +229,20 @@ export default {
 }
 .cates li a{
   color: #ADBECE;
-  padding-left: 20px;
+  padding-left: 10px;
   display: block;
   cursor: pointer;
   background-color: transparent;
+  display: flex;
+}
+.cates li i{
+  line-height: 35px;
+}
+.cates li span{
+  flex: 1;
 }
 .cates li ul li a{
-  padding-left: 40px;
+  padding-left: 30px;
 }
 .cates li a:hover, .cates li a.cur{
   border-radius: 3px;
@@ -248,13 +257,12 @@ export default {
 }
 .cates li a .set{
   display: none;
-  float: right;
   margin-right: 5px;
   line-height: 35px;
   opacity: 0.8;
 }
 .cates li a:hover .set{
-  display: inline-block;
+  display: inline-flex;
 }
 .cates .catename{
   width: 10px;

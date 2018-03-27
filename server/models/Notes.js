@@ -96,7 +96,7 @@ export default class Notes {
 
   // 删除信息
   del(id) {
-    var sql = `delete from notes where path like concat((select path from notes where id = ?),'%')`
+    var sql = `delete from notes where id = ?`
     return db.query(sql, [id])
   }
 }

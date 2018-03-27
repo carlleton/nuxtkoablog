@@ -26,7 +26,7 @@
       </el-aside>
       <el-main class="editor">
         <!-- 编辑器 -->
-        <Editor :cateid="cateid" :noteid="noteid" @updatenotes="updatenotes"></Editor>
+        <Editor :cateid="cateid" :noteid="noteid" :action="action" @updatenotes="updatenotes" @addNote="addNote"></Editor>
       </el-main>
     </el-container>
   </el-container>
@@ -47,7 +47,8 @@ export default {
     return {
       cateid: 0,
       catename: '最新',
-      noteid: 0
+      noteid: 0,
+      action: ''
     }
   },
   created() {
@@ -59,6 +60,7 @@ export default {
         this.$refs.cates.$emit('selectFirstCate')
       }
       this.noteid = 0
+      this.action = 'add'
     },
     updatenotes() {
       this.$refs.notes.$emit('updatenotes')

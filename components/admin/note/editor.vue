@@ -2,7 +2,7 @@
   <div class="form">
     <div class="formtit">
       <el-input placeholder="标签" class="inputtags" v-model="note.tags"></el-input>
-      <el-checkbox v-model="isPost">发布到post</el-checkbox>
+      <el-checkbox class="ispost" v-model="isPost">发布到post</el-checkbox>
       <div class="rightbtn">
         <i class="fa fa-edit" title="编辑" v-show="act=='show'" @click="act='edit'"></i>
         <i class="fa fa-eye" title="查看" v-show="act!='show'" @click="act='show'"></i>
@@ -12,6 +12,9 @@
     <el-input placeholder="请输入标题" v-model="note.title"></el-input>
     <div class="contentshow md" v-if="act=='show'" v-html="markdownhtml"></div>
     <mavon-editor class="editor" v-if="act!='show'" v-model="note.content"></mavon-editor>
+    <div class="nonoteshow" v-if="action=='' && noteid==0">
+      <button @click="$emit('addNote')">添加笔记</button>
+    </div>
   </div>
 </template>
 <script>
@@ -35,7 +38,7 @@ marked.setOptions({
   }
 })
 export default {
-  props: ['cateid', 'noteid'],
+  props: ['cateid', 'noteid', 'action'],
   data() {
     return {
       act: 'show',
@@ -61,17 +64,15 @@ export default {
     },
     noteid(newval, oldval) {
       if (newval === 0) {
-        this.act = 'add'
-        this.note.id = 0
-        this.note.tags = ''
-        this.note.postid = ''
-        this.note.title = ''
-        this.note.content = ''
-        this.note.addtime = new Date()
-        this.isPost = false
+        this.doadd()
       } else {
         this.act = 'show'
         this.getnote(newval)
+      }
+    },
+    action(newval, oldval) {
+      if (newval === 'add') {
+        this.doadd()
       }
     }
   },
@@ -189,6 +190,16 @@ export default {
           duration: 2000
         })
       }
+    },
+    doadd() {
+      this.act = 'add'
+      this.note.id = 0
+      this.note.tags = ''
+      this.note.postid = ''
+      this.note.title = ''
+      this.note.content = ''
+      this.note.addtime = new Date()
+      this.isPost = false
     }
   }
 }
@@ -200,6 +211,9 @@ export default {
 }
 .inputtags{
   width: 500px;
+}
+.ispost{
+  margin-left: 10px;
 }
 .rightbtn{
   float: right;
@@ -216,5 +230,9 @@ export default {
 }
 .contentshow{
   padding: 10px;
+}
+.nonoteshow{
+  width: 300px;
+  text-align: center;
 }
 </style>
