@@ -2,23 +2,35 @@
   <div class="cates" v-loading="loading" element-loading-background="rgba(0, 0, 0, 0.8)">
     <ul>
       <li v-for="cate in cates" :key="cate.id">
-        <a :class="{cur:cateid==cate.id}" @click="selectcate(cate)" @contextmenu="showContextMenu(cate)">
+        <p :class="{cur:cateid==cate.id}" @click="selectcate(cate)" @contextmenu="showContextMenu(cate)" @dblclick.prevent.stop="changeEdit(cate)">
           <span>
             <template v-if="cate.childs">
               <i class="fa fa-plus-square-o" v-show="!cate.childshow" @click.stop="cate.childshow=true"></i>
               <i class="fa fa-minus-square-o" v-show="cate.childshow" @click.stop="cate.childshow=false"></i>
             </template>
             <i class="catename" v-else></i>
-            {{cate.catename}}
+            <template v-if="!cate.edit">
+              {{cate.catename}}
+            </template>
+            <template v-else>
+              <input class="editbox" type="text" v-model="cate.catename" @blur="savename(cate)" @keyup.enter="savename(cate)" />
+            </template>
           </span>
           <i class="fa fa-cog set" @click="showContextMenu(cate)" v-if="cate.id!=0"></i>
-        </a>
+        </p>
           <ul v-if="cate.childs && cate.childs.length > 0" v-show="cate.childshow">
             <li v-for="child in cate.childs" :key="child.id" @contextmenu="showContextMenu(child)">
-              <a :class="{cur:cateid==child.id}" @click="selectcate(child)">
-              <span>{{child.catename}}</span>
+              <p :class="{cur:cateid==child.id}" @click="selectcate(child)">
+              <span @dblclick.prevent="changeEdit(child)">
+                <template v-if="!child.edit">
+                  {{child.catename}}
+                </template>
+                <template v-else>
+                  <input class="editbox" type="text" v-model="child.catename" @blur="savename(child)" @keyup.enter="savename(child)" />
+                </template>
+              </span>
               <i class="fa fa-cog set" @click="showContextMenu(child)"></i>
-              </a>
+              </p>
             </li>
           </ul>
       </li>
@@ -58,6 +70,8 @@ export default {
       var cates = []
       var temps = []
       for (var i = 0, n = data.length; i < n; i++) {
+        data[i].edit = false
+        data[i].oldcatename = data[i].catename
         if (data[i].pid === 0) {
           cates.push(data[i])
         } else {
@@ -211,10 +225,44 @@ export default {
         })
       }
       this.loading = false
+    },
+    // 名称更改后自动保存
+    async savename(cate) {
+      if (cate.oldcatename === cate.catename) {
+        cate.edit = false
+        return
+      }
+      var url = '/api/notecates/update'
+      var params = {
+        catename: cate.catename,
+        id: cate.id
+      }
+      axios.post(url, params).then((res) => {
+        if (res.data.rows > 0) {
+          this.$message({
+            message: '更新成功',
+            duration: 2000
+          })
+          cate.oldcatename = cate.catename
+          cate.edit = false
+        }
+      })
+    },
+    changeEdit(cate) {
+      if (cate.id !== 0) {
+        cate.edit = true
+      }
     }
   },
   components: {
     contextmenu
+  },
+  directives: {
+    focus: {
+      inserted: function (el, {value}) {
+        el.focus()
+      }
+    }
   }
 }
 </script>
@@ -227,9 +275,10 @@ export default {
   border-bottom: 1px solid transparent;
   border-color: rgba(255, 255, 255, 0.05);
 }
-.cates li a{
+.cates li p{
   color: #ADBECE;
   padding-left: 10px;
+  line-height: 35px;
   display: block;
   cursor: pointer;
   background-color: transparent;
@@ -241,32 +290,41 @@ export default {
 .cates li span{
   flex: 1;
 }
-.cates li ul li a{
+.cates li ul li p{
   padding-left: 30px;
 }
-.cates li a:hover, .cates li a.cur{
+.cates li p:hover, .cates li a.cur{
   border-radius: 3px;
   color: #fff;
 }
-.cates li a.cur{
+.cates li p.cur{
   background-color: #191D2B;
   border: 0;
 }
-.cates li a:hover{
+.cates li p:hover{
   background-color: rgba(0, 0, 0, 0.3);
 }
-.cates li a .set{
+.cates li p .set{
   display: none;
   margin-right: 5px;
   line-height: 35px;
   opacity: 0.8;
 }
-.cates li a:hover .set{
+.cates li p:hover .set{
   display: inline-flex;
 }
 .cates .catename{
   width: 10px;
   display: inline-block;
+}
+.editbox{
+  line-height: 35px;
+  border: 0;
+  outline: none;
+  width: 80%;
+  background: #191D2B;
+  color: #fff;
+  padding: 0 5px;
 }
 
 </style>

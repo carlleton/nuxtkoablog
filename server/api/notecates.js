@@ -64,22 +64,25 @@ router.post('/add', async (ctx, next) => {
 router.post('/update', async (ctx, next) => {
   var body = ctx.request.body
   var params = {
-    id: body.id,
-    catename: body.catename,
-    pid: body.pid,
-    orderid: body.orderid,
-    path: ''
+    id: body.id
   }
-  if (body.pid !== 0) {
-    var pCates = await notecatesModel.find({
-      where: 'id = ' + body.pid,
-      limit: '0, 1'
-    })
-    if (pCates.result.length > 0) {
-      params.path = pCates.result[0].path
+  body.catename && (params.catename = body.catename)
+  body.pid && (params.pid = body.pid)
+  body.orderid && (params.orderid = body.orderid)
+
+  if (body.orderid) {
+    params.path = ''
+    if (body.pid !== 0) {
+      var pCates = await notecatesModel.find({
+        where: 'id = ' + body.pid,
+        limit: '0, 1'
+      })
+      if (pCates.result.length > 0) {
+        params.path = pCates.result[0].path
+      }
     }
+    params.path += getTen(params.orderid) + ','
   }
-  params.path += getTen(params.orderid) + ','
   var result = await notecatesModel.update(params)
   if (result.error) {
     ctx.status = 404
