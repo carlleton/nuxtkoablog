@@ -1,5 +1,5 @@
 ﻿# Host: localhost  (Version: 5.5.53)
-# Date: 2018-03-19 16:39:24
+# Date: 2018-03-27 13:35:17
 # Generator: MySQL-Front 5.3  (Build 4.234)
 
 /*!40101 SET NAMES utf8 */;
@@ -29,8 +29,9 @@ CREATE TABLE `notecates` (
   `pid` int(11) DEFAULT NULL,
   `orderid` int(11) DEFAULT NULL,
   `path` varchar(255) DEFAULT NULL,
+  `pidpath` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=40 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=47 DEFAULT CHARSET=utf8;
 
 #
 # Structure for table "notes"
@@ -59,7 +60,7 @@ CREATE TABLE `options` (
   `name` varchar(255) DEFAULT NULL,
   `value` longtext,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 #
 # Structure for table "posts"

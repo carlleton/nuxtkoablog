@@ -20,9 +20,20 @@ export default class NoteCates {
   }
 
   // 根据id获取Post详情
-  one(id) {
+  one(id, action) {
     var sql = 'select * from notecates where id = ?'
-    return db.query(sql, [id])
+    var params = []
+    params.push(id)
+    if (action) {
+      if (action === 'up') {
+        sql = 'select * from notecates where pid = (select pid from notecates where id = ?) and orderid < (select orderid from notecates where id = ?) order by orderid desc limit 0, 1'
+      }
+      if (action === 'down') {
+        sql = 'select * from notecates where pid = (select pid from notecates where id = ?) and orderid > (select orderid from notecates where id = ?) order by orderid asc limit 0, 1'
+      }
+      params.push(id)
+    }
+    return db.query(sql, params)
   }
 
   find({where,order,limit}) {
@@ -41,12 +52,13 @@ export default class NoteCates {
 
   // 插入Post
   add(obj) {
-    let sql = 'insert into notecates (catename,pid,orderid,path) values (?, ?, ?, ?)'
+    let sql = 'insert into notecates (catename,pid,orderid,path,pidpath) values (?, ?, ?, ?, ?)'
     let params = [
       obj.catename,
       obj.pid,
       obj.orderid,
-      obj.path
+      obj.path,
+      obj.pidpath
     ]
     return db.query(sql, params)
   }
@@ -70,7 +82,7 @@ export default class NoteCates {
 
   // 删除信息
   del(id) {
-    var sql = `delete from notecates where path like concat((select path from notecates where id = ?),'%')`
+    var sql = `delete from notecates where path like concat((select a.path from (select path from notecates where id = ?) a),'%')`
     return db.query(sql, [id])
   }
 }

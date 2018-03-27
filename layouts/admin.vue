@@ -113,6 +113,9 @@ export default {
   color: #fff;
   line-height: 50px;
 }
+.author a{
+  color: #eee;
+}
 .logout{
   cursor: pointer;
 }

@@ -5,11 +5,11 @@
         登陆
       </div>
       <div class="form-group">
-        <el-input type="text" id="username" placeholder="登录名" auto-complete="off" v-model="username" prefix-icon="fa fa-user">
+        <el-input type="text" ref="username" id="username" placeholder="登录名" auto-complete="off" v-model="username" prefix-icon="fa fa-user">
         </el-input>
       </div>
       <div class="form-group">
-        <el-input type="password" id="userpass" placeholder="密码" v-model="userpass" @keyup.enter="login" prefix-icon="fa fa-lock"></el-input>
+        <el-input type="password" id="userpass" placeholder="密码" v-model="userpass" @keyup.enter.native="login" prefix-icon="fa fa-lock"></el-input>
       </div>
       <div class="form-group">
         <el-button class="btn" type="primary" v-on:keyup.enter="login" @click="login">登陆</el-button>
@@ -32,6 +32,9 @@ export default {
       username: '',
       userpass: ''
     }
+  },
+  mounted() {
+    this.$refs.username.focus()
   },
   methods: {
     login() {

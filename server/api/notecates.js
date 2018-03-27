@@ -25,7 +25,8 @@ router.post('/add', async (ctx, next) => {
     catename: body.catename,
     pid: body.pid,
     orderid: body.orderid || 1,
-    path: ''
+    path: '',
+    pidpath: ''
   }
   if (body.pid !== 0) {
     var pCates = await notecatesModel.find({
@@ -34,6 +35,7 @@ router.post('/add', async (ctx, next) => {
     })
     if (pCates.result.length > 0) {
       params.path = pCates.result[0].path
+      params.pidpath = pCates.result[0].idpath + getTen(pCates.result[0].id) + ','
     }
   }
   if (!body.orderid) {
@@ -101,6 +103,144 @@ router.post('/del', async (ctx, next) => {
     ctx.status = 200
     ctx.body = {
       rows: result.result.affectedRows
+    }
+  }
+})
+
+router.post('/up', async (ctx, next) => {
+  var body = ctx.request.body
+  var id = _.toNumber(body.id)
+  if (!id) {
+    ctx.status = 404
+    ctx.body = {
+      code: 404,
+      message: 'no result'
+    }
+    return
+  }
+  var upresult = await notecatesModel.one(id, 'up')
+  if (upresult.result.length === 0) {
+    ctx.status = 200
+    ctx.body = {
+      rows: 0
+    }
+  } else {
+    var nowresult = await notecatesModel.one(id)
+    var nowone = nowresult.result[0]
+    var upone = upresult.result[0]
+
+    var nowpath = nowone.path
+    nowpath = nowpath.substr(0, nowpath.lastIndexOf(','))
+    nowpath = nowpath.substr(0, nowpath.lastIndexOf(','))
+    if (nowpath) {
+      nowpath += ','
+    }
+    nowpath += getTen(upone.orderid)+','
+    var objnow = {
+      id: nowone.id,
+      path: nowpath,
+      orderid: upone.orderid
+    }
+    await notecatesModel.update(objnow)
+    var sql1 = 'update notecates set path = replace(path, ?, ?) where pidpath like ?'
+    var params1 = []
+    params1.push(nowone.path)
+    params1.push(nowpath)
+    params1.push((nowone.pidpath||'') + getTen(nowone.id) + ',')
+    var res1 = await db.query(sql1, params1)
+
+    var uppath = upone.path
+    uppath = uppath.substr(0, uppath.lastIndexOf(','))
+    uppath = uppath.substr(0, uppath.lastIndexOf(','))
+    if (uppath) {
+       uppath += ','
+    }
+    uppath += getTen(nowone.orderid)+','
+    var objup = {
+      id: upone.id,
+      path: uppath,
+      orderid: nowone.orderid
+    }
+    await notecatesModel.update(objup)
+    var sql2 = 'update notecates set path = replace(path, ?, ?) where pidpath like ?'
+    var params2 = []
+    params2.push(upone.path)
+    params2.push(uppath)
+    params2.push((upone.pidpath||'') + getTen(upone.id) + ',')
+    var res2 = await db.query(sql2, params2)
+
+    ctx.status = 200
+    ctx.body = {
+      rows: 2 + res1.result.affectedRows + res2.result.affectedRows
+    }
+  }
+})
+
+router.post('/down', async (ctx, next) => {
+  var body = ctx.request.body
+  var id = _.toNumber(body.id)
+  if (!id) {
+    ctx.status = 404
+    ctx.body = {
+      code: 404,
+      message: 'no result'
+    }
+    return
+  }
+  var upresult = await notecatesModel.one(id, 'down')
+  if (upresult.result.length === 0) {
+    ctx.status = 200
+    ctx.body = {
+      rows: 0
+    }
+  } else {
+    var nowresult = await notecatesModel.one(id)
+    var nowone = nowresult.result[0]
+    var upone = upresult.result[0]
+
+    var nowpath = nowone.path
+    nowpath = nowpath.substr(0, nowpath.lastIndexOf(','))
+    nowpath = nowpath.substr(0, nowpath.lastIndexOf(','))
+    if (nowpath) {
+      nowpath += ','
+    }
+    nowpath += getTen(upone.orderid)+','
+    var objnow = {
+      id: nowone.id,
+      path: nowpath,
+      orderid: upone.orderid
+    }
+    await notecatesModel.update(objnow)
+    var sql1 = 'update notecates set path = replace(path, ?, ?) where pidpath like ?'
+    var params1 = []
+    params1.push(nowone.path)
+    params1.push(nowpath)
+    params1.push((nowone.pidpath||'') + getTen(nowone.id) + ',')
+    var res1 = await db.query(sql1, params1)
+
+    var uppath = upone.path
+    uppath = uppath.substr(0, uppath.lastIndexOf(','))
+    uppath = uppath.substr(0, uppath.lastIndexOf(','))
+    if (uppath) {
+       uppath += ','
+    }
+    uppath += getTen(nowone.orderid)+','
+    var objup = {
+      id: upone.id,
+      path: uppath,
+      orderid: nowone.orderid
+    }
+    await notecatesModel.update(objup)
+    var sql2 = 'update notecates set path = replace(path, ?, ?) where pidpath like ?'
+    var params2 = []
+    params2.push(upone.path)
+    params2.push(uppath)
+    params2.push((upone.pidpath||'') + getTen(upone.id) + ',')
+    var res2 = await db.query(sql2, params2)
+
+    ctx.status = 200
+    ctx.body = {
+      rows: 2 + res1.result.affectedRows + res2.result.affectedRows
     }
   }
 })
