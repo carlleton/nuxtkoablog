@@ -5,7 +5,8 @@ let config = {
     password: 'root',
     database: 'nuxtkoablog'
   },
-  jwtSecret: 'nuxtkoablog123abc'
+  jwtSecret: 'nuxtkoablog123abc',
+  notInstalled: true
 }
 
 module.exports = config

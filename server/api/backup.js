@@ -6,6 +6,7 @@ const moment = require('moment')
 
 let optionsModel = new Options()
 
+// 发送邮件
 var sendEmail = async function(obj) {
   var params = {
     keys: 'sendEmail,receiveEmail'
@@ -25,6 +26,7 @@ var sendEmail = async function(obj) {
   return backup.email(conf, obj)
 }
 
+// 发送测试邮件
 router.get('/email', async (ctx, next) => {
   var obj = {
     subject: '这是一封测试邮件',
@@ -35,6 +37,7 @@ router.get('/email', async (ctx, next) => {
   ctx.body = result
 })
 
+// 打包数据库发送到邮箱
 router.get('/zip', async (ctx, next) => {
   var filename = await backup.zip()
   var obj = {

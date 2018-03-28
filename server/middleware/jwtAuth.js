@@ -4,7 +4,15 @@ const jwtSecret = config.jwtSecret
 const needAuth = config.needAuth
 
 module.exports = (ctx, next) => {
-  // let path = ctx.req.originalUrl
+  let path = ctx.request.url
+  if (path.indexOf('/install') === -1 && config.notInstalled) {
+    ctx.body = {
+      code: 201,
+      message: 'not installed',
+      notInstalled: true
+    }
+    return
+  }
 
   // 接口不需要登陆，直接next
   if (needAuth.indexOf('path') < 0) {

@@ -41,25 +41,28 @@ $ npm run generate
     - [x] cmd命令行导入普通`.md`文件到数据库
     - [x] cmd导入markdown文件，支持gitblog格式，支持命令行单个markdown文件导入
 - [x] 后台配置部分参数
-    - [ ] 配置保存在数据库中
+    - [x] 配置保存在数据库中
     - [ ] 导出配置到文件中做缓存（更改频率小）
-- [ ] 安装升级功能
+- [x] 安装升级功能
   - [ ] 开始部署时需要输入ip、用户名、密码、数据库名，然后安装sql文件
   - [ ] 一开始定义好升级操作，每次版本升级更新相应内容
 
-PS：一些功能暂时只是为了先使用起来，后续再说优化
+PS：一些功能暂时只是为了先用起来，后续再说优化
 
 ## 命令行工具
-* `node cmd.js markdown E:\WWW\folder`
-  `node cmd.js markdown E:\www\folder\aa.md`
-  导入具体目录下的markdown文件到数据库，目前只支持windows下的，还没兼容linux的
+* 导入具体目录下的markdown文件到数据库，目前只支持windows下的，还没兼容linux的
+```
+node cmd.js markdown E:\WWW\folder
+node cmd.js markdown E:\www\folder\aa.md
+```
 
 ## 初衷
 * 分享原创文章，收藏转载文章
 * 记录笔记，日常学习东西的笔记，搜索方便
 * 隐私需求，记录日记在自己的服务器上，实现自动备份数据
 
-参考：
+### 参考：
+
 * [akoa](https://github.com/alwxkxk/akoa)
 * [koa2-note](https://github.com/chenshenhai/koa2-note)
 * [justyeh.com](https://github.com/justyeh/justyeh.com)
