@@ -1,5 +1,4 @@
 /* eslint-disable */
-var fs = require('fs')
 
 // 时间格式化输出
 export function dateFormat(date,format){
@@ -69,6 +68,7 @@ export function isLogin() {
 }
 
 export function writeFile(fPath, content) {
+  var fs = require('fs')
   return new Promise(function(resolve, reject) {
     fs.writeFile(fPath, content, function(err, data) {
       if (err) {
@@ -81,6 +81,7 @@ export function writeFile(fPath, content) {
 }
 
 export function readFile(fPath) {
+  var fs = require('fs')
   return new Promise(function (resolve, reject) {
     fs.readFile(fPath, 'utf-8', function(err, data) {
       if (err) {
