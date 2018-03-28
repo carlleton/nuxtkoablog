@@ -65,7 +65,7 @@
 import axios from 'axios'
 import {dateFormat} from '~/util/tools'
 import Cates from '~/components/admin/cates'
-let pageSize = require('~/config').pageSize
+let pageSize = process.env.pageSize
 
 export default {
   layout: 'admin',

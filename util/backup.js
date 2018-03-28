@@ -3,7 +3,7 @@
 const moment = require('moment')
 const cp = require('child_process')
 const nodemailer = require('nodemailer')
-const config = require('../config')
+const config = require('../server/config')
 
 /**
  * 备份数据库并压缩

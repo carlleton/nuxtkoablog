@@ -25,6 +25,12 @@ module.exports = {
     'element-ui/lib/theme-chalk/reset.css',
     'element-ui/lib/theme-chalk/index.css'
   ],
+  /**
+   * 全局变量
+   */
+  env: {
+    pageSize: 10
+  },
   plugins: [
     { src: '~plugins/axios' },
     { src: '~plugins/mavon-editor', ssr: false },

@@ -3,7 +3,7 @@ import NoteCates from '../models/NoteCates'
 const router = require('koa-router')()
 const db = require('../../util/db')
 const _ = require('lodash')
-let pageSize = require('../../config').pageSize
+let pageSize = process.env.pageSize
 
 let notesModel = new Notes()
 let notecatesModel = new NoteCates()

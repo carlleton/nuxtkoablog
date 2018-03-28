@@ -56,7 +56,7 @@ export default {
           name: '系统设置',
           childs: [
             {name: '备份管理', link: '/admin/system/backup'},
-            {name: '系统设置', link: '/admin/system/set'}
+            {name: '更改密码', link: '/admin/system/password'}
           ]
         }
       ]

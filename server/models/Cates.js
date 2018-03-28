@@ -1,5 +1,5 @@
 let db = require('../../util/db')
-let pageSize = require('../../config').pageSize
+let pageSize = process.env.pageSize
 
 export default class Cates {
 
