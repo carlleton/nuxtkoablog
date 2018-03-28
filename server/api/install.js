@@ -1,4 +1,4 @@
-import { writeFile, readFile } from '../../util/tools'
+import { writeFile, readFile } from '../tools'
 
 const router = require('koa-router')()
 const _ = require('lodash')

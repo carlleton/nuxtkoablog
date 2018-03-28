@@ -1,5 +1,4 @@
 /* eslint-disable */
-
 // 时间格式化输出
 export function dateFormat(date,format){
   if(!date)return '';
@@ -65,32 +64,6 @@ export function isLogin() {
     return true
   }
   return false
-}
-
-export function writeFile(fPath, content) {
-  var fs = require('fs')
-  return new Promise(function(resolve, reject) {
-    fs.writeFile(fPath, content, function(err, data) {
-      if (err) {
-        reject(err)
-      } else {
-        resolve("successed")
-      }
-    })
-  })
-}
-
-export function readFile(fPath) {
-  var fs = require('fs')
-  return new Promise(function (resolve, reject) {
-    fs.readFile(fPath, 'utf-8', function(err, data) {
-      if (err) {
-        reject(err)
-      } else {
-        resolve(data)
-      }
-    })
-  })
 }
 
 
