@@ -64,7 +64,7 @@ module.exports.email = function(conf, obj, callback) {
   }
   return new Promise((resolve, reject) => {
     transporter.sendMail(option, function (error, info) {
-      resolve({err: error, message: info.response})
+      resolve({err: error, message: info})
     })
   })
 
