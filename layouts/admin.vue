@@ -5,6 +5,7 @@
         <div class="admin_tit">
           <nuxt-link to="/admin">后台管理</nuxt-link>
           <nuxt-link class="fontpage" to="/" target="_blank">前台页面</nuxt-link>
+          <btnBackup></btnBackup>
         </div>
         <div class="author">
           carlleton
@@ -34,6 +35,8 @@
 <script>
 import '../assets/css/admin.css'
 import { removeToken } from '../util/tools'
+import btnBackup from '../components/btn-backup'
+
 export default {
   data() {
     return {
@@ -67,6 +70,9 @@ export default {
       removeToken()
       this.$router.push('/')
     }
+  },
+  components: {
+    btnBackup
   }
 }
 </script>

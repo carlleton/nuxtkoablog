@@ -13,8 +13,12 @@ export default {
       title: '首页'
     }
   },
+  validate({ params }) {
+    return /^\d+$/.test(params.pageid)
+  },
   async asyncData({params}) {
-    let posts = await axios.get('/api/posts/list?page=1')
+    var page = params.pageid
+    let posts = await axios.get('/api/posts/list?page=' + page)
     return {
       posts: posts.data.data,
       total: posts.data.total

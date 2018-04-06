@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <section>
     <ArticleList :posts="posts" :total="total" :url="'/cate/' + cid + '/page/?'"></ArticleList>
-  </div>
+  </section>
 </template>
 <script>
 import axios from 'axios'

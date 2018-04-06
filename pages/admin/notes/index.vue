@@ -8,6 +8,7 @@
         <el-button plain size="mini" style="margin-left:10px;" @click="addNote">添加笔记</el-button>
       </div>
       <div class="author">
+        <btnBackup></btnBackup>
         <a class="logout" @click="logout()">退出</a>
       </div>
     </el-header>
@@ -35,6 +36,7 @@
 import Cates from '~/components/admin/note/cates'
 import Notes from '~/components/admin/note/notes'
 import Editor from '~/components/admin/note/editor'
+import btnBackup from '~/components/btn-backup'
 
 export default {
   layout: 'admin2',
@@ -69,7 +71,8 @@ export default {
   components: {
     Cates,
     Notes,
-    Editor
+    Editor,
+    btnBackup
   }
 }
 </script>
