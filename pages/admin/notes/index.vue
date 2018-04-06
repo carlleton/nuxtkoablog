@@ -23,11 +23,11 @@
       </el-aside>
       <el-aside width="250px" class="notes">
         <!-- 笔记列表 -->
-        <Notes ref="notes" :cateid="cateid" :catename="catename" :noteid.sync="noteid"></Notes>
+        <Notes ref="notes" :cateid="cateid" :catename="catename" :act.sync="act" :noteid.sync="noteid"></Notes>
       </el-aside>
       <el-main class="editor">
         <!-- 编辑器 -->
-        <Editor :cateid="cateid" :noteid="noteid" :action="action" @updatenotes="updatenotes" @addNote="addNote"></Editor>
+        <Editor :cateid="cateid" :noteid="noteid" :act.sync="act" @updatenotes="updatenotes" @addNote="addNote"></Editor>
       </el-main>
     </el-container>
   </el-container>
@@ -50,7 +50,7 @@ export default {
       cateid: 0,
       catename: '最新',
       noteid: 0,
-      action: ''
+      act: 'show'
     }
   },
   created() {
@@ -62,7 +62,7 @@ export default {
         this.$refs.cates.$emit('selectFirstCate')
       }
       this.noteid = 0
-      this.action = 'add'
+      this.act = 'add'
     },
     updatenotes() {
       this.$refs.notes.$emit('updatenotes')

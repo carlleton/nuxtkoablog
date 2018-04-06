@@ -1,18 +1,18 @@
 <template>
   <div class="form">
     <div class="formtit">
-      <el-input placeholder="标签" class="inputtags" v-model="note.tags"></el-input>
+      <el-input size="small" placeholder="标签" class="inputtags" v-model="note.tags"></el-input>
       <el-checkbox class="ispost" v-model="isPost">发布到post</el-checkbox>
       <div class="rightbtn">
-        <i class="fa fa-edit" title="编辑" v-show="act=='show'" @click="act='edit'"></i>
-        <i class="fa fa-eye" title="查看" v-show="act!='show'" @click="act='show'"></i>
+        <i class="fa fa-edit" title="编辑" v-show="act=='show'" @click="actchange('edit')"></i>
+        <i class="fa fa-eye" title="查看" v-show="act!='show'" @click="actchange('show')"></i>
         <i class="fa fa-save" @click="save" title="保存"></i>
       </div>
     </div>
     <el-input placeholder="请输入标题" v-model="note.title"></el-input>
     <div class="contentshow md" v-if="act=='show'" v-html="markdownhtml"></div>
     <mavon-editor class="editor" v-if="act!='show'" v-model="note.content"></mavon-editor>
-    <div class="nonoteshow" v-if="action=='' && noteid==0">
+    <div class="nonoteshow" v-if="act=='show' && noteid==0">
       <button @click="$emit('addNote')">添加笔记</button>
     </div>
   </div>
@@ -38,10 +38,9 @@ marked.setOptions({
   }
 })
 export default {
-  props: ['cateid', 'noteid', 'action'],
+  props: ['cateid', 'noteid', 'act'],
   data() {
     return {
-      act: 'show',
       isPost: false,
       note: {
         tags: '',
@@ -66,13 +65,8 @@ export default {
       if (newval === 0) {
         this.doadd()
       } else {
-        this.act = 'show'
+        this.$emit('update:act', 'show')
         this.getnote(newval)
-      }
-    },
-    action(newval, oldval) {
-      if (newval === 'add') {
-        this.doadd()
       }
     }
   },
@@ -106,7 +100,7 @@ export default {
             message: '添加成功',
             duration: 2000,
             onClose: () => {
-              this.act = 'show'
+              this.$emit('update:act', 'show')
               this.$emit('updatenotes')
             }
           })
@@ -122,7 +116,7 @@ export default {
             message: '更新成功',
             duration: 2000,
             onClose: () => {
-              this.act = 'show'
+              this.$emit('update:act', 'show')
               this.$emit('updatenotes')
             }
           })
@@ -192,7 +186,7 @@ export default {
       }
     },
     doadd() {
-      this.act = 'add'
+      this.$emit('update:act', 'add')
       this.note.id = 0
       this.note.tags = ''
       this.note.postid = ''
@@ -200,6 +194,9 @@ export default {
       this.note.content = ''
       this.note.addtime = new Date()
       this.isPost = false
+    },
+    actchange(tag) {
+      this.$emit('update:act', tag)
     }
   }
 }

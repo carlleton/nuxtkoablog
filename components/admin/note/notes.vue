@@ -4,6 +4,9 @@
       {{catename}}({{total}})
     </div>
     <ul>
+      <li v-show="act=='add' && noteid===0">
+        <p></p>
+      </li>
       <li v-for="(note,index) in notes" :key="index" :class="{cur:noteid==note.id}" @click="selectNote(note)" @contextmenu="showContextMenu(note)">
         <p class="itemtitle" :title="note.title">
           {{note.title}}
@@ -22,7 +25,7 @@ import axios from 'axios'
 import contextmenu from '~/components/contextmenu'
 
 export default {
-  props: ['cateid', 'noteid', 'catename'],
+  props: ['cateid', 'noteid', 'catename', 'act'],
   data() {
     return {
       isloading: false,
