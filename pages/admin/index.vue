@@ -1,6 +1,6 @@
 <template>
   <div>
-    内容展示
+    <nuxt-link to="/admin/notes">打开日志页面</nuxt-link>
   </div>
 </template>
 <script>
