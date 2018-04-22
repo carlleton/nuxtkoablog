@@ -8,6 +8,7 @@ const notecates = require('./notecates')
 const options = require('./options')
 const backup = require('./backup')
 const install = require('./install')
+const usns = require('./usns')
 
 let jwtAuth = require('../middleware/jwtAuth')
 
@@ -22,6 +23,7 @@ router.use('/notecates', notecates.routes(), notecates.allowedMethods())
 router.use('/options', options.routes(), options.allowedMethods())
 router.use('/backup', backup.routes(), backup.allowedMethods())
 router.use('/install', install.routes(), install.allowedMethods())
+router.use('/usns', usns.routes(), usns.allowedMethods())
 
 router.all('/', async (ctx, next) => {
   ctx.status = 200
