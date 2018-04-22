@@ -9,4 +9,11 @@ export default class Users {
     user.userpass = crypto.createHash('sha1').update(user.userpass).digest('hex')
     return db.query(sql, [user.username, user.userpass])
   }
+  // 更改密码
+  changePass(params) {
+    let sql = "update users set password = ? where username = ? and password = ?"
+    params.oldpass = crypto.createHash('sha1').update(params.oldpass).digest('hex')
+    params.newpass = crypto.createHash('sha1').update(params.newpass).digest('hex')
+    return db.query(sql, [params.newpass, params.username, params.oldpass])
+  }
 }

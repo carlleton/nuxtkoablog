@@ -34,7 +34,7 @@ export default async function ({ isClient, isServer, route, req, res, redirect }
     if (path.indexOf('/install') > -1 && !notInstalled) {
       return redirect('/')
     }
-    
+
     if (path.indexOf('admin') > 0 && !isLogin()) {
       return redirect('login')
     }

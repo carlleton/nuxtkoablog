@@ -58,6 +58,14 @@ export function getCookieInClient(name) {
   }
 }
 
+export function setUserName(value) {
+  setCookieInClient('username', value, 60*24*7)
+}
+
+export function getUserName() {
+  return getCookieInClient('username')
+}
+
 // 是否登陆
 export function isLogin() {
   if (getCookieInClient('token')) {
