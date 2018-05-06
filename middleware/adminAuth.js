@@ -3,28 +3,40 @@ import axios from 'axios'
 
 export default async function ({ isClient, isServer, route, req, res, redirect }) {
   let result = await axios.get('/api')
+  let path = ''
+  let notInstalled = result.data.notInstalled
 
   // 服务器端判断是否需要登陆
   if (isServer) {
     let cookies = getCookiesInServer(req)
-    let path = req.originalUrl
+    path = req.originalUrl
 
-    if (path.indexOf('/install') === -1 && result.data.notInstalled) {
-      redirect('/install')
+    if (path.indexOf('/install') === -1 && notInstalled) {
+      return redirect('/install')
+    }
+
+    if (path.indexOf('/install') > -1 && !notInstalled) {
+      return redirect('/')
     }
 
     if (path.indexOf('admin') > 0 && !cookies.token) {
-      redirect('/login')
+      return redirect('/login')
     }
   }
   // 客户端
   if (isClient) {
-    var path = route.path
-    if (path.indexOf('/install') === -1 && result.data.notInstalled) {
-      redirect('/install')
+    path = route.path
+
+    if (path.indexOf('/install') === -1 && notInstalled) {
+      return redirect('/install')
     }
+
+    if (path.indexOf('/install') > -1 && !notInstalled) {
+      return redirect('/')
+    }
+
     if (path.indexOf('admin') > 0 && !isLogin()) {
-      redirect('login')
+      return redirect('login')
     }
   }
 }

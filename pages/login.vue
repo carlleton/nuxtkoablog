@@ -19,7 +19,7 @@
 </template>
 <script>
 import axios from 'axios'
-import { setToken } from '../util/tools'
+import { setToken, setUserName } from '../util/tools'
 
 export default {
   head: {
@@ -43,11 +43,11 @@ export default {
         userpass: this.userpass
       }).then((res) => {
         let data = res.data
-        console.log(data)
         if (data.code !== 200) {
           this.$message(data.message)
         } else {
           setToken(data.token)
+          setUserName(this.username)
           this.$router.replace('/admin')
         }
       }).catch((err) => {

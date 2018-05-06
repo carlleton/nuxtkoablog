@@ -2,7 +2,7 @@
   <el-container>
     <el-header style="height:40px;">
       <div class="admin_tit">
-        <nuxt-link to="/admin"><< 后台管理页面</nuxt-link>
+        <nuxt-link to="/admin"> &lt;&lt; 后台管理页面</nuxt-link>
         <nuxt-link to="/" class="page" target="_blank">前台页面</nuxt-link>
         <nuxt-link to="/admin/posts/list" class="page">文章列表</nuxt-link>
         <el-button plain size="mini" style="margin-left:10px;" @click="addNote">添加笔记</el-button>
@@ -27,7 +27,7 @@
       </el-aside>
       <el-main class="editor">
         <!-- 编辑器 -->
-        <Editor :cateid="cateid" :noteid="noteid" :act.sync="act" @updatenotes="updatenotes" @addNote="addNote"></Editor>
+        <Editor :cateid="cateid" :noteid.sync="noteid" :act.sync="act" @updatenotes="updatenotes" @addNote="addNote"></Editor>
       </el-main>
     </el-container>
   </el-container>

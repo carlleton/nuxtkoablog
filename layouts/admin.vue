@@ -59,6 +59,7 @@ export default {
           name: '系统设置',
           childs: [
             {name: '备份管理', link: '/admin/system/backup'},
+            {name: '同步管理', link: '/admin/system/sync'},
             {name: '更改密码', link: '/admin/system/password'}
           ]
         }

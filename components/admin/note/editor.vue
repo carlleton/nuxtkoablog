@@ -101,6 +101,7 @@ export default {
             duration: 2000,
             onClose: () => {
               this.$emit('update:act', 'show')
+              this.$emit('update:noteid', this.note.id)
               this.$emit('updatenotes')
             }
           })

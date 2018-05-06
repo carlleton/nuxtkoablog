@@ -33,6 +33,7 @@ $ npm run generate
   - [x] 笔记-编辑器页面
   - [x] 笔记-显示模式、编辑模式
   - [x] 笔记可发布到文章展示列表
+  - [x] 笔记页面右键，增加删除优化
 - [x] 备份功能
   - [x] 发送数据库备份到邮箱（手动）
   - [x] 定义一个邮箱来发送备份
@@ -52,8 +53,12 @@ PS：一些功能暂时只是为了先用起来，后续再说优化
 ## 命令行工具
 * 导入具体目录下的markdown文件到数据库，目前只支持windows下的，还没兼容linux的
 ```
-node cmd.js markdown E:\WWW\folder
-node cmd.js markdown E:\www\folder\aa.md
+node cmd.js markdown ./folder
+node cmd.js markdown ./folder/aa.md
+```
+* 导出笔记表中数据，导出notecates结构为某目录下的分类目录，notes导出为.md文件
+```
+node cmd.js note2file ./out
 ```
 
 ## 初衷

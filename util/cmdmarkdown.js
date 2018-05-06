@@ -6,7 +6,8 @@ const rename = promisify(fs.rename);
 const stat = promisify(fs.stat);
 let db = require('./db')
 let gitblog = require('./mdgitblog')
-
+let cmdmarkdown_write = require('./cmdmarkdown_write')
+module.exports.write = cmdmarkdown_write.write
 
 var cates = {}
 
@@ -104,7 +105,6 @@ async function queryCates() {
     }
   }
 }
-
 
 function read(folder) {
   queryCates()
