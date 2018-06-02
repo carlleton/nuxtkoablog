@@ -19,4 +19,12 @@ export default class Cates {
     return db.query(sql, params)
   }
 
+  getState(usn) {
+    let sql = 'select * from usns where usn > ?'
+    let params = [
+      usn
+    ]
+    return db.query(sql, params)
+  }
+
 }

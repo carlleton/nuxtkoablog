@@ -39,6 +39,12 @@ export default class Cates {
     return db.query(sql, [])
   }
 
+  findids(ids) {
+    let sql = 'select * from cates where id in (?)'
+    let params = [ids]
+    return db.query(sql, params)
+  }
+
   // 插入Post
   add(obj) {
     let sql = 'insert into cates (catename,pid,orderid,path) values (?, ?, ?, ?)'

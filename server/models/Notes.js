@@ -54,13 +54,13 @@ export default class Notes {
     return Promise.all([listdata, totaldata])
   }
 
-  // 根据id获取Post详情
+  // 根据id获取详情
   one(id) {
     let sql = 'select * from notes where notes.id = ?'
     return db.query(sql, [id])
   }
 
-  // 插入Post
+  // 插入
   add(post) {
     let sql = 'insert into notes (title,content,cid,tags,postid,addtime,updatetime) values (?, ?, ?, ?, ?, ?, ?)'
     let params = [

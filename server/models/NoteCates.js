@@ -36,7 +36,7 @@ export default class NoteCates {
     return db.query(sql, params)
   }
 
-  find({where,order,limit}) {
+  find({where, order, limit}) {
     var sql = 'select * from notecates where 1 = 1'
     if (where) {
       sql += ' and ' + where
@@ -48,6 +48,11 @@ export default class NoteCates {
       sql += ' limit ' + limit
     }
     return db.query(sql, [])
+  }
+  findids(ids) {
+    let sql = 'select * from notecates where id in (?)'
+    let params = [ids]
+    return db.query(sql, params)
   }
 
   // 插入Post
