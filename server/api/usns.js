@@ -1,6 +1,8 @@
 import Usns from '../models/Usns'
 import NoteCates from '../models/NoteCates'
 import Cates from '../models/Cates'
+import Posts from '../models/Posts'
+import Notes from '../models/Notes'
 import { getTen } from '../../util/tools'
 
 const { tables, tableids, usnstates } = require('../config/state')
@@ -12,6 +14,8 @@ const _ = require('lodash')
 let usnsModel = new Usns()
 let notecatesModel = new NoteCates()
 let catesModel = new Cates()
+let postsModel = new Posts()
+let notesModel = new Notes()
 
 router.post('/init', async (ctx, next) => {
   var body = ctx.request.body
@@ -46,10 +50,10 @@ router.post('/init', async (ctx, next) => {
     ctx.status = 200
     ctx.body = { code: 404, message: `查询${body.table}ids失败` }
   }
-
 })
 
-router.get('/state', async (ctx, next) => {
+// 同步状态，获取
+router.get('/sync/state', async (ctx, next) => {
   let usn = ctx.query.usn
   let res = await usnsModel.getState(usn)
   let usns = []
@@ -76,6 +80,36 @@ router.get('/state', async (ctx, next) => {
     notecates,
     cates,
     usns
+  }
+})
+
+router.get('/sync/post', async (ctx, next) => {
+  let ids = ctx.query.ids
+  let res = await postsModel.findByIds(ids)
+  if (!res.err) {
+    ctx.status = 200
+    ctx.body = {
+      code: 200,
+      list: res.result
+    }
+  } else {
+    ctx.state = 200
+    ctx.body = { code: 404, message: `查询post_ids_${ids}失败` }
+  }
+})
+
+router.get('/sync/note', async (ctx, next) => {
+  let ids = ctx.query.ids
+  let res = await notesModel.findByIds(ids)
+  if (!res.err) {
+    ctx.status = 200
+    ctx.body = {
+      code: 200,
+      list: res.result
+    }
+  } else {
+    ctx.state = 200
+    ctx.body = { code: 404, message: `查询note_ids_${ids}失败` }
   }
 })
 

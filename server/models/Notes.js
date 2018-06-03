@@ -60,6 +60,12 @@ export default class Notes {
     return db.query(sql, [id])
   }
 
+  findByIds(ids) {
+    let sql = 'select * from notes where id in (?)'
+    let params = [ids]
+    return db.query(sql, params)
+  }
+
   // 插入
   add(post) {
     let sql = 'insert into notes (title,content,cid,tags,postid,addtime,updatetime) values (?, ?, ?, ?, ?, ?, ?)'

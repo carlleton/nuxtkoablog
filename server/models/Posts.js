@@ -63,6 +63,12 @@ export default class Posts {
     return db.query(sql, [id])
   }
 
+  findByIds(ids) {
+    let sql = 'select * from posts where id in (?)'
+    let params = [ids]
+    return db.query(sql, params)
+  }
+
   // 根据类型id获取单个posts
   findOneByCate(cid) {
     let sql = 'select posts.*,cates.catename from posts,cates where posts.cid = cates.id and posts.cid = ? limit 0, 1'
