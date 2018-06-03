@@ -59,6 +59,9 @@ router.get('/sync/state', async (ctx, next) => {
   let usns = []
   if (!res.error) {
     usns = res.result
+    usns.forEach((item) => {
+      item._id = item.id
+    })
   }
   // 笔记分类
   let notecateids = usns.filter(item => item.tag === tableids['notecates'] && item.state > 0).map(item => item.tagid)
@@ -66,6 +69,9 @@ router.get('/sync/state', async (ctx, next) => {
   let notecates = []
   if (!notecatesRes.err) {
     notecates = notecatesRes.result
+    notecates.forEach((item) => {
+      item._id = item.id
+    })
   }
   // 分类
   let cateids = usns.filter(item => item.tag === tableids['cates'] && item.state > 0).map(item => item.tagid)
@@ -73,6 +79,9 @@ router.get('/sync/state', async (ctx, next) => {
   let cates = []
   if (!catesRes.err) {
     cates = catesRes.result
+    cates.forEach((item) => {
+      item._id = item.id
+    })
   }
 
   ctx.status = 200
@@ -84,14 +93,14 @@ router.get('/sync/state', async (ctx, next) => {
 })
 
 router.get('/sync/post', async (ctx, next) => {
-  let ids = ctx.query.ids
+  let ids = ctx.query.ids.split(',')
   let res = await postsModel.findByIds(ids)
   if (!res.err) {
     ctx.status = 200
-    ctx.body = {
-      code: 200,
-      list: res.result
-    }
+    res.result.forEach(item => {
+      item._id = item.id
+    })
+    ctx.body = res.result
   } else {
     ctx.state = 200
     ctx.body = { code: 404, message: `查询post_ids_${ids}失败` }
@@ -99,14 +108,14 @@ router.get('/sync/post', async (ctx, next) => {
 })
 
 router.get('/sync/note', async (ctx, next) => {
-  let ids = ctx.query.ids
+  let ids = ctx.query.ids.split(',')
   let res = await notesModel.findByIds(ids)
   if (!res.err) {
     ctx.status = 200
-    ctx.body = {
-      code: 200,
-      list: res.result
-    }
+    res.result.forEach(item => {
+      item._id = item.id
+    })
+    ctx.body = res.result
   } else {
     ctx.state = 200
     ctx.body = { code: 404, message: `查询note_ids_${ids}失败` }
