@@ -26,6 +26,7 @@
     "mavon-editor": "^2.4.16",
     "moment": "^2.21.0",
     "mysql": "^2.15.0",
+    "node-snowflake": "^0.0.1",
     "nodemailer": "^4.6.3",
     "nuxt": "latest",
     "object-assign": "^4.1.1",

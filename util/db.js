@@ -1,5 +1,6 @@
 let mysql = require('mysql')
 const mysqlConfig = require('../server/config').mysqlConfig
+let snowflake = require('node-snowflake').Snowflake
 
 var pool = mysql.createPool(mysqlConfig)
 
@@ -43,6 +44,11 @@ function query (sql, params) {
       })
     }
   })
+}
+
+module.exports.nextId = function () {
+  let id = snowflake.nextId()
+  return id
 }
 
 module.exports.query = query

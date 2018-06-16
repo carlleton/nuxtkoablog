@@ -77,12 +77,12 @@ export default class Posts {
 
   // 插入Post
   add(post) {
-    let sql = 'insert into posts (title,content,cid,noteid,status,tags,addtime,updatetime) values (?, ?, ?, ?, ?, ?, ?, ?)'
+    let sql = 'insert into posts (id,title,content,cid,status,tags,addtime,updatetime) values (?, ?, ?, ?, ?, ?, ?, ?, ?)'
     let params = [
+      post.id,
       post.title,
       post.content,
       post.cid,
-      post.noteid||0,
       post.status,
       post.tags,
       post.addtime || new Date().getTime(),

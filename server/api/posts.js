@@ -72,15 +72,16 @@ router.get('/cate:cid', async (ctx, next) => {
 })
 
 router.post('/add', async (ctx, next) => {
-  var body = ctx.request.body
-  var params = {
+  let body = ctx.request.body
+  let id = db.nextId()
+  let params = {
+    id,
     title: body.title,
     content: body.content,
     cid: body.cid,
     status: body.status || 'published',
     addtime: body.addtime,
-    tags: body.tags,
-    noteid: body.noteid
+    tags: body.tags
   }
   var result = await postsModel.add(params)
   if (result.err) {
@@ -89,7 +90,7 @@ router.post('/add', async (ctx, next) => {
   } else {
     ctx.status = 200
     ctx.body = {
-      id: result.result.insertId
+      id
     }
   }
 })
@@ -105,7 +106,6 @@ router.post('/update', async (ctx, next) => {
   body.cid && (params.cid = body.cid)
   body.status && (params.status = body.status)
   body.tags && (params.tags = body.tags)
-  body.noteid && (params.noteid = body.noteid)
 
   var result = await postsModel.update(params)
   if (result.error) {

@@ -57,8 +57,9 @@ export default class NoteCates {
 
   // 插入Post
   add(obj) {
-    let sql = 'insert into notecates (catename,pid,orderid,path,pidpath) values (?, ?, ?, ?, ?)'
+    let sql = 'insert into notecates (id,catename,pid,orderid,path,pidpath) values (?, ?, ?, ?, ?, ?)'
     let params = [
+      obj.id,
       obj.catename,
       obj.pid,
       obj.orderid,

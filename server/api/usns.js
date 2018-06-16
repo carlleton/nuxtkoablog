@@ -3,6 +3,8 @@ import NoteCates from '../models/NoteCates'
 import Cates from '../models/Cates'
 import Posts from '../models/Posts'
 import Notes from '../models/Notes'
+import Options from '../models/Options'
+
 import { getTen } from '../../util/tools'
 
 const { tables, tableids, usnstates } = require('../config/state')
@@ -16,7 +18,11 @@ let notecatesModel = new NoteCates()
 let catesModel = new Cates()
 let postsModel = new Posts()
 let notesModel = new Notes()
+let optionsModel = new Options()
 
+/**
+ * 初始化
+ */
 router.post('/init', async (ctx, next) => {
   var body = ctx.request.body
   let tag = body.tag
@@ -29,6 +35,7 @@ router.post('/init', async (ctx, next) => {
     var result_success = 0
     for (let i in ids) {
       let params = {
+        id: db.nextId(),
         tag: parseInt(tag),
         tagid: ids[i],
         usn: 1,
@@ -91,7 +98,7 @@ router.get('/sync/state', async (ctx, next) => {
     usns
   }
 })
-
+// 获取新的post
 router.get('/sync/post', async (ctx, next) => {
   let ids = ctx.query.ids.split(',')
   let res = await postsModel.findByIds(ids)
@@ -106,7 +113,7 @@ router.get('/sync/post', async (ctx, next) => {
     ctx.body = { code: 404, message: `查询post_ids_${ids}失败` }
   }
 })
-
+// 获取新的note
 router.get('/sync/note', async (ctx, next) => {
   let ids = ctx.query.ids.split(',')
   let res = await notesModel.findByIds(ids)
@@ -120,6 +127,22 @@ router.get('/sync/note', async (ctx, next) => {
     ctx.state = 200
     ctx.body = { code: 404, message: `查询note_ids_${ids}失败` }
   }
+})
+// 上传信息
+router.post('/sync/up', async (ctx, next) => {
+  let usns = ctx.body.usns
+  let cates = ctx.body.cates
+  let posts = ctx.body.posts
+  let notecates = ctx.body.notecates
+  let notes = ctx.body.notes
+  let maxusn = 1
+
+  let resMaxUsn = await optionsModel.one('maxusn')
+  if (!resMaxUsn) {
+    maxusn = parseInt(resMaxUsn.result.value)
+  }
+  
+
 })
 
 module.exports = router

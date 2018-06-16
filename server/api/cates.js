@@ -21,7 +21,9 @@ router.get('/list', async (ctx, next) => {
 
 router.post('/add', async (ctx, next) => {
   var body = ctx.request.body
+  let id = db.nextId()
   var params = {
+    id: id,
     catename: body.catename,
     pid: body.pid,
     orderid: body.orderid || 1,
@@ -54,7 +56,7 @@ router.post('/add', async (ctx, next) => {
   } else {
     ctx.status = 200
     ctx.body = {
-      id: result.result.insertId
+      id: id
     }
   }
 })

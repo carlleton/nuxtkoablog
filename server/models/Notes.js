@@ -23,7 +23,7 @@ export default class Notes {
     }
 
     var totalsql = 'select count(id) as total from notes where 1=1' + sql
-    var listsql = 'select id,title,cid,addtime,updatetime,tags,postid from notes where 1=1' + sql
+    var listsql = 'select id,title,cid,addtime,updatetime,tags from notes where 1=1' + sql
     listsql += ' order by updatetime desc'
     if (obj.pageNum && obj.pageSize) {
       listsql += ' limit ?, ?'
@@ -68,13 +68,13 @@ export default class Notes {
 
   // 插入
   add(post) {
-    let sql = 'insert into notes (title,content,cid,tags,postid,addtime,updatetime) values (?, ?, ?, ?, ?, ?, ?)'
+    let sql = 'insert into notes (id,title,content,cid,tags,addtime,updatetime) values (?, ?, ?, ?, ?, ?, ?, ?)'
     let params = [
+      post.id,
       post.title,
       post.content,
       post.cid,
       post.tags,
-      post.postid,
       post.addtime || new Date().getTime(),
       new Date().getTime()
     ]

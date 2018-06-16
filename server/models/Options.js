@@ -48,8 +48,9 @@ export default class Options {
 
   // 插入Post
   add(post) {
-    let sql = 'insert into options (name, value) values (?, ?)'
+    let sql = 'insert into options (id, name, value) values (?, ?, ?)'
     let params = [
+      post.id,
       post.name,
       post.value
     ]

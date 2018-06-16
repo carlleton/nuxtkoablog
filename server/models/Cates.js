@@ -25,7 +25,7 @@ export default class Cates {
     return db.query(sql, [id])
   }
 
-  find({where,order,limit}) {
+  find({where, order, limit}) {
     var sql = 'select * from cates where 1 = 1'
     if (where) {
       sql += ' and ' + where
@@ -47,8 +47,9 @@ export default class Cates {
 
   // 插入Post
   add(obj) {
-    let sql = 'insert into cates (catename,pid,orderid,path) values (?, ?, ?, ?)'
+    let sql = 'insert into cates (id,catename,pid,orderid,path) values (?, ?, ?, ?, ?)'
     let params = [
+      obj.id,
       obj.catename,
       obj.pid,
       obj.orderid,

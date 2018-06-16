@@ -42,9 +42,9 @@ export default {
     return {
       menus: [
         {
-          name: '日记管理',
+          name: '笔记管理',
           childs: [
-            {name: '日记列表', link: '/admin/notes'},
+            {name: '笔记列表', link: '/admin/notes'},
             {name: '分类管理', link: '/admin/notes/cates'}
           ]
         },

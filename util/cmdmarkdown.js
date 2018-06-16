@@ -13,8 +13,10 @@ var cates = {}
 
 // 数据插入到数据库
 function add(post) {
-  let sql = 'insert into notes (title,content,cid,tags,addtime,updatetime) values (?, ?, ?, ?, ?, ?)'
+  let id = db.nextId()
+  let sql = 'insert into notes (id,title,content,cid,tags,addtime,updatetime) values (?, ?, ?, ?, ?, ?, ?)'
   let params = [
+    id,
     post.title,
     post.content,
     post.cid,

@@ -30,8 +30,10 @@ router.get('/list', async (ctx, next) => {
 })
 
 router.post('/add', async (ctx, next) => {
+  let id = db.nextId()
   var body = ctx.request.body
   var params = {
+    id,
     name: body.name,
     value: body.value
   }

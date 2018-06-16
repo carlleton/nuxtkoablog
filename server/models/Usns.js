@@ -8,8 +8,9 @@ export default class Cates {
   }
 
   create(obj) {
-    let sql = 'insert into usns (tag, tagid, usn, updatetime, state) values (?, ?, ?, ?, ?)'
+    let sql = 'insert into usns (id,tag, tagid, usn, updatetime, state) values (?, ?, ?, ?, ?, ?)'
     let params = [
+      obj.id,
       obj.tag,
       obj.tagid,
       obj.usn,

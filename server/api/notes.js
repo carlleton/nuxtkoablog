@@ -36,13 +36,14 @@ router.get('/list', async (ctx, next) => {
 
 router.post('/add', async (ctx, next) => {
   var body = ctx.request.body
+  let id = db.nextId()
   var params = {
+    id,
     title: body.title,
     content: body.content,
     cid: body.cid,
     addtime: body.addtime,
-    tags: body.tags,
-    postid: body.postid
+    tags: body.tags
   }
   var result = await notesModel.add(params)
   if (result.err) {
@@ -51,7 +52,7 @@ router.post('/add', async (ctx, next) => {
   } else {
     ctx.status = 200
     ctx.body = {
-      id: result.result.insertId
+      id
     }
   }
 })
@@ -66,7 +67,6 @@ router.post('/update', async (ctx, next) => {
   body.content && (params.content = body.content)
   body.cid && (params.cid = body.cid)
   body.tags && (params.tags = body.tags)
-  body.postid !== undefined && (params.postid = body.postid)
 
   var result = await notesModel.update(params)
   if (result.error) {
