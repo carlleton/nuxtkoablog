@@ -60,15 +60,15 @@ router.post('/init', async (ctx, next) => {
 
 // 同步状态，获取
 router.get('/sync/state', async (ctx, next) => {
+  let maxusn = 1
+  let resMaxUsn = await optionsModel.one('maxusn')
+  if (!resMaxUsn) {
+    maxusn = parseInt(resMaxUsn.result.value)
+  }
   let res = await usnsModel.getUsns({
     deal: 0
   })
   if (!res.error && res.result.length > 0) {
-    let maxusn = 1
-    let resMaxUsn = await optionsModel.one('maxusn')
-    if (!resMaxUsn) {
-      maxusn = parseInt(resMaxUsn.result.value)
-    }
     maxusn += 1
     await optionsModel.update({
       name: 'maxusn',
@@ -85,14 +85,14 @@ router.get('/sync/state', async (ctx, next) => {
       }
     })
   }
-  let usn = ctx.query.usn
+  let usn = parseInt(ctx.query.usn)
   res = await usnsModel.getUsns({usn})
   let usns = []
   if (!res.error) {
     usns = res.result
-    usns.forEach((item) => {
-      item._id = item.id
-    })
+    for (let usn of usns) {
+      usn._id = usn.id
+    }
   }
   // 笔记分类
   let notecateids = usns.filter(item => item.tag === tableids['notecates'] && item.state > 0).map(item => item.tagid)
@@ -110,13 +110,14 @@ router.get('/sync/state', async (ctx, next) => {
   let cates = []
   if (!catesRes.err) {
     cates = catesRes.result
-    cates.forEach((item) => {
+    for (let item of cates) {
       item._id = item.id
-    })
+    }
   }
 
   ctx.status = 200
   ctx.body = {
+    maxusn,
     notecates,
     cates,
     usns
@@ -128,7 +129,7 @@ router.get('/sync/post', async (ctx, next) => {
   let res = await postsModel.findByIds(ids)
   if (!res.err) {
     ctx.status = 200
-    res.result.forEach(item => {
+    res.result.forEach((item) => {
       item._id = item.id
     })
     ctx.body = res.result

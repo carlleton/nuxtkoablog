@@ -25,7 +25,7 @@ export default class Usns {
     let sql = 'select * from usns where 1=1'
     let params = []
     if (where.usn !== undefined) {
-      sql += 'and usn > ?'
+      sql += ' and usn > ?'
       params.push(where.usn)
     }
     if (where.deal !== undefined) {
@@ -49,8 +49,6 @@ export default class Usns {
       sql += ' and ' + key + ' = ?'
       params.push(obj.where[key])
     }
-    console.log(sql)
-    console.log(params)
     return db.query(sql, params)
   }
 
