@@ -5,8 +5,6 @@ import Posts from '../models/Posts'
 import Notes from '../models/Notes'
 import Options from '../models/Options'
 
-import { getTen } from '../../util/tools'
-
 const { tables, tableids, usnstates } = require('../config/state')
 
 const router = require('koa-router')()
@@ -39,7 +37,8 @@ router.post('/init', async (ctx, next) => {
         tag: parseInt(tag),
         tagid: ids[i],
         usn: 1,
-        state: 1
+        state: 1,
+        deal: 1
       }
       let addresult = await usnsModel.create(params)
       if (addresult.error) {
@@ -61,8 +60,33 @@ router.post('/init', async (ctx, next) => {
 
 // 同步状态，获取
 router.get('/sync/state', async (ctx, next) => {
+  let res = await usnsModel.getUsns({
+    deal: 0
+  })
+  if (!res.error && res.result.length > 0) {
+    let maxusn = 1
+    let resMaxUsn = await optionsModel.one('maxusn')
+    if (!resMaxUsn) {
+      maxusn = parseInt(resMaxUsn.result.value)
+    }
+    maxusn += 1
+    await optionsModel.update({
+      name: 'maxusn',
+      value: maxusn
+    })
+    await usnsModel.update({
+      where: {
+        deal: 0
+      },
+      set: {
+        usn: maxusn,
+        deal: 1,
+        state: 1
+      }
+    })
+  }
   let usn = ctx.query.usn
-  let res = await usnsModel.getState(usn)
+  res = await usnsModel.getUsns({usn})
   let usns = []
   if (!res.error) {
     usns = res.result
@@ -98,7 +122,7 @@ router.get('/sync/state', async (ctx, next) => {
     usns
   }
 })
-// 获取新的post
+// 批量获取新的post
 router.get('/sync/post', async (ctx, next) => {
   let ids = ctx.query.ids.split(',')
   let res = await postsModel.findByIds(ids)
@@ -113,7 +137,7 @@ router.get('/sync/post', async (ctx, next) => {
     ctx.body = { code: 404, message: `查询post_ids_${ids}失败` }
   }
 })
-// 获取新的note
+// 批量获取新的note
 router.get('/sync/note', async (ctx, next) => {
   let ids = ctx.query.ids.split(',')
   let res = await notesModel.findByIds(ids)
@@ -131,18 +155,66 @@ router.get('/sync/note', async (ctx, next) => {
 // 上传信息
 router.post('/sync/up', async (ctx, next) => {
   let usns = ctx.body.usns
-  let cates = ctx.body.cates
-  let posts = ctx.body.posts
-  let notecates = ctx.body.notecates
-  let notes = ctx.body.notes
   let maxusn = 1
 
   let resMaxUsn = await optionsModel.one('maxusn')
   if (!resMaxUsn) {
     maxusn = parseInt(resMaxUsn.result.value)
   }
-  
-
+  maxusn += 1
+  let models = {
+    'posts': postsModel,
+    'notes': notesModel,
+    'cates': catesModel,
+    'notecates': notecatesModel
+  }
+  for (let usn of usns) {
+    let model = models[tables[usn.tag]]
+    // 删除操作
+    if (usn.state === 0) {
+      await model.del(usn.tagid)
+    }
+    if (usn.state === 1) {
+      await model.add(usn.obj)
+    }
+    if (usn.state === 2) {
+      await updateData(tables[usn.tag], usn.obj)
+    }
+    await usnsModel.update({
+      where: {
+        id: usn.id
+      },
+      set: {
+        state: usn.state > 0 ? 1 : 0,
+        updatetime: Date.now(),
+        usn: maxusn
+      }
+    })
+  }
+  await optionsModel.update({
+    name: 'maxusn',
+    value: maxusn
+  })
+  ctx.status = 200
+  ctx.body = {
+    maxusn
+  }
 })
+
+function updateData(table, obj) {
+  var updated = []
+  var params = []
+  for (var key in obj) {
+    if (key === 'id' || key === '_id') {
+      continue
+    }
+    updated.push(key + ' = ?')
+    params.push(obj[key])
+  }
+  var sql = 'update ' + table + ' set ' + updated.join(',') + ' where id = ?'
+  params.push(obj.id)
+
+  return db.query(sql, params)
+}
 
 module.exports = router

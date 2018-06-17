@@ -86,7 +86,7 @@ export default class Posts {
       post.status,
       post.tags,
       post.addtime || new Date().getTime(),
-      new Date().getTime()
+      post.updatetime || new Date().getTime()
     ]
     return db.query(sql, params)
   }

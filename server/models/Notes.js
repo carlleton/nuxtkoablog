@@ -76,7 +76,7 @@ export default class Notes {
       post.cid,
       post.tags,
       post.addtime || new Date().getTime(),
-      new Date().getTime()
+      post.update || new Date().getTime()
     ]
     return db.query(sql, params)
   }

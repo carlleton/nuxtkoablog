@@ -1,5 +1,4 @@
 import Options from '../models/Options'
-import { getTen } from '../../util/tools'
 const router = require('koa-router')()
 const db = require('../../util/db')
 const _ = require('lodash')

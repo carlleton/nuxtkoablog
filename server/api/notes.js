@@ -1,5 +1,6 @@
 import Notes from '../models/Notes'
 import NoteCates from '../models/NoteCates'
+import Usns from '../models/Usns'
 const router = require('koa-router')()
 const db = require('../../util/db')
 const _ = require('lodash')
@@ -7,6 +8,7 @@ let pageSize = process.env.pageSize
 
 let notesModel = new Notes()
 let notecatesModel = new NoteCates()
+let usnsModel = new Usns()
 
 router.get('/list', async (ctx, next) => {
   var params = {
@@ -17,9 +19,6 @@ router.get('/list', async (ctx, next) => {
   }
   if (typeof params.pageSize === 'string') {
     params.pageSize = parseInt(params.pageSize)
-  }
-  if (typeof params.cid === 'string') {
-    params.cid = parseInt(params.cid)
   }
   var result = await notesModel.list(params)
   if (result.err) {
@@ -50,6 +49,8 @@ router.post('/add', async (ctx, next) => {
     ctx.status = 404
     ctx.body = { code: 404, message: 'no result' }
   } else {
+    let res = await usnsModel.syncadd('notes', id)
+    console.log(res)
     ctx.status = 200
     ctx.body = {
       id
@@ -73,6 +74,8 @@ router.post('/update', async (ctx, next) => {
     ctx.status = 404
     ctx.body = { code: 404, message: 'no result' }
   } else {
+    let res = await usnsModel.syncupdate('notes', body.id)
+    console.log(res)
     ctx.status = 200
     ctx.body = {
       rows: result.result.affectedRows
@@ -88,6 +91,7 @@ router.post('/del', async (ctx, next) => {
     ctx.status = 404
     ctx.body = { code: 404, message: 'no result' }
   } else {
+    await usnsModel.syncdel('notes', body.id)
     ctx.status = 200
     ctx.body = {
       rows: result.result.affectedRows

@@ -1,10 +1,12 @@
 import Cates from '../models/Cates'
+import Usns from '../models/Usns'
 import { getTen } from '../../util/tools'
 const router = require('koa-router')()
 const db = require('../../util/db')
 const _ = require('lodash')
 
 let catesModel = new Cates()
+let usnsModel = new Usns()
 
 router.get('/list', async (ctx, next) => {
   var params = {}
@@ -54,6 +56,7 @@ router.post('/add', async (ctx, next) => {
     ctx.status = 404
     ctx.body = { code: 404, message: 'no result' }
   } else {
+    await usnsModel.syncadd('cates', id)
     ctx.status = 200
     ctx.body = {
       id: id
@@ -85,6 +88,8 @@ router.post('/update', async (ctx, next) => {
     ctx.status = 404
     ctx.body = { code: 404, message: 'no result' }
   } else {
+    let res = await usnsModel.syncupdate('cates', body.id)
+    console.log(res)
     ctx.status = 200
     ctx.body = {
       rows: result.result.affectedRows
@@ -100,6 +105,7 @@ router.post('/del', async (ctx, next) => {
     ctx.status = 404
     ctx.body = { code: 404, message: 'no result' }
   } else {
+    await usnsModel.syncdel('cates', body.id)
     ctx.status = 200
     ctx.body = {
       rows: result.result.affectedRows

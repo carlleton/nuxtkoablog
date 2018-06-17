@@ -1,5 +1,6 @@
 import Posts from '../models/Posts'
 import Cates from '../models/Cates'
+import Usns from '../models/Usns'
 const router = require('koa-router')()
 const db = require('../../util/db')
 const _ = require('lodash')
@@ -7,6 +8,7 @@ let pageSize = process.env.pageSize
 
 let postsModel = new Posts()
 let catesModel = new Cates()
+let usnsModel = new Usns()
 
 router.get('/list', async (ctx, next) => {
   var params = {
@@ -48,6 +50,7 @@ router.get('/cate:cid', async (ctx, next) => {
       return
     }
     var params = {
+      id: db.nextId(),
       title: cate.catename,
       content: '',
       cid: cid,
@@ -55,6 +58,7 @@ router.get('/cate:cid', async (ctx, next) => {
       addtime: new Date().getTime()
     }
     var resultAdd = await postsModel.add(params)
+    await usnsModel.syncadd('posts', params.id)
     if (resultAdd.error) {
       ctx.status = 404
       ctx.body = { code: 404, message: 'no result' }
@@ -88,6 +92,7 @@ router.post('/add', async (ctx, next) => {
     ctx.status = 404
     ctx.body = { code: 404, message: 'no result' }
   } else {
+    await usnsModel.syncadd('posts', id)
     ctx.status = 200
     ctx.body = {
       id
@@ -112,6 +117,7 @@ router.post('/update', async (ctx, next) => {
     ctx.status = 404
     ctx.body = { code: 404, message: 'no result' }
   } else {
+    await usnsModel.syncupdate('posts', body.id)
     ctx.status = 200
     ctx.body = {
       rows: result.result.affectedRows
@@ -127,6 +133,7 @@ router.post('/del', async (ctx, next) => {
     ctx.status = 404
     ctx.body = { code: 404, message: 'no result' }
   } else {
+    await usnsModel.syncdel('posts', body.id)
     ctx.status = 200
     ctx.body = {
       rows: result.result.affectedRows
