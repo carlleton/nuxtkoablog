@@ -155,7 +155,7 @@ router.get('/sync/note', async (ctx, next) => {
 })
 // 上传信息
 router.post('/sync/up', async (ctx, next) => {
-  let usns = ctx.body.usns
+  let usns = ctx.request.body.usns
   let maxusn = 1
 
   let resMaxUsn = await optionsModel.one('maxusn')
