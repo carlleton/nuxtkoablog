@@ -68,7 +68,7 @@ export default class Notes {
 
   // 插入
   add(post) {
-    let sql = 'insert into notes (id,title,content,cid,tags,addtime,updatetime) values (?, ?, ?, ?, ?, ?, ?, ?)'
+    let sql = 'insert into notes (id,title,content,cid,tags,addtime,updatetime,replay) values (?, ?, ?, ?, ?, ?, ?, ?, ?)'
     let params = [
       post.id,
       post.title,
@@ -76,7 +76,8 @@ export default class Notes {
       post.cid,
       post.tags,
       post.addtime || new Date().getTime(),
-      post.update || new Date().getTime()
+      post.update || new Date().getTime(),
+      post.replay || 0
     ]
     return db.query(sql, params)
   }

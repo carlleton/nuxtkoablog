@@ -42,7 +42,8 @@ router.post('/add', async (ctx, next) => {
     content: body.content,
     cid: body.cid,
     addtime: body.addtime,
-    tags: body.tags
+    tags: body.tags,
+    replay: body.replay || 0
   }
   var result = await notesModel.add(params)
   if (result.err) {
@@ -68,6 +69,7 @@ router.post('/update', async (ctx, next) => {
   body.content && (params.content = body.content)
   body.cid && (params.cid = body.cid)
   body.tags && (params.tags = body.tags)
+  body.replay !== undefined && (params.replay = body.replay)
 
   var result = await notesModel.update(params)
   if (result.error) {
