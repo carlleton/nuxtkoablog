@@ -3,7 +3,8 @@
 > 这是一个使用Nuxt,Node,Koa2,Mysql搭建的博客
 
 ## 运行
-
+1. 更改`/server/config/config.js`文件，更改相应的数据库、用户名、密码、token盐
+2. 安装
 ``` bash
 # install dependencies
 $ npm install # Or yarn install*[see note below]

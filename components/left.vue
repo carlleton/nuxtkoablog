@@ -9,10 +9,10 @@
     <aside class="widget" v-if="cates.length > 0">
       <h2 class="widget-title">分类目录</h2>
       <ul class="widget-cates">
-        <li v-for="cate in cates" :key="cate.id">
+        <li v-for="cate in cates" :key="'cate'+cate.id">
           <nuxt-link :to="'/cate/'+cate.id">{{cate.catename}}</nuxt-link>
           <ul v-if="cate.childs && cate.childs.length > 0">
-            <li v-for="childcate in cate.childs" :key="childcate.id">
+            <li v-for="childcate in cate.childs" :key="'cate'+childcate.id">
               <nuxt-link :to="'/cate/'+childcate.id">{{childcate.catename}}</nuxt-link>
             </li>
           </ul>
@@ -39,7 +39,7 @@ export default {
       var cates = []
       var temps = []
       for (var i = 0, n = data.length; i < n; i++) {
-        if (data[i].pid === 0) {
+        if (data[i].pid === '0') {
           cates.push(data[i])
         } else {
           var maxi = cates.length - 1

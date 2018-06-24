@@ -72,7 +72,7 @@ export default {
       for (var i = 0, n = data.length; i < n; i++) {
         data[i].edit = false
         data[i].oldcatename = data[i].catename
-        if (data[i].pid === 0) {
+        if (data[i].pid === '0') {
           cates.push(data[i])
         } else {
           var maxi = cates.length - 1

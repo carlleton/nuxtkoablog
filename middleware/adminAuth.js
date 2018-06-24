@@ -2,7 +2,7 @@ import { isLogin, getCookiesInServer } from '../util/tools'
 import axios from 'axios'
 
 export default async function ({ isClient, isServer, route, req, res, redirect }) {
-  let result = await axios.get('/api')
+  let result = await axios.get('/api/install')
   let path = ''
   let notInstalled = result.data.notInstalled
 

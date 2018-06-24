@@ -87,7 +87,7 @@ async function queryCates() {
   var data = catesresult.result
   var tmps = []
   for (var i = 0, n = data.length; i < n; i++) {
-    if (data[i].pid === 0) {
+    if (data[i].pid === '0') {
       data[i].folder = '\\' + data[i].catename
       cates[data[i].folder] = data[i].id
       tmps.push(data[i])

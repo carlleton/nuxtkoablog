@@ -16,7 +16,6 @@ function query (sql, params) {
     try {
       pool.getConnection((err, connection) => {
         if (err) {
-          console.log(err)
           return resolve({
             err: true
           })
@@ -27,6 +26,12 @@ function query (sql, params) {
           connection.release()
           if (err) {
             console.error('db error17:' + err)
+            if (err.code === 'ER_NO_SUCH_TABLE') {
+              return resolve({
+                err: true,
+                notInstalled: true
+              })
+            }
             return resolve({
               err: true
             })
@@ -40,7 +45,9 @@ function query (sql, params) {
     } catch (err) {
       console.error('db error24:' + err)
       return resolve({
-        err: true
+        err: true,
+        message: 'not installed',
+        notInstalled: true
       })
     }
   })
