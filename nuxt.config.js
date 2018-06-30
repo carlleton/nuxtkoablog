@@ -29,7 +29,14 @@ module.exports = {
    * 全局变量
    */
   env: {
-    pageSize: 10
+    pageSize: 10,
+    mysqlConfig: {
+      host: 'localhost',
+      user: 'root',
+      password: 'root',
+      database: 'nuxtkoablog'
+    },
+    jwtSecret: 'nuxtkoablog123abc' // token盐
   },
   plugins: [
     { src: '~plugins/axios' },

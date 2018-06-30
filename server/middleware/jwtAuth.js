@@ -1,6 +1,6 @@
 let jwt = require('jwt-simple')
 const config = require('../config')
-const jwtSecret = config.jwtSecret
+const jwtSecret = process.env.jwtSecret
 const needAuth = config.needAuth
 
 module.exports = (ctx, next) => {

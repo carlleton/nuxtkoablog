@@ -2,6 +2,11 @@ import Koa from 'koa'
 import { Nuxt, Builder } from 'nuxt'
 import bodyParser from 'koa-bodyparser'
 
+let config = require('../nuxt.config.js')
+
+Object.assign(process.env, config.env)
+process.env.mysqlConfig = JSON.stringify(config.env.mysqlConfig)
+
 const app = new Koa()
 const host = process.env.HOST || '0.0.0.0'
 const port = process.env.PORT || 3001
@@ -11,10 +16,9 @@ app.use(bodyParser())
 let api = require('./api/index')
 app.use(api.routes())
 
-async function start () {
-
+async function start() {
   // Import and Set Nuxt.js options
-  let config = require('../nuxt.config.js')
+  
   config.dev = !(app.env === 'production')
 
   // Instantiate nuxt.js

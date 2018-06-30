@@ -1,9 +1,8 @@
 let mysql = require('mysql')
-const mysqlConfig = require('../server/config').mysqlConfig
 let snowflake = require('node-snowflake').Snowflake
+const mysqlConfig = JSON.parse(process.env.mysqlConfig)
 
-var pool = mysql.createPool(mysqlConfig)
-
+let pool = mysql.createPool(mysqlConfig)
 pool.on('connection', function (connection) {
   // console.log('Connection %d built', connection.threadId)
   connection.on('error', function (err) {

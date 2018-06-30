@@ -14,9 +14,12 @@ router.get('/list', async (ctx, next) => {
   var params = {
     scope: ctx.query.scope || '',
     pageNum: ctx.query.page || 1,
-    pageSize: pageSize,
+    pageSize: ctx.query.pageSize || pageSize,
     cid: ctx.query.cid || '',
     keyword: ctx.query.keyword || ''
+  }
+  if (typeof params.pageSize === 'string') {
+    params.pageSize = parseInt(params.pageSize)
   }
   var result = await postsModel.list(params)
   if (result.err) {

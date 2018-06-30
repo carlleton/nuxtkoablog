@@ -3,7 +3,8 @@
 > 这是一个使用Nuxt,Node,Koa2,Mysql搭建的博客
 
 ## 运行
-1. 更改`/server/config/config.js`文件，更改相应的数据库、用户名、密码、token盐
+1. 更改`nuxt.config.js`文件，更改env.mysqlConfig和env.jwtSecret
+    对应数据库、用户名、密码，token盐
 2. 安装
 ``` bash
 # install dependencies
@@ -44,12 +45,8 @@ $ npm run generate
     - [x] cmd导入markdown文件，支持gitblog格式，支持命令行单个markdown文件导入
 - [x] 后台配置部分参数
     - [x] 配置保存在数据库中
-    - [ ] 导出配置到文件中做缓存（更改频率小）
 - [x] 安装升级功能
-  - [ ] 开始部署时需要输入ip、用户名、密码、数据库名，然后安装sql文件
-  - [ ] 一开始定义好升级操作，每次版本升级更新相应内容
-
-PS：一些功能暂时只是为了先用起来，后续再说优化
+  - [x] 安装sql文件
 
 ## 命令行工具
 * 导入具体目录下的markdown文件到数据库，目前只支持windows下的，还没兼容linux的

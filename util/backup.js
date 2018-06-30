@@ -4,6 +4,7 @@ const moment = require('moment')
 const cp = require('child_process')
 const nodemailer = require('nodemailer')
 const config = require('../server/config')
+const mysqlConfig = JSON.parse(process.env.mysqlConfig)
 
 /**
  * 备份数据库并压缩
@@ -11,9 +12,9 @@ const config = require('../server/config')
  * @param  {Function} callback [回调]
  */
 module.exports.zip = () => {
-  var filename = 'out/' + config.mysqlConfig.database+moment().format('YYYYMMDD')+'.sql.gz'
+  var filename = 'out/' + mysqlConfig.database+moment().format('YYYYMMDD')+'.sql.gz'
   return new Promise((resolve, reject) => {
-    var command = 'mysqldump --user='+config.mysqlConfig.user+' --password='+config.mysqlConfig.password+' '+config.mysqlConfig.database+' | gzip > '+filename
+    var command = 'mysqldump --user='+mysqlConfig.user+' --password='+mysqlConfig.password+' '+mysqlConfig.database+' | gzip > '+filename
     cp.exec(command, (err,stdout,stderr) => {
       if (err) {
         console.log('备份数据库发生错误:'+stderr)
