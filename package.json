@@ -44,7 +44,9 @@
     "eslint-plugin-node": "^4.2.2",
     "eslint-plugin-promise": "^3.4.0",
     "eslint-plugin-standard": "^3.0.1",
+    "node-sass": "^4.9.0",
     "nodemon": "^1.11.0",
+    "sass-loader": "^7.0.3",
     "scmp": "^2.0.0"
   }
 }

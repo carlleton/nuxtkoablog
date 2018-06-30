@@ -13,6 +13,7 @@ export default {
   },
   methods: {
     async checkBackup() {
+      let isReload = this.$route.path === '/admin/system/backup'
       var lastBackupTime = this.$store.state.lastBackupTime
       if (!lastBackupTime) {
         var result = await axios.get('/api/options/lastBackupTime')
@@ -31,7 +32,15 @@ export default {
         if (!backupresult.data.err) {
           lastBackupTime = backupresult.data.lastBackupTime
           this.$store.commit('setLastBackupTime', lastBackupTime)
-          this.$message('备份成功')
+          this.$message({
+            type: 'info',
+            message: '备份成功',
+            onClose: () => {
+              if (isReload) {
+                window.location.reload()
+              }
+            }
+          })
         }
       }).catch(() => {
         this.$message({

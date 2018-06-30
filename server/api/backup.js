@@ -7,7 +7,7 @@ const moment = require('moment')
 let optionsModel = new Options()
 
 // 发送邮件
-var sendEmail = async function(obj) {
+var sendEmail = async function (obj) {
   var params = {
     keys: 'sendEmail,receiveEmail'
   }
@@ -47,11 +47,35 @@ router.get('/zip', async (ctx, next) => {
   }
   var result = await sendEmail(obj)
   var lastBackupTime = (new Date()).getTime()
-  var result_update = await optionsModel.update({
+  await optionsModel.update({
     name: 'lastBackupTime',
     value: lastBackupTime
   })
   result.lastBackupTime = lastBackupTime
+  ctx.status = 200
+  ctx.body = result
+})
+
+// 备份列表
+router.get('/list', async (ctx, next) => {
+  let folder = 'out/zip'
+  let files = await backup.readfolder(folder)
+  ctx.status = 200
+  ctx.body = files
+})
+
+// 删除备份文件
+router.post('/del', async (ctx, next) => {
+  let name = ctx.request.body.name
+  let result = await backup.delBackup(name)
+  ctx.status = 200
+  ctx.body = result
+})
+
+// 还原备份
+router.post('/restore', async (ctx, next) => {
+  let name = ctx.request.body.name
+  let result = await backup.restore(name)
   ctx.status = 200
   ctx.body = result
 })
