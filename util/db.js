@@ -16,7 +16,8 @@ function query (sql, params) {
       pool.getConnection((err, connection) => {
         if (err) {
           return resolve({
-            err: true
+            err: true,
+            error: true
           })
         }
         //链接
@@ -28,15 +29,18 @@ function query (sql, params) {
             if (err.code === 'ER_NO_SUCH_TABLE') {
               return resolve({
                 err: true,
+                error: true,
                 notInstalled: true
               })
             }
             return resolve({
-              err: true
+              err: true,
+              error: true
             })
           }
           resolve({
             err: false,
+            error: false,
             result: result
           })
         })
@@ -45,6 +49,7 @@ function query (sql, params) {
       console.error('db error24:' + err)
       return resolve({
         err: true,
+        error: true,
         message: 'not installed',
         notInstalled: true
       })

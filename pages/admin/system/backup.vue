@@ -14,7 +14,7 @@
             <th>序号</th>
             <th>备份名称</th>
             <th>大小</th>
-            <th>操作</th>
+            <th style="width: 120px;">操作</th>
           </tr>
         </thead>
         <tbody>

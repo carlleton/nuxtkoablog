@@ -62,8 +62,8 @@ router.post('/init', async (ctx, next) => {
 router.get('/sync/state', async (ctx, next) => {
   let maxusn = 1
   let resMaxUsn = await optionsModel.one('maxusn')
-  if (!resMaxUsn) {
-    maxusn = parseInt(resMaxUsn.result.value)
+  if (!resMaxUsn.err) {
+    maxusn = parseInt(resMaxUsn.result[0].value)
   }
   let res = await usnsModel.getUsns({
     deal: 0
@@ -88,7 +88,7 @@ router.get('/sync/state', async (ctx, next) => {
   let usn = parseInt(ctx.query.usn)
   res = await usnsModel.getUsns({usn})
   let usns = []
-  if (!res.error) {
+  if (!res.err) {
     usns = res.result
     for (let usn of usns) {
       usn._id = usn.id
@@ -96,22 +96,27 @@ router.get('/sync/state', async (ctx, next) => {
   }
   // 笔记分类
   let notecateids = usns.filter(item => item.tag === tableids['notecates'] && item.state > 0).map(item => item.tagid)
-  let notecatesRes = await notecatesModel.findids(notecateids)
   let notecates = []
-  if (!notecatesRes.err) {
-    notecates = notecatesRes.result
-    notecates.forEach((item) => {
-      item._id = item.id
-    })
+  if (notecateids.length > 0) {
+    let notecatesRes = await notecatesModel.findids(notecateids)
+    if (!notecatesRes.err) {
+      notecates = notecatesRes.result
+      console.log(notecatesRes)
+      notecates.forEach((item) => {
+        item._id = item.id
+      })
+    }
   }
   // 分类
   let cateids = usns.filter(item => item.tag === tableids['cates'] && item.state > 0).map(item => item.tagid)
-  let catesRes = await catesModel.findids(cateids)
   let cates = []
-  if (!catesRes.err) {
-    cates = catesRes.result
-    for (let item of cates) {
-      item._id = item.id
+  if (cateids.length > 0) {
+    let catesRes = await catesModel.findids(cateids)
+    if (!catesRes.err) {
+      cates = catesRes.result
+      for (let item of cates) {
+        item._id = item.id
+      }
     }
   }
 
@@ -159,8 +164,8 @@ router.post('/sync/up', async (ctx, next) => {
   let maxusn = 1
 
   let resMaxUsn = await optionsModel.one('maxusn')
-  if (!resMaxUsn) {
-    maxusn = parseInt(resMaxUsn.result.value)
+  if (!resMaxUsn.err) {
+    maxusn = parseInt(resMaxUsn.result[0].value)
   }
   maxusn += 1
   let models = {
@@ -169,28 +174,62 @@ router.post('/sync/up', async (ctx, next) => {
     'cates': catesModel,
     'notecates': notecatesModel
   }
+  let delnum = 0
+  let addnum = 0
+  let updatenum = 0
+  let usnnum = 0
+  let res
   for (let usn of usns) {
     let model = models[tables[usn.tag]]
     // 删除操作
     if (usn.state === 0) {
-      await model.del(usn.tagid)
-    }
-    if (usn.state === 1) {
-      await model.add(usn.obj)
-    }
-    if (usn.state === 2) {
-      await updateData(tables[usn.tag], usn.obj)
-    }
-    await usnsModel.update({
-      where: {
-        id: usn.id
-      },
-      set: {
-        state: usn.state > 0 ? 1 : 0,
-        updatetime: Date.now(),
-        usn: maxusn
+      res = await model.del(usn.tagid)
+      if (!res.err) {
+        delnum++
       }
-    })
+    } else {
+      if (!usn.obj) {
+        continue
+      }
+      let oneres = await model.one(usn.tagid)
+      if (oneres.result.length > 0) {
+        res = await updateData(tables[usn.tag], usn.obj)
+        if (!res.err) {
+          updatenum++
+        }
+      } else {
+        res = await model.add(usn.obj)
+        if (!res.err) {
+          addnum++
+        }
+      }
+    }
+    let usnParams = {
+      state: usn.state > 0 ? 1 : 0,
+      updatetime: Date.now(),
+      usn: maxusn
+    }
+    let serverOne = await usnsModel.one(usn.id)
+    if (serverOne.result.length > 0) {
+      res = await usnsModel.update({
+        where: {
+          id: usn.id
+        },
+        set: usnParams
+      })
+      if (!res.err) {
+        usnnum++
+      }
+    } else {
+      usnParams.id = usn.id
+      usnParams.tagid = usn.tagid
+      usnParams.tag = usn.tag
+      usnParams.deal = 1
+      res = await usnsModel.create(usnParams)
+      if (!res.err) {
+        usnnum++
+      }
+    }
   }
   await optionsModel.update({
     name: 'maxusn',
@@ -198,6 +237,10 @@ router.post('/sync/up', async (ctx, next) => {
   })
   ctx.status = 200
   ctx.body = {
+    addnum,
+    delnum,
+    updatenum,
+    usnnum,
     maxusn
   }
 })

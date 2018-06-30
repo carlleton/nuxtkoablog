@@ -21,6 +21,12 @@ export default class Usns {
     return db.query(sql, params)
   }
 
+  // 根据id获取详情
+  one(id) {
+    let sql = 'select * from usns where id = ?'
+    return db.query(sql, [id])
+  }
+
   getUsns(where) {
     let sql = 'select * from usns where 1=1'
     let params = []
