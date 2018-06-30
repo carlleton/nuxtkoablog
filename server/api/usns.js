@@ -186,6 +186,8 @@ router.post('/sync/up', async (ctx, next) => {
       res = await model.del(usn.tagid)
       if (!res.err) {
         delnum++
+      } else {
+        console.log('uperr delmodel', usn)
       }
     } else {
       if (!usn.obj) {
@@ -196,11 +198,15 @@ router.post('/sync/up', async (ctx, next) => {
         res = await updateData(tables[usn.tag], usn.obj)
         if (!res.err) {
           updatenum++
+        } else {
+          console.log('uperr updatemodel', usn.obj)
         }
       } else {
         res = await model.add(usn.obj)
         if (!res.err) {
           addnum++
+        } else {
+          console.log('uperr addmodel', usn.obj)
         }
       }
     }
@@ -219,6 +225,8 @@ router.post('/sync/up', async (ctx, next) => {
       })
       if (!res.err) {
         usnnum++
+      } else {
+        console.log('uperr usnupdate', usn)
       }
     } else {
       usnParams.id = usn.id
@@ -228,6 +236,8 @@ router.post('/sync/up', async (ctx, next) => {
       res = await usnsModel.create(usnParams)
       if (!res.err) {
         usnnum++
+      } else {
+        console.log('uperr usnadd', usn)
       }
     }
   }

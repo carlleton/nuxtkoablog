@@ -68,7 +68,7 @@ export default class Notes {
 
   // 插入
   add(post) {
-    let sql = 'insert into notes (id,title,content,cid,tags,addtime,updatetime,replay) values (?, ?, ?, ?, ?, ?, ?, ?, ?)'
+    let sql = 'insert into notes (id,title,content,cid,tags,addtime,updatetime,replay) values (?, ?, ?, ?, ?, ?, ?, ?)'
     let params = [
       post.id,
       post.title,
