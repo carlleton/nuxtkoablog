@@ -76,8 +76,7 @@ router.post('/update', async (ctx, next) => {
     ctx.status = 404
     ctx.body = { code: 404, message: 'no result' }
   } else {
-    let res = await usnsModel.syncupdate('notes', body.id)
-    console.log(res)
+    await usnsModel.syncupdate('notes', body.id)
     ctx.status = 200
     ctx.body = {
       rows: result.result.affectedRows

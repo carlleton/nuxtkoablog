@@ -101,7 +101,6 @@ router.get('/sync/state', async (ctx, next) => {
     let notecatesRes = await notecatesModel.findids(notecateids)
     if (!notecatesRes.err) {
       notecates = notecatesRes.result
-      console.log(notecatesRes)
       notecates.forEach((item) => {
         item._id = item.id
       })

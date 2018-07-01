@@ -135,6 +135,7 @@ router.post('/up', async (ctx, next) => {
       rows: 0
     }
   } else {
+    let updateCount = 0
     var nowresult = await notecatesModel.one(id)
     var nowone = nowresult.result[0]
     var upone = upresult.result[0]
@@ -146,7 +147,7 @@ router.post('/up', async (ctx, next) => {
       nowpath += ','
     }
     nowpath += getTen(upone.orderid) + ','
-    let replacepath = (nowone.pidpath||'') + nowone.id + ','
+    let replacepath = (nowone.pidpath || '') + nowone.id + ','
     var objnow = {
       id: nowone.id,
       path: nowpath,
@@ -154,27 +155,31 @@ router.post('/up', async (ctx, next) => {
     }
     await notecatesModel.update(objnow)
     await usnsModel.syncupdate('notecates', objnow.id)
+    updateCount += 1
     let updateres = await db.query('select id from notecates where pidpath like ?', [replacepath])
-    var sql1 = 'update notecates set path = replace(path, ?, ?) where pidpath like ?'
-    var params1 = [
-      nowone.path,
-      nowpath,
-      replacepath
-    ]
-    var res1 = await db.query(sql1, params1)
-    let updateids = updateres.data
-    for (let i = 0, n = updateids.length; i < n; i++) {
-      await usnsModel.syncupdate('notecates', updateids[i])
+    let updateids = updateres.result
+    if (updateids.length > 0) {
+      var sql1 = 'update notecates set path = replace(path, ?, ?) where pidpath like ?'
+      var params1 = [
+        nowone.path,
+        nowpath,
+        replacepath
+      ]
+      var res1 = await db.query(sql1, params1)
+      for (let i = 0, n = updateids.length; i < n; i++) {
+        await usnsModel.syncupdate('notecates', updateids[i])
+      }
+      updateCount += res1.result.affectedRows
     }
 
     var uppath = upone.path
     uppath = uppath.substr(0, uppath.lastIndexOf(','))
     uppath = uppath.substr(0, uppath.lastIndexOf(','))
     if (uppath) {
-       uppath += ','
+      uppath += ','
     }
-    uppath += getTen(nowone.orderid)+','
-    replacepath = (upone.pidpath||'') + upone.id + ','
+    uppath += getTen(nowone.orderid) + ','
+    replacepath = (upone.pidpath || '') + upone.id + ','
     var objup = {
       id: upone.id,
       path: uppath,
@@ -182,22 +187,26 @@ router.post('/up', async (ctx, next) => {
     }
     await notecatesModel.update(objup)
     await usnsModel.syncupdate('notecates', objup.id)
+    updateCount += 1
     updateres = await db.query('select id from notecates where pidpath like ?', [replacepath])
-    var sql2 = 'update notecates set path = replace(path, ?, ?) where pidpath like ?'
-    var params2 = [
-      upone.path,
-      uppath,
-      replacepath
-    ]
-    var res2 = await db.query(sql2, params2)
-    updateids = updateres.data
-    for (let i = 0, n = updateids.length; i < n; i++) {
-      await usnsModel.syncupdate('notecates', updateids[i])
+    updateids = updateres.result
+    if (updateids.length > 0) {
+      var sql2 = 'update notecates set path = replace(path, ?, ?) where pidpath like ?'
+      var params2 = [
+        upone.path,
+        uppath,
+        replacepath
+      ]
+      var res2 = await db.query(sql2, params2)
+      for (let i = 0, n = updateids.length; i < n; i++) {
+        await usnsModel.syncupdate('notecates', updateids[i])
+      }
+      updateCount += res2.result.affectedRows
     }
 
     ctx.status = 200
     ctx.body = {
-      rows: 2 + res1.result.affectedRows + res2.result.affectedRows
+      rows: updateCount
     }
   }
 })
@@ -220,6 +229,7 @@ router.post('/down', async (ctx, next) => {
       rows: 0
     }
   } else {
+    let updateCount = 0 // 更新次数
     var nowresult = await notecatesModel.one(id)
     var nowone = nowresult.result[0]
     var upone = upresult.result[0]
@@ -230,8 +240,8 @@ router.post('/down', async (ctx, next) => {
     if (nowpath) {
       nowpath += ','
     }
-    nowpath += getTen(upone.orderid)+','
-    let updatepath = (nowone.pidpath||'') + nowone.id + ','
+    nowpath += getTen(upone.orderid) + ','
+    let updatepath = (nowone.pidpath || '') + nowone.id + ','
     var objnow = {
       id: nowone.id,
       path: nowpath,
@@ -239,49 +249,58 @@ router.post('/down', async (ctx, next) => {
     }
     await notecatesModel.update(objnow)
     await usnsModel.syncupdate('notecates', objnow.id)
+    updateCount += 1
     let updateres = await db.query('select id from notecates where pidpath like ?', [updatepath])
-    var sql1 = 'update notecates set path = replace(path, ?, ?) where pidpath like ?'
-    var params1 = [
-      nowone.path,
-      nowpath,
-      updatepath
-    ]
-    var res1 = await db.query(sql1, params1)
-    let updateids = updateres.data
-    for (let i = 0, n = updateids.length; i < n; i++) {
-      await usnsModel.syncupdate('notecates', updateids[i])
+    let updateids = updateres.result
+    if (updateids.length > 0) {
+      var sql1 = 'update notecates set path = replace(path, ?, ?) where pidpath like ?'
+      var params1 = [
+        nowone.path,
+        nowpath,
+        updatepath
+      ]
+      var res1 = await db.query(sql1, params1)
+      for (let i = 0, n = updateids.length; i < n; i++) {
+        await usnsModel.syncupdate('notecates', updateids[i])
+      }
+      updateCount += res1.result.affectedRows
     }
 
     var uppath = upone.path
     uppath = uppath.substr(0, uppath.lastIndexOf(','))
     uppath = uppath.substr(0, uppath.lastIndexOf(','))
     if (uppath) {
-       uppath += ','
+      uppath += ','
     }
-    uppath += getTen(nowone.orderid)+','
-    updatepath = (upone.pidpath||'') + upone.id + ','
+    uppath += getTen(nowone.orderid) + ','
+    updatepath = (upone.pidpath || '') + upone.id + ','
     var objup = {
       id: upone.id,
       path: uppath,
       orderid: nowone.orderid
     }
     await notecatesModel.update(objup)
+    await usnsModel.syncupdate('notecates', objup.id)
+    updateCount += 1
     updateres = await db.query('select id from notecates where pidpath like ?', [updatepath])
-    var sql2 = 'update notecates set path = replace(path, ?, ?) where pidpath like ?'
-    var params2 = [
-      upone.path,
-      uppath,
-      updatepath
-    ]
-    var res2 = await db.query(sql2, params2)
-    updateids = updateres.data
-    for (let i = 0, n = updateids.length; i < n; i++) {
-      await usnsModel.syncupdate('notecates', updateids[i])
+    updateids = updateres.result
+    if (updateids.length > 0) {
+      var sql2 = 'update notecates set path = replace(path, ?, ?) where pidpath like ?'
+      var params2 = [
+        upone.path,
+        uppath,
+        updatepath
+      ]
+      var res2 = await db.query(sql2, params2)
+      for (let i = 0, n = updateids.length; i < n; i++) {
+        await usnsModel.syncupdate('notecates', updateids[i])
+      }
+      updateCount += res2.result.affectedRows
     }
 
     ctx.status = 200
     ctx.body = {
-      rows: 2 + res1.result.affectedRows + res2.result.affectedRows
+      rows: updateCount
     }
   }
 })
@@ -305,6 +324,5 @@ router.get('/:id', async (ctx, next) => {
     ctx.body = {}
   }
 })
-
 
 module.exports = router
