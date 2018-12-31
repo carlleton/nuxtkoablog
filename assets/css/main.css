@@ -1,0 +1,58 @@
+html, body
+{
+  background-color: #fff;
+  color: #2e2f30;
+  letter-spacing: 0.5px;
+  font-family: "Source Sans Pro", Arial, sans-serif;
+  height: 100vh;
+  margin: 0;
+  font-size: 14px;
+}
+
+footer
+{
+  padding: 20px;
+  text-align: center;
+  border-top: 1px solid #ddd;
+  background: #fff;
+  border-radius: 0 0 1px rgba(0, 0, 0, 0.15);
+}
+body a{
+  color: #333;
+}
+a:hover, a:focus, a:visited
+{
+  /*color: rgba(51, 51, 51, 0.7);*/
+}
+h1, h2, h3, h4, h5, h6{
+  font-weight: bold;
+}
+ul, li{
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+p{
+  margin: 0;
+  padding: 0;
+}
+
+.logo {
+  width: 243px;
+  height: 218px;
+}
+
+.page-enter-active, .page-leave-active
+{
+  transition: opacity .5s
+}
+.page-enter, .page-leave-active
+{
+  opacity: 0
+}
+.right{
+  float: right;
+}
+.left{
+  float: left;
+}

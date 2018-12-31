@@ -1,0 +1,22 @@
+{
+  "apps": [{
+    "name": "nuxtkoablog",
+    "script": "build/main.js",
+    "watch": [
+      "build"
+    ],
+    "ignore_watch": [
+      "node_modules",
+      "out/logs",
+      "public"
+    ],
+    "watch_options": {
+      "followSymlinks": false
+    },
+    "error_file" : "./out/logs/app-err.log",  // 错误日志路径
+    "out_file"   : "./out/logs/app-out.log",  // 普通日志路径
+    "env": {
+      "NODE_ENV": "production"  // 环境参数，当前指定为生产环境
+    }
+  }]
+}
