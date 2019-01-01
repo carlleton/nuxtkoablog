@@ -21,7 +21,6 @@
   </div>
 </template>
 <script>
-import axios from 'axios'
 import contextmenu from '~/components/contextmenu'
 
 export default {
@@ -65,7 +64,7 @@ export default {
       } else if (this.cateid !== 0) {
         url += '&cid=' + this.cateid
       }
-      let notesresult = await axios.get(url)
+      let notesresult = await this.$axios.$get(url)
       this.total = notesresult.data.total
       this.notes.push(...notesresult.data.data)
     },
@@ -116,7 +115,7 @@ export default {
       var params = {
         id: note.id
       }
-      let res = await axios.post(url, params)
+      let res = await this.$axios.post(url, params)
       if (res.data.rows > 0) {
         this.$message({
           type: 'success',

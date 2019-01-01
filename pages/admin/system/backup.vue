@@ -89,8 +89,6 @@
   </div>
 </template>
 <script>
-import axios from 'axios'
-
 export default {
   layout: 'admin',
   data() {
@@ -115,11 +113,11 @@ export default {
   },
   methods: {
     async getBackList() {
-      let res = await axios.get('/api/backup/list')
+      let res = await this.$axios.$get('/api/backup/list')
       this.backupList = res.data
     },
     async getData() { // 获取基本配置信息
-      let result = await axios.get('/api/options/list?keys=sendEmail,receiveEmail,backupRate')
+      let result = await this.$axios.$get('/api/options/list?keys=sendEmail,receiveEmail,backupRate')
       if (result.data.data) {
         var sendEmail = result.data.data['sendEmail']
         try {
@@ -133,15 +131,15 @@ export default {
       }
     },
     async save() { // 保存设置
-      let result1 = await axios.post('/api/options/update', {
+      let result1 = await this.$axios.post('/api/options/update', {
         name: 'sendEmail',
         value: JSON.stringify(this.sendEmail)
       })
-      let result2 = await axios.post('/api/options/update', {
+      let result2 = await this.$axios.post('/api/options/update', {
         name: 'receiveEmail',
         value: this.receiveEmail
       })
-      let result3 = await axios.post('/api/options/update', {
+      let result3 = await this.$axios.post('/api/options/update', {
         name: 'backupRate',
         value: this.backupRate
       })
@@ -154,7 +152,7 @@ export default {
     },
     async sendTestEmail() { // 发生测试邮件
       var url = '/api/backup/email'
-      var result = await axios.get(url)
+      var result = await this.$axios.$get(url)
       if (result.data) {
         if (!result.data.err) {
           this.testresult = '发送成功'
@@ -167,7 +165,7 @@ export default {
     },
     async zipBackupSendEmail() { // 打包发送
       var url = '/api/backup/zip'
-      var result = await axios.get(url)
+      var result = await this.$axios.$get(url)
       if (result.data) {
         if (!result.data.err) {
           this.testresult = '发送成功'
@@ -189,7 +187,7 @@ export default {
         let params = {
           name: name
         }
-        let res = await axios.post(url, params)
+        let res = await this.$axios.post(url, params)
         if (res.data) {
           this.getBackList()
           this.$message({
@@ -216,7 +214,7 @@ export default {
         let params = {
           name: name
         }
-        let res = await axios.post(url, params)
+        let res = await this.$axios.post(url, params)
         if (res.data) {
           this.$message({
             message: '恢复成功',
@@ -236,7 +234,7 @@ export default {
     async do_upload() {
       var formData = new FormData()
       formData.append('upfile', this.uploadfile, this.uploadfile.name)
-      let res = await axios.post('/api/backup/upload', formData)
+      let res = await this.$axios.post('/api/backup/upload', formData)
       if (res && res.data && res.data.code === 200 && res.data.name) {
         this.getBackList()
         this.restoreBackup(res.data.name, '上传成功，需要恢复数据吗？')

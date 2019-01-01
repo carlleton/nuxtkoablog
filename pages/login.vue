@@ -18,7 +18,6 @@
   </div>
 </template>
 <script>
-import axios from 'axios'
 import { setToken, setUserName } from '../util/tools'
 
 export default {
@@ -38,7 +37,7 @@ export default {
   },
   methods: {
     login() {
-      axios.post('/api/users/login', {
+      this.$axios.post('/api/users/login', {
         username: this.username,
         userpass: this.userpass
       }).then((res) => {

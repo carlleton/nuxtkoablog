@@ -29,7 +29,6 @@
   </section>
 </template>
 <script>
-import axios from 'axios'
 import {dateFormat} from '~/util/tools'
 let pageSize = process.env.pageSize
 
@@ -43,7 +42,7 @@ export default {
     }
   },
   created() {
-    axios.get('/api/cates/list').then((res) => {
+    this.$axios.$get('/api/cates/list').then((res) => {
       this.cates = res.data
     })
   },

@@ -20,7 +20,6 @@
   </div>
 </template>
 <script>
-import axios from 'axios'
 import { getUserName } from '../../../util/tools'
 
 export default {
@@ -46,7 +45,7 @@ export default {
         oldpass: this.oldpass,
         newpass: this.newpass
       }
-      let res = await axios.post(url, params)
+      let res = await this.$axios.post(url, params)
       if (res.data && res.data.code === 200) {
         this.$message({
           message: '更改成功',

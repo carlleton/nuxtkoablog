@@ -2,7 +2,6 @@
   <a class="backup" @click="checkBackup">备份一下</a>
 </template>
 <script>
-import axios from 'axios'
 const moment = require('moment')
 
 export default {
@@ -16,7 +15,7 @@ export default {
       let isReload = this.$route.path === '/admin/system/backup'
       var lastBackupTime = this.$store.state.lastBackupTime
       if (!lastBackupTime) {
-        var result = await axios.get('/api/options/lastBackupTime')
+        var result = await this.$axios.$get('/api/options/lastBackupTime')
         lastBackupTime = result.data
         this.$store.commit('setLastBackupTime', lastBackupTime)
       }
@@ -28,7 +27,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(async () => {
-        var backupresult = await axios.get('/api/backup/zip')
+        var backupresult = await this.$axios.$get('/api/backup/zip')
         if (!backupresult.data.err) {
           lastBackupTime = backupresult.data.lastBackupTime
           this.$store.commit('setLastBackupTime', lastBackupTime)

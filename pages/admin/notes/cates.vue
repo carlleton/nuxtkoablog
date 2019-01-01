@@ -53,8 +53,6 @@
   </div>
 </template>
 <script>
-import axios from 'axios'
-
 export default {
   layout: 'admin',
   head: {
@@ -75,7 +73,7 @@ export default {
   },
   methods: {
     async getData() {
-      let cates = await axios.get('/api/notecates/list')
+      let cates = await this.$axios.$get('/api/notecates/list')
       this.cates = cates.data
     },
     addcate() {
@@ -89,7 +87,7 @@ export default {
         pid: this.pid,
         orderid: this.orderid
       }
-      axios.post(url, params).then((res) => {
+      this.$axios.post(url, params).then((res) => {
         if (res.data.id) {
           this.$message({
             message: '添加成功',
@@ -116,7 +114,7 @@ export default {
         orderid: this.orderid,
         id: this.editid
       }
-      axios.post(url, params).then((res) => {
+      this.$axios.post(url, params).then((res) => {
         if (res.data.rows > 0) {
           this.$message({
             message: '更新成功',
@@ -150,7 +148,7 @@ export default {
         var sendData = {
           id: id
         }
-        axios.post(url, sendData).then((res) => {
+        this.$axios.post(url, sendData).then((res) => {
           if (res.data.rows > 0) {
             this.$message({
               type: 'success',

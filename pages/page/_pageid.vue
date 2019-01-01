@@ -4,7 +4,6 @@
   </section>
 </template>
 <script>
-import axios from 'axios'
 import ArticleList from '~/components/ArticleList.vue'
 
 export default {
@@ -16,9 +15,9 @@ export default {
   validate({ params }) {
     return /^\d+$/.test(params.pageid)
   },
-  async asyncData({params}) {
+  async asyncData({params, $axios}) {
     var page = params.pageid
-    let posts = await axios.get('/api/posts/list?page=' + page)
+    let posts = await $axios.$get('/api/posts/list?page=' + page)
     return {
       posts: posts.data.data,
       total: posts.data.total

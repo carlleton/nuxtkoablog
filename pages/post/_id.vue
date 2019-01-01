@@ -19,7 +19,6 @@
 </template>
 <script>
 import hljs from 'highlight.js'
-import axios from 'axios'
 import {dateFormat} from '~/util/tools'
 import 'highlight.js/styles/dark.css'
 import '~/assets/css/yeh-md-theme.css'
@@ -49,10 +48,10 @@ export default {
   validate({ params }) {
     return /^\d+$/.test(params.id)
   },
-  async asyncData({params}) {
-    let postdata = await axios.get('/api/posts/' + params.id)
+  async asyncData({params, $axios}) {
+    let postdata = await $axios.$get('/api/posts/' + params.id)
     let post = postdata.data
-    let cates = await axios.get('/api/cates/list')
+    let cates = await $axios.$get('/api/cates/list')
     var markdownhtml = marked(post.content)
     return {
       title: post.title,

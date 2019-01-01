@@ -25,8 +25,6 @@
   </div>
 </template>
 <script>
-import axios from 'axios'
-
 export default {
   layout: 'bank',
   title: '安装',
@@ -58,7 +56,7 @@ export default {
         username: this.user.username,
         userpass: this.user.userpass
       }
-      let installresult = await axios.post(url, params)
+      let installresult = await this.$axios.post(url, params)
       if (installresult.data) {
         var result = installresult.data.results
         this.results.push(...result)

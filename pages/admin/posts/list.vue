@@ -62,7 +62,6 @@
   </div>
 </template>
 <script>
-import axios from 'axios'
 import {dateFormat} from '~/util/tools'
 import Cates from '~/components/admin/cates'
 let pageSize = process.env.pageSize
@@ -80,12 +79,12 @@ export default {
       }
     }
   },
-  async asyncData({query}) {
+  async asyncData({query, $axios}) {
     var pageNum = query.page || 1
     var cid = query.cid || ''
     var url = '/api/posts/list?page=' + pageNum + '&cid=' + cid
-    let {data} = await axios.get(url)
-    let cates = await axios.get('/api/cates/list')
+    let {data} = await $axios.$get(url)
+    let cates = await $axios.$get('/api/cates/list')
 
     return {
       cates: cates.data,
@@ -100,14 +99,14 @@ export default {
       var pageNum = this.currentPage || this.$route.query.page || 0
       var cid = this.$route.query.cid || 0
       var url = '/api/posts/list?page=' + pageNum + '&cid=' + cid
-      let {data} = await axios.get(url)
+      let {data} = await this.$axios.$get(url)
       this.postsdata = data.data
     },
     async goSearch() {
       var pageNum = this.$route.query.page || 0
       var cid = this.search.cid || ''
       var url = '/api/posts/list?page=' + pageNum + '&cid=' + cid + '&keyword=' + this.search.keyword
-      let {data} = await axios.get(url)
+      let {data} = await this.$axios.$get(url)
       this.postsdata = data.data
     },
     handleCurrentChange(currentPage) {
@@ -126,7 +125,7 @@ export default {
         var sendData = {
           id: id
         }
-        axios.post(url, sendData).then((res) => {
+        this.$axios.post(url, sendData).then((res) => {
           if (res.data.rows > 0) {
             this.$message({
               type: 'success',

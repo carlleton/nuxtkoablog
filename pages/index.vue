@@ -4,7 +4,6 @@
   </section>
 </template>
 <script>
-import axios from 'axios'
 import ArticleList from '~/components/ArticleList.vue'
 
 export default {
@@ -13,8 +12,8 @@ export default {
       title: '首页'
     }
   },
-  async asyncData ({ params }) {
-    let posts = await axios.get('/api/posts/list?page=1')
+  async asyncData ({ params, $axios }) {
+    let posts = await $axios.$get('/api/posts/list?page=1')
     return {
       posts: posts.data.data,
       total: posts.data.total

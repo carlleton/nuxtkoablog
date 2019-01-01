@@ -15,7 +15,6 @@
   </div>
 </template>
 <script>
-import axios from 'axios'
 export default {
   layout: 'admin',
   data() {
@@ -34,7 +33,7 @@ export default {
           table: tables[i]
         }
         console.log(params)
-        let res = await axios.post(url, params)
+        let res = await this.$axios.post(url, params)
         if (res.data && res.data.code === 200) {
           this.results.push(res.data.message)
         } else {

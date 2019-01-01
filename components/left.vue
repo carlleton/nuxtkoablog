@@ -22,7 +22,6 @@
   </div>
 </template>
 <script>
-import axios from 'axios'
 export default {
   data() {
     return {
@@ -34,7 +33,7 @@ export default {
   },
   methods: {
     async init() {
-      var catesresult = await axios.get('/api/cates/list')
+      var catesresult = await this.$axios.$get('/api/cates/list')
       var data = catesresult.data
       var cates = []
       var temps = []

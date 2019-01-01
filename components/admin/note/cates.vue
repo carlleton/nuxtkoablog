@@ -39,7 +39,6 @@
   </div>
 </template>
 <script>
-import axios from 'axios'
 import contextmenu from '~/components/contextmenu'
 
 export default {
@@ -65,7 +64,7 @@ export default {
   methods: {
     async getCatesData() {
       this.loading = true
-      let catesresult = await axios.get('/api/notecates/list')
+      let catesresult = await this.$axios.$get('/api/notecates/list')
       var data = catesresult.data
       var cates = []
       var temps = []
@@ -164,7 +163,7 @@ export default {
       var params = {
         id: cate.id
       }
-      let res = await axios.post(url, params)
+      let res = await this.$axios.post(url, params)
       if (res.data.rows > 0) {
         this.$message({
           type: 'success',
@@ -187,7 +186,7 @@ export default {
       var params = {
         id: cate.id
       }
-      let res = await axios.post(url, params)
+      let res = await this.$axios.post(url, params)
       if (res.data.rows > 0) {
         this.$message({
           type: 'success',
@@ -210,7 +209,7 @@ export default {
       var params = {
         id: cate.id
       }
-      let res = await axios.post(url, params)
+      let res = await this.$axios.post(url, params)
       if (res.data.rows > 0) {
         this.$message({
           type: 'success',
@@ -237,7 +236,7 @@ export default {
         catename: cate.catename,
         id: cate.id
       }
-      axios.post(url, params).then((res) => {
+      this.$axios.post(url, params).then((res) => {
         if (res.data.rows > 0) {
           this.$message({
             message: '更新成功',

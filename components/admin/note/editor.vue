@@ -17,7 +17,6 @@
   </div>
 </template>
 <script>
-import axios from 'axios'
 import hljs from 'highlight.js'
 import 'highlight.js/styles/dark.css'
 import '~/assets/css/yeh-md-theme.css'
@@ -72,7 +71,7 @@ export default {
   },
   methods: {
     async getnote(id) {
-      let result = await axios.get('/api/notes/' + id)
+      let result = await this.$axios.$get('/api/notes/' + id)
       this.note = result.data
     },
     async save() {
@@ -88,7 +87,7 @@ export default {
       var notedata
       if (this.note.id === 0) {
         url = '/api/notes/add'
-        notedata = await axios.post(url, params)
+        notedata = await this.$axios.post(url, params)
         if (notedata.data.id) {
           this.note.id = notedata.data.id
           this.$message({
@@ -103,7 +102,7 @@ export default {
         }
       } else {
         url = '/api/notes/update'
-        notedata = await axios.post(url, params)
+        notedata = await this.$axios.post(url, params)
         if (notedata.data.rows > 0) {
           this.$message({
             message: '更新成功',

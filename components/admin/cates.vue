@@ -6,7 +6,6 @@
   </el-select>
 </template>
 <script>
-import axios from 'axios'
 export default {
   props: ['cid', 'handleChange'],
   data() {
@@ -27,7 +26,7 @@ export default {
     }
   },
   async mounted() {
-    let cates = await axios.get('/api/cates/list')
+    let cates = await this.$axios.$get('/api/cates/list')
     this.cates = [{
       id: 0,
       catename: '未分类',

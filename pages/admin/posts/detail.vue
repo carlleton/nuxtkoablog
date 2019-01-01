@@ -42,7 +42,6 @@
   </div>
 </template>
 <script>
-import axios from 'axios'
 import _ from 'lodash'
 import Cates from '~/components/admin/cates'
 
@@ -89,14 +88,14 @@ export default {
       if (id) {
         this.act = 'edit'
         this.title = '编辑内容'
-        result = await axios.get('/api/posts/' + id)
+        result = await this.$axios.$get('/api/posts/' + id)
         console.log(result)
         this.posts = result.data
         this.posts.addtime = new Date(this.posts.addtime)
         console.log(this.posts)
       } else if (cid) {
         this.act = 'cate'
-        result = await axios.get('/api/posts/cate' + cid)
+        result = await this.$axios.$get('/api/posts/cate' + cid)
         this.posts = result.posts
         this.posts.addtime = new Date(this.posts.addtime)
         this.title = '编辑' + this.posts.title
@@ -111,7 +110,7 @@ export default {
           if (this.act === 'add') {
             console.log(params)
             url = '/api/posts/add'
-            axios.post(url, params).then((res) => {
+            this.$axios.post(url, params).then((res) => {
               if (res.data.id) {
                 this.$message({
                   message: '添加成功',
@@ -122,7 +121,7 @@ export default {
             })
           } else {
             url = '/api/posts/update'
-            axios.post(url, params).then((res) => {
+            this.$axios.post(url, params).then((res) => {
               if (res.data.rows > 0) {
                 this.$message({
                   message: '更新成功',
