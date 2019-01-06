@@ -1,6 +1,3 @@
-import axios from 'axios'
-import {getCookieInClient} from '../util/tools'
-
 export default ({ app, store, $axios, redirect }) => {
   // 服务端渲染需要完整的url
   if (process.server) {
@@ -9,12 +6,10 @@ export default ({ app, store, $axios, redirect }) => {
 
   $axios.interceptors.request.use(config => {
     if (typeof document === 'object') {
-      let token = getCookieInClient('token')
-      if (token) {
-        config.headers.token = token
-      }
+      let token = sessionStorage.getItem('token')
+      $axios.setToken(token, 'Bearer')
     }
-    $axios.setToken('456')
+    // $axios.setToken('456')
     return config
   }, err => {
     return Promise.reject(err)
@@ -22,6 +17,7 @@ export default ({ app, store, $axios, redirect }) => {
 
   $axios.interceptors.response.use(response => {
     if (response.data.code === 401) {
+      sessionStorage.setItem('token', '')
       redirect('/login')
     }
     return response

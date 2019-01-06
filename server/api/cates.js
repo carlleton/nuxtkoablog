@@ -89,7 +89,6 @@ router.post('/update', async (ctx, next) => {
     ctx.status = 404
     ctx.body = { code: 404, message: 'no result' }
   } else {
-    console.log(res)
     ctx.status = 200
     ctx.body = {
       rows: result.result.affectedRows

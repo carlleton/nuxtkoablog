@@ -9,10 +9,10 @@ const options = require('./options')
 const backup = require('./backup')
 const install = require('./install')
 
-// let jwtAuth = require('../middleware/jwtAuth')
+let jwtAuth = require('../middleware/jwtAuth')
 
 router.prefix('/api')
-// router.use('/', jwtAuth)
+router.use('/', jwtAuth)
 
 router.use('/users', users.routes(), users.allowedMethods())
 router.use('/posts', posts.routes(), posts.allowedMethods())

@@ -17,7 +17,7 @@ module.exports = (ctx, next) => {
   }
 
   // 接口需要登陆
-  var token = ctx.req.headers['token']
+  var token = ctx.req.headers['authorization']
   if (!token) {
     // ctx.type = 'json'
     ctx.body = {
@@ -26,7 +26,7 @@ module.exports = (ctx, next) => {
     }
     return
   }
-
+  token = token.replace('Bearer ', '')
   try {
     //解密获取的token
     let decoded = jwt.decode(token, jwtSecret)
