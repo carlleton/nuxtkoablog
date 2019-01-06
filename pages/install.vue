@@ -44,9 +44,8 @@ export default {
       this.isloading = true
       // this.results.push('配置写入文件成功！')
       if (!this.user.username || !this.user.userpass) {
-        this.$message({
-          type: 'info',
-          message: '请输入账户和密码'
+        this.$Message.info({
+          content: '请输入账户和密码'
         })
         return
       }

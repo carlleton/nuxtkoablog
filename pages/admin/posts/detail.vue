@@ -90,7 +90,7 @@ export default {
         this.title = '编辑内容'
         result = await this.$axios.$get('/api/posts/' + id)
         console.log(result)
-        this.posts = result.data
+        this.posts = result
         this.posts.addtime = new Date(this.posts.addtime)
         console.log(this.posts)
       } else if (cid) {
@@ -111,10 +111,10 @@ export default {
             console.log(params)
             url = '/api/posts/add'
             this.$axios.post(url, params).then((res) => {
-              if (res.data.id) {
-                this.$message({
-                  message: '添加成功',
-                  duration: 2000,
+              if (res.id) {
+                this.$Message.info({
+                  content: '添加成功',
+                  duration: 2,
                   onClose: () => this.$router.push('./list')
                 })
               }
@@ -122,17 +122,17 @@ export default {
           } else {
             url = '/api/posts/update'
             this.$axios.post(url, params).then((res) => {
-              if (res.data.rows > 0) {
-                this.$message({
-                  message: '更新成功',
-                  duration: 2000,
+              if (res.rows > 0) {
+                this.$Message.info({
+                  content: '更新成功',
+                  duration: 2,
                   onClose: () => this.$router.push('./list')
                 })
               }
             })
           }
         } else {
-          this.$message.error('校验失败!')
+          this.$Message.error('校验失败!')
         }
       })
     },

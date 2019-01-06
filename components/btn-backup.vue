@@ -31,9 +31,8 @@ export default {
         if (!backupresult.data.err) {
           lastBackupTime = backupresult.data.lastBackupTime
           this.$store.commit('setLastBackupTime', lastBackupTime)
-          this.$message({
-            type: 'info',
-            message: '备份成功',
+          this.$Message.info({
+            content: '备份成功',
             onClose: () => {
               if (isReload) {
                 window.location.reload()
@@ -42,9 +41,8 @@ export default {
           })
         }
       }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '取消备份'
+        this.$Message.info({
+          content: '取消备份'
         })
       })
     }

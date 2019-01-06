@@ -34,9 +34,8 @@ export default {
   methods: {
     async changePass() {
       if (this.newpass !== this.repass) {
-        this.$message({
-          message: '新密码和确认密码必须一致',
-          type: 'error'
+        this.$Message.error({
+          content: '新密码和确认密码必须一致'
         })
       }
       let url = '/api/users/changePass'
@@ -46,9 +45,9 @@ export default {
         newpass: this.newpass
       }
       let res = await this.$axios.post(url, params)
-      if (res.data && res.data.code === 200) {
-        this.$message({
-          message: '更改成功',
+      if (res && res.data && res.data.code === 200) {
+        this.$Message.info({
+          content: '更改成功',
           duration: 2000
         })
       }

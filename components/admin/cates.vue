@@ -31,7 +31,7 @@ export default {
       id: 0,
       catename: '未分类',
       path: ''
-    }].concat(cates.data)
+    }].concat(cates)
   },
   methods: {
     cateshow(value) {

@@ -36,7 +36,6 @@ export default {
       columns: [
         {
           title: 'id',
-          key: 'id',
           width: 120,
           render: (h, obj) => {
             let row = obj.row
@@ -57,7 +56,7 @@ export default {
                 h(
                   'Button',
                   {
-                    props: { size: 'mini' },
+                    props: { size: 'small', type: 'primary' },
                     on: {
                       click: () => {
                         this.handleEdit(index, row)
@@ -69,7 +68,8 @@ export default {
                 h(
                   'Button',
                   {
-                    props: { size: 'mini', type: 'danger' },
+                    props: { size: 'small', type: 'error' },
+                    style: { marginLeft: '10px' },
                     on: {
                       click: () => {
                         this.handleDelete(index, row)
@@ -91,11 +91,11 @@ export default {
   methods: {
     async getData() {
       let cates = await this.$axios.$get('/api/cates/list')
-      this.cates = cates.data
+      this.cates = cates
     },
     addcate() {
       if (this.catename === '') {
-        this.$message.error('请输入分类名称')
+        this.$Message.error('请输入分类名称')
         return
       }
       var url = '/api/cates/add'
@@ -106,9 +106,9 @@ export default {
       }
       this.$axios.post(url, params).then((res) => {
         if (res.data.id) {
-          this.$message({
-            message: '添加成功',
-            duration: 2000,
+          this.$Message.info({
+            content: '添加成功',
+            duration: 2,
             onClose: () => {
               this.act = ''
               this.catename = ''
@@ -121,21 +121,21 @@ export default {
     },
     updateCate() {
       if (this.catename === '') {
-        this.$message.error('请输入分类名称')
+        this.$Message.error('请输入分类名称')
         return
       }
       var url = '/api/cates/update'
       var params = {
         catename: this.catename,
-        pid: this.pid,
+        pid: this.pid || 0,
         orderid: this.orderid,
         id: this.editid
       }
       this.$axios.post(url, params).then((res) => {
-        if (res.data.rows > 0) {
-          this.$message({
-            message: '更新成功',
-            duration: 2000,
+        if (res.data && res.data.rows > 0) {
+          this.$Message.info({
+            content: '更新成功',
+            duration: 2,
             onClose: () => {
               this.act = ''
               this.catename = ''
@@ -160,31 +160,21 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(() => {
+      }).then(async () => {
         var url = '/api/cates/del'
         var sendData = {
           id: id
         }
-        this.$axios.post(url, sendData).then((res) => {
-          if (res.data.rows > 0) {
-            this.$message({
-              type: 'success',
-              message: '删除' + res.data.rows + '条'
-            })
-            this.getData()
-          } else {
-            console.log(res.data)
-            this.$message({
-              type: 'error',
-              message: '删除失败'
-            })
-          }
-        })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
-        })
+        let res = await this.$axios.post(url, sendData)
+        if (res && res.data && res.data.rows > 0) {
+          this.$Message.success('删除' + res.rows + '条')
+          this.getData()
+        } else {
+          console.log(res)
+          this.$Message.error({
+            content: '删除失败'
+          })
+        }
       })
       console.log('delete', row.id)
     },

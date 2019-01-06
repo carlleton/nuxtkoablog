@@ -144,9 +144,9 @@ export default {
         value: this.backupRate
       })
       if (result1.data.rows > 0 && result2.data.rows > 0 && result3.data.rows > 0) {
-        this.$message({
-          message: '保存成功',
-          duration: 2000
+        this.$Message.info({
+          content: '保存成功',
+          duration: 2
         })
       }
     },
@@ -190,15 +190,14 @@ export default {
         let res = await this.$axios.post(url, params)
         if (res.data) {
           this.getBackList()
-          this.$message({
-            message: '删除成功',
-            duration: 2000
+          this.$Message.info({
+            content: '删除成功',
+            duration: 2
           })
         }
       }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '取消删除'
+        this.$Message.info({
+          content: '取消删除'
         })
       })
     },
@@ -216,15 +215,14 @@ export default {
         }
         let res = await this.$axios.post(url, params)
         if (res.data) {
-          this.$message({
-            message: '恢复成功',
-            duration: 2000
+          this.$Message.info({
+            content: '恢复成功',
+            duration: 2
           })
         }
       }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '取消恢复'
+        this.$Message.info({
+          content: '取消恢复'
         })
       })
     },

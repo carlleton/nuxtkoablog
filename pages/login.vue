@@ -36,25 +36,21 @@ export default {
     this.$refs.username.focus()
   },
   methods: {
-    login() {
-      this.$axios.post('/api/users/login', {
+    async login() {
+      let url = '/api/users/login'
+      let params = {
         username: this.username,
         userpass: this.userpass
-      }).then((res) => {
-        let data = res.data
-        if (data.code !== 200) {
-          this.$message(data.message)
-        } else {
-          setToken(data.token)
-          setUserName(this.username)
-          this.$router.replace('/admin')
-        }
-      }).catch((err) => {
-        this.$message({
-          message: err.message,
-          type: 'error'
-        })
-      })
+      }
+      let res = await this.$axios.post(url, params)
+      let data = res.data
+      if (data.code !== 200) {
+        this.$Message.error(data.message)
+      } else {
+        sessionStorage.setItem('token', data.token)
+        setUserName(this.username)
+        this.$router.replace('/admin')
+      }
     }
   }
 }

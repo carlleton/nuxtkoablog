@@ -42,13 +42,12 @@ export default {
         keyword: ''
       },
       columns: [
-        { title: 'id', key: 'id', width: 50 },
+        { title: 'id', key: 'id', width: 60 },
         {
           title: '标题',
           render: (h, obj) => {
             let row = obj.row
-            return
-            h(
+            return h(
               'nuxt-link',
               {
                 props: {
@@ -70,7 +69,7 @@ export default {
         },
         {
           title: '时间',
-          width: 100,
+          width: 120,
           render: (h, obj) => {
             let row = obj.row
             return h('span', this.formater_addtime(row))
@@ -84,7 +83,7 @@ export default {
             let row = obj.row
             return h('div', [
               h('Button', {
-                props: { size: 'mini' },
+                props: { size: 'small', type: 'primary' },
                 on: {
                   click: () => {
                     this.$router.push('./detail?id=' + row.id)
@@ -92,7 +91,8 @@ export default {
                 }
               }, '编辑'),
               h('Button', {
-                props: { size: 'mini', type: 'danger' },
+                props: { size: 'small', type: 'error' },
+                style: { marginLeft: '10px' },
                 on: {
                   click: () => {
                     this.handleDelete(index, row)
@@ -113,8 +113,8 @@ export default {
     let cates = await $axios.$get('/api/cates/list')
 
     return {
-      cates: cates.data,
-      postsdata: data.data || [],
+      cates: cates,
+      postsdata: data || [],
       total: data.total || 0,
       pageSize: pageSize,
       currentPage: pageNum
@@ -153,23 +153,20 @@ export default {
         }
         this.$axios.post(url, sendData).then((res) => {
           if (res.data.rows > 0) {
-            this.$message({
-              type: 'success',
-              message: '删除' + res.data.rows + '条'
+            this.$Message.success({
+              content: '删除' + res.rows + '条'
             })
             this.getData()
           } else {
-            console.log(res.data)
-            this.$message({
-              type: 'error',
-              message: '删除失败'
+            console.log(res)
+            this.$Message.error({
+              content: '删除失败'
             })
           }
         })
       }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
+        this.$Message.info({
+          content: '已取消删除'
         })
       })
       console.log('delete', row.id)
