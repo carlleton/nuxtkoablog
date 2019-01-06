@@ -3,10 +3,10 @@
     <p>
       提示：<i>请保证系统能够使用gunzip、mysqldump、mysql命令</i>
     </p>
-    <el-tabs v-model="show" type="card">
-      <el-tab-pane label="备份列表" name="list"></el-tab-pane>
-      <el-tab-pane label="备份设置" name="set"></el-tab-pane>
-    </el-tabs>
+    <Tabs v-model="show" type="card">
+      <TabPane label="备份列表" name="list"></TabPane>
+      <TabPane label="备份设置" name="set"></TabPane>
+    </Tabs>
     <div class="list" v-if="show=='list'">
       <p>
         <input type="file" @change="handleFile($event)" />
@@ -41,37 +41,37 @@
     </div>
     <div class="set" v-if="show=='set'">
       <div class="left" style="width:500px;">
-        <el-form label-position="right" label-width="100px">
-          <el-form-item class="tit">
+        <Form label-position="right" label-width="100px">
+          <FormItem class="tit">
             <strong>自动备份设置</strong>
-          </el-form-item>
+          </FormItem>
           <div class="send">
-            <el-form-item label="host">
-              <el-input v-model="sendEmail.host" placeholder="host"></el-input>
-            </el-form-item>
-            <el-form-item label="用户名">
-              <el-input v-model="sendEmail.user" placeholder="用户名"></el-input>
-            </el-form-item>
-            <el-form-item label="密码">
-              <el-input v-model="sendEmail.pass" placeholder="密码"></el-input>
-            </el-form-item>
-            <el-form-item label="发送名">
-              <el-input v-model="sendEmail.from" placeholder="发送名"></el-input>
-            </el-form-item>
+            <FormItem label="host">
+              <Input v-model="sendEmail.host" placeholder="host"></Input>
+            </FormItem>
+            <FormItem label="用户名">
+              <Input v-model="sendEmail.user" placeholder="用户名"></Input>
+            </FormItem>
+            <FormItem label="密码">
+              <Input v-model="sendEmail.pass" placeholder="密码"></Input>
+            </FormItem>
+            <FormItem label="发送名">
+              <Input v-model="sendEmail.from" placeholder="发送名"></Input>
+            </FormItem>
           </div>
-          <el-form-item label="接收Email">
-            <el-input v-model="receiveEmail" placeholder="接收Email"></el-input>
-          </el-form-item>
-          <el-form-item label="发送频率">
-            <el-select v-model="backupRate" placeholder="发送频率">
-              <el-option value="day" label="每天"></el-option>
-              <el-option value="hour" label="每小时"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="save()">保存</el-button>
-          </el-form-item>
-        </el-form>
+          <FormItem label="接收Email">
+            <Input v-model="receiveEmail" placeholder="接收Email"></Input>
+          </FormItem>
+          <FormItem label="发送频率">
+            <Select v-model="backupRate" placeholder="发送频率">
+              <Option value="day" label="每天"></Option>
+              <Option value="hour" label="每小时"></Option>
+            </Select>
+          </FormItem>
+          <FormItem>
+            <Button type="primary" @click="save()">保存</Button>
+          </FormItem>
+        </Form>
       </div>
       <div class="left testbox">
         <div class="tit">

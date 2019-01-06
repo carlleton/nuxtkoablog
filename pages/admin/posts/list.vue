@@ -1,64 +1,28 @@
 <template>
   <div>
     <div class="tabletit">
-      <el-breadcrumb name="breadcrumb" separator=">" class="left">
-        <el-breadcrumb-item>home</el-breadcrumb-item>
-        <el-breadcrumb-item>内容列表</el-breadcrumb-item>
-      </el-breadcrumb>
+      <Breadcrumb name="breadcrumb" separator=">" class="left">
+        <BreadcrumbItem>home</BreadcrumbItem>
+        <BreadcrumbItem>内容列表</BreadcrumbItem>
+      </Breadcrumb>
       <div class="right">
-        <el-button type="primary" size="small" @click="gotoadd()">添加</el-button>
+        <Button type="primary" size="small" @click="gotoadd()">添加</Button>
       </div>
     </div>
     <div class="tabletit">
       分类：<Cates :cid.sync="search.cid"></Cates>
-      <el-input v-model="search.keyword" placeholder="关键词" style="width:200px;margin-left:10px;"></el-input>
-      <el-button type="primary" style="margin-left:10px;" size="small" @click="goSearch()">搜索</el-button>
+      <Input v-model="search.keyword" placeholder="关键词" style="width:200px;margin-left:10px;"></Input>
+      <Button type="primary" style="margin-left:10px;" size="small" @click="goSearch()">搜索</Button>
     </div>
-    <el-table border :data="postsdata">
-      <el-table-column
-        prop="id"
-        label="id"
-        width="50">
-      </el-table-column>
-      <el-table-column
-        label="标题">
-        <template slot-scope="scope">
-          <nuxt-link :to="'/post/' + scope.row.id" target="_blank">{{scope.row.title}}</nuxt-link>
-        </template>
-      </el-table-column>
-      <el-table-column
-        prop="catename"
-        label="分类"
-        width="150"
-        :formatter="formater_catename">
-      </el-table-column>
-      <el-table-column
-        prop="addtime"
-        label="时间"
-        width="100"
-        :formatter="formater_addtime">
-      </el-table-column>
-      <el-table-column label="操作" width="150">
-        <template slot-scope="scope">
-          <el-button
-            size="mini"
-            @click="$router.push('./detail?id=' + scope.row.id)">编辑</el-button>
-          <el-button
-            size="mini"
-            type="danger"
-            @click="handleDelete(scope.$index, scope.row)">删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <el-pagination
-      background
-      layout="prev, pager, next"
+    <Table border :columns="columns" :data="postsdata">
+    </Table>
+    <Page
       :total="total"
-      :size="pageSize"
-      :current-page.sync="currentPage"
-      @current-change="handleCurrentChange"
+      :page-size="pageSize"
+      :current.sync="currentPage"
+      @on-change="handleCurrentChange"
       v-show="total > pageSize"
-      ></el-pagination>
+      ></Page>
   </div>
 </template>
 <script>
@@ -76,7 +40,69 @@ export default {
       search: {
         cid: 0,
         keyword: ''
-      }
+      },
+      columns: [
+        { title: 'id', key: 'id', width: 50 },
+        {
+          title: '标题',
+          render: (h, obj) => {
+            let row = obj.row
+            return
+            h(
+              'nuxt-link',
+              {
+                props: {
+                  to:'/post/' + row.id,
+                  target:"_blank"
+                }
+              },
+              row.title
+            )
+          }
+        },
+        {
+          title: '分类',
+          width: 150,
+          render: (h, obj) => {
+            let row = obj.row
+            return h('span', this.formater_catename(row))
+          }
+        },
+        {
+          title: '时间',
+          width: 100,
+          render: (h, obj) => {
+            let row = obj.row
+            return h('span', this.formater_addtime(row))
+          }
+        },
+        {
+          title: '操作',
+          width: 150,
+          render: (h, obj) => {
+            let index = obj.index
+            let row = obj.row
+            return h('div', [
+              h('Button', {
+                props: { size: 'mini' },
+                on: {
+                  click: () => {
+                    this.$router.push('./detail?id=' + row.id)
+                  }
+                }
+              }, '编辑'),
+              h('Button', {
+                props: { size: 'mini', type: 'danger' },
+                on: {
+                  click: () => {
+                    this.handleDelete(index, row)
+                  }
+                }
+              }, '删除')
+            ])
+          }
+        }
+      ]
     }
   },
   async asyncData({query, $axios}) {
@@ -165,7 +191,7 @@ export default {
       return str
     },
     // 分类格式化
-    formater_catename(row, column) {
+    formater_catename(row) {
       var cate = this.cates.filter(cate => row.cid === cate.id)
       var catename = '未分类'
       if (cate.length > 0) {
@@ -174,7 +200,7 @@ export default {
       return catename
     },
     // 时间格式化
-    formater_addtime(row, column) {
+    formater_addtime(row) {
       return dateFormat(new Date(row.addtime), 'yyyy-MM-dd')
     }
   },

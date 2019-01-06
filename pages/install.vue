@@ -4,22 +4,22 @@
       <div class="resultarea" v-if="results && results.length > 0">
         <p v-for="(result,index) in results" :key="index">{{result}}</p>
       </div>
-      <el-form ref="form" :model="user" label-width="80px" v-if="!isFinish" style="margin-top: 10px;">
-        <el-form-item>
+      <Form ref="form" :model="user" label-width="80px" v-if="!isFinish" style="margin-top: 10px;">
+        <FormItem>
           <h3>安装系统</h3>
-        </el-form-item>
-        <el-form-item label="用户名">
-          <el-input v-model="user.username" placeholder="管理页用户名"></el-input>
-        </el-form-item>
-        <el-form-item label="密码">
-          <el-input type="password" v-model="user.userpass" placeholder="管理页用户名"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="save">点击安装</el-button>
-        </el-form-item>
-      </el-form>
+        </FormItem>
+        <FormItem label="用户名">
+          <Input v-model="user.username" placeholder="管理页用户名"></Input>
+        </FormItem>
+        <FormItem label="密码">
+          <Input type="password" v-model="user.userpass" placeholder="管理页用户名"></Input>
+        </FormItem>
+        <FormItem>
+          <Button type="primary" @click="save">点击安装</Button>
+        </FormItem>
+      </Form>
       <div class="btns">
-        <el-button type="primary" @click="goadmin" v-if="isFinish">点击登陆</el-button>
+        <Button type="primary" @click="goadmin" v-if="isFinish">点击登陆</Button>
       </div>
     </div>
   </div>

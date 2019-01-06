@@ -1,44 +1,44 @@
 <template>
   <div>
     <div class="tabletit">
-      <el-breadcrumb name="breadcrumb" separator-class="el-icon-arrow-right" class="left">
-        <el-breadcrumb-item>home</el-breadcrumb-item>
-        <el-breadcrumb-item to="./list">内容列表</el-breadcrumb-item>
-        <el-breadcrumb-item>{{title}}</el-breadcrumb-item>
-      </el-breadcrumb>
+      <Breadcrumb name="breadcrumb" separator-class="el-icon-arrow-right" class="left">
+        <BreadcrumbItem>home</BreadcrumbItem>
+        <BreadcrumbItem to="./list">内容列表</BreadcrumbItem>
+        <BreadcrumbItem>{{title}}</BreadcrumbItem>
+      </Breadcrumb>
     </div>
-    <el-form ref="posts" :model="posts" :rules="ruleValidate" label-position="top" label-width="0" style="overflow:auto;">
+    <Form ref="posts" :model="posts" :rules="ruleValidate" label-position="top" label-width="0" style="overflow:auto;">
       <div style="width:800px;float:left;">
-        <el-form-item label="标题" prop="title">
-          <el-input v-model="posts.title" :disabled="act=='cate'"></el-input>
-        </el-form-item>
-        <el-form-item label="内容" prop="content">
+        <FormItem label="标题" prop="title">
+          <Input v-model="posts.title" :disabled="act=='cate'"></Input>
+        </FormItem>
+        <FormItem label="内容" prop="content">
           <mavon-editor v-model="posts.content"></mavon-editor>
-        </el-form-item>
+        </FormItem>
       </div>
       <div style="width:200px;float:left;margin-left:10px;">
-        <el-form-item label="分类" v-if="act!='cate'">
+        <FormItem label="分类" v-if="act!='cate'">
           <Cates :cid.sync="posts.cid"></Cates>
-        </el-form-item>
-        <el-form-item label="状态" prop="status">
-          <el-select v-model="posts.status">
-              <el-option value="published">发布</el-option>
-              <el-option value="draft">草稿</el-option>
-              <el-option value="disabled">禁用</el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="添加时间" prop="addtime">
-          <el-date-picker type="date" size="small" placeholder="选择日期" v-model="posts.addtime"></el-date-picker>
-        </el-form-item>
-        <el-form-item label="关键词" prop="tags">
-          <el-input v-model="posts.tags"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="handleSubmit()">提交</el-button>
-          <el-button type="ghost" @click="handleReset()" style="margin-left: 8px">重置</el-button>
-        </el-form-item>
+        </FormItem>
+        <FormItem label="状态" prop="status">
+          <Select v-model="posts.status">
+              <Option value="published">发布</Option>
+              <Option value="draft">草稿</Option>
+              <Option value="disabled">禁用</Option>
+          </Select>
+        </FormItem>
+        <FormItem label="添加时间" prop="addtime">
+          <DatePicker type="date" size="small" placeholder="选择日期" v-model="posts.addtime"></DatePicker>
+        </FormItem>
+        <FormItem label="关键词" prop="tags">
+          <Input v-model="posts.tags"></Input>
+        </FormItem>
+        <FormItem>
+          <Button type="primary" @click="handleSubmit()">提交</Button>
+          <Button type="ghost" @click="handleReset()" style="margin-left: 8px">重置</Button>
+        </FormItem>
       </div>
-    </el-form>
+    </Form>
   </div>
 </template>
 <script>

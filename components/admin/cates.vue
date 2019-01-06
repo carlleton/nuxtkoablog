@@ -1,9 +1,9 @@
 <template>
-  <el-select v-model="editid" style="width:150px;">
-    <el-option v-for="cate in cates" :value="cate.id" :label="cateshow(cate.path)+cate.catename" :key="cate.id">
+  <Select v-model="editid" style="width:150px;">
+    <Option v-for="cate in cates" :value="cate.id" :label="cateshow(cate.path)+cate.catename" :key="cate.id">
       {{cateshow(cate.path)}}{{cate.catename}}
-    </el-option>
-  </el-select>
+    </Option>
+  </Select>
 </template>
 <script>
 export default {

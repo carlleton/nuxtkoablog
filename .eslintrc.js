@@ -31,7 +31,8 @@ module.exports = {
     'vue/order-in-components': 'off',
     'vue/html-indent': 'off',
     'vue/require-prop-types': 'off',
-    'vue/attribute-hyphenation': 'off'
+    'vue/attribute-hyphenation': 'off',
+    "vue/no-parsing-error": [2, { "x-invalid-end-tag": false }]
   },
   parserOptions: {
     parser: 'babel-eslint'

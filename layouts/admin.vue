@@ -1,7 +1,7 @@
 <template>
   <div class="layout">
-    <el-container>
-      <el-header>
+    <Layout>
+      <Header>
         <div class="admin_tit">
           <nuxt-link to="/admin">后台管理</nuxt-link>
           <nuxt-link class="fontpage" to="/" target="_blank">前台页面</nuxt-link>
@@ -11,25 +11,25 @@
           carlleton
           <a class="logout" @click="logout()">退出</a>
         </div>
-      </el-header>
-      <el-container>
-        <el-aside width="200px" style="minHeight:280px;padding:24px 0;">
-          <el-menu theme="light" width="auto" default-active="0-0" :default-openeds="['0']" :unique-opened="true">
-            <el-submenu :index="pindex+''" v-for="(menu,pindex) in menus" :key="pindex">
+      </Header>
+      <Layout>
+        <Sider width="200px" style="minHeight:280px;padding:24px 0;">
+          <Menu theme="light" width="auto" default-active="0-0" :default-openeds="['0']" :unique-opened="true">
+            <Submenu :name="pindex+''" v-for="(menu,pindex) in menus" :key="pindex">
               <template slot="title">
                 <i class="el-icon-message"></i>{{menu.name}}
               </template>
-              <el-menu-item :index="pindex+'-'+index" v-for="(item,index) in menu.childs" :key="index">
+              <MenuItem :name="pindex+'-'+index" v-for="(item,index) in menu.childs" :key="index">
                 <nuxt-link :to="item.link">{{item.name}}</nuxt-link>
-              </el-menu-item>
-            </el-submenu>
-          </el-menu>
-        </el-aside>
-        <el-main :style="{padding: '24px', minHeight: '280px',paddingLeft:'34px', background:'#fff'}">
+              </MenuItem>
+            </Submenu>
+          </Menu>
+        </Sider>
+        <Content :style="{padding: '24px', minHeight: '280px',paddingLeft:'34px', background:'#fff'}">
           <nuxt/>
-        </el-main>
-      </el-container>
-    </el-container>
+        </Content>
+      </Layout>
+    </Layout>
   </div>
 </template>
 <script>
@@ -42,13 +42,6 @@ export default {
     return {
       menus: [
         {
-          name: '笔记管理',
-          childs: [
-            {name: '笔记列表', link: '/admin/notes'},
-            {name: '分类管理', link: '/admin/notes/cates'}
-          ]
-        },
-        {
           name: '文章管理',
           isadmin: true,
           childs: [
@@ -60,7 +53,6 @@ export default {
           name: '系统设置',
           childs: [
             {name: '备份管理', link: '/admin/system/backup', isadmin: true},
-            {name: '同步管理', link: '/admin/system/sync', isadmin: true},
             {name: '更改密码', link: '/admin/system/password'}
           ]
         }
@@ -83,7 +75,7 @@ export default {
   height: 100%;
   width: 100%;
 }
-.el-header{
+.Header{
   background-color: #666;
 }
 .admin_tit{
@@ -99,7 +91,7 @@ export default {
   font-size: 14px;
   margin-left: 20px;
 }
-.el-aside {
+.Sider {
   color: #333;
   text-align: center;
   line-height: 200px;

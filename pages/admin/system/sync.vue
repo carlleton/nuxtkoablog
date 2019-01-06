@@ -1,17 +1,17 @@
 <template>
   <div style="width:500px;">
-    <el-form label-position="right" label-width="100px">
-      <el-form-item>
-        <el-button @click="doinit()">初始化</el-button>
-      </el-form-item>
-      <el-form-item>
+    <Form label-position="right" label-width="100px">
+      <FormItem>
+        <Button @click="doinit()">初始化</Button>
+      </FormItem>
+      <FormItem>
         <div>
           <p v-for="(item,index) in results" :key="index">
             {{item}}
           </p>
         </div>
-      </el-form-item>
-    </el-form>
+      </FormItem>
+    </Form>
   </div>
 </template>
 <script>

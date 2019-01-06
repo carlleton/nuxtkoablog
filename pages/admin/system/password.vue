@@ -1,22 +1,22 @@
 <template>
   <div style="width:500px;">
-    <el-form label-position="right" label-width="100px">
-      <el-form-item class="tit">
+    <Form label-position="right" label-width="100px">
+      <FormItem class="tit">
         <strong>密码管理</strong>
-      </el-form-item>
-      <el-form-item label="旧密码">
-        <el-input type="password" v-model="oldpass" placeholder="请输入旧密码"></el-input>
-      </el-form-item>
-      <el-form-item label="新密码">
-        <el-input type="password" v-model="newpass" placeholder="请输入新密码"></el-input>
-      </el-form-item>
-      <el-form-item label="重新输入">
-        <el-input type="password" v-model="repass" placeholder="请重新输入密码"></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="changePass()">更改密码</el-button>
-      </el-form-item>
-    </el-form>
+      </FormItem>
+      <FormItem label="旧密码">
+        <Input type="password" v-model="oldpass" placeholder="请输入旧密码"></Input>
+      </FormItem>
+      <FormItem label="新密码">
+        <Input type="password" v-model="newpass" placeholder="请输入新密码"></Input>
+      </FormItem>
+      <FormItem label="重新输入">
+        <Input type="password" v-model="repass" placeholder="请重新输入密码"></Input>
+      </FormItem>
+      <FormItem>
+        <Button type="primary" @click="changePass()">更改密码</Button>
+      </FormItem>
+    </Form>
   </div>
 </template>
 <script>

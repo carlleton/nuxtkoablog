@@ -1,15 +1,15 @@
 <template>
-  <el-container>
-    <el-aside style="width:28.2%;">
+  <Layout>
+    <Sider style="width:28.2%;">
       <left></left>
-    </el-aside>
-    <el-main>
+    </Sider>
+    <Content>
       <div class="main">
         <nuxt/>
       </div>
       <my-footer/>
-    </el-main>
-  </el-container>
+    </Content>
+  </Layout>
 </template>
 
 <script>
@@ -30,17 +30,17 @@ export default {
 </script>
 
 <style>
-.el-container{
+.Layout{
   background: rgb(241, 241, 241);
   height: 100vh;
 }
-.el-aside{
+.Sider{
   background: #fff;
   box-shadow: 0 0 1px rgba(0, 0, 0, 0.15);
   content:"";
   width: 29.4118%;
 }
-.el-main{
+.Content{
   padding: 20px 5%;
 }
 .main{

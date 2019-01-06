@@ -1,5 +1,5 @@
 <template>
-  <section v-show="posts.length > 0">
+  <section v-show="posts && posts.length > 0">
     <article v-for="post in posts" :key="post.id">
       <div class="entry-header">
         <h2 class="entry-title">
@@ -16,16 +16,14 @@
         </div>
       </div>
     </article>
-    <el-pagination
-      background
+    <Page
       class="pages"
-      layout="prev, pager, next"
-      :current-page.sync="currentPage"
+      :current.sync="currentPage"
       :page-size="pageSize"
       :total="total"
-      @current-change="handleCurrentChange"
+      @on-change="handleCurrentChange"
       v-show="total > pageSize">
-    </el-pagination>
+    </Page>
   </section>
 </template>
 <script>

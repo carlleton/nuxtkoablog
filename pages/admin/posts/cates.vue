@@ -1,49 +1,20 @@
 <template>
   <div>
     <div class="tabletit">
-      <el-breadcrumb name="breadcrumb" separator=">" class="left">
-        <el-breadcrumb-item>home</el-breadcrumb-item>
-        <el-breadcrumb-item>分类管理</el-breadcrumb-item>
-      </el-breadcrumb>
+      <Breadcrumb name="breadcrumb" separator=">" class="left">
+        <BreadcrumbItem>home</BreadcrumbItem>
+        <BreadcrumbItem>分类管理</BreadcrumbItem>
+      </Breadcrumb>
     </div>
     <div class="tabletit">
       父分类：<Cates :cid.sync="pid"></Cates>
-      <el-input v-model="catename" placeholder="分类名称" style="width:200px;margin-left:10px;"></el-input>
-      <el-input v-model="orderid" placeholder="排序" style="width:75px;margin-left:10px;"></el-input>
-      <el-button @click="addcate()" style="margin-left:10px;" v-if="act!=='edit'">添加</el-button>
-      <el-button @click="updateCate()" style="margin-left:10px;" v-if="act==='edit'">保存</el-button>
+      <Input v-model="catename" placeholder="分类名称" style="width:200px;margin-left:10px;"></Input>
+      <Input v-model="orderid" placeholder="排序" style="width:75px;margin-left:10px;"></Input>
+      <Button @click="addcate()" style="margin-left:10px;" v-if="act!=='edit'">添加</Button>
+      <Button @click="updateCate()" style="margin-left:10px;" v-if="act==='edit'">保存</Button>
     </div>
-    <el-table border :data="cates" style="width:800px;">
-      <el-table-column
-        prop="id"
-        label="id"
-        width="120"
-        :formatter="formatter_id">
-      </el-table-column>
-      <el-table-column
-        prop="catename"
-        label="名称">
-      </el-table-column>
-      <el-table-column
-        prop="pid"
-        label="父id">
-      </el-table-column>
-      <el-table-column
-        prop="orderid"
-        label="排序">
-      </el-table-column>
-      <el-table-column label="操作">
-        <template slot-scope="scope">
-          <el-button
-            size="mini"
-            @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-          <el-button
-            size="mini"
-            type="danger"
-            @click="handleDelete(scope.$index, scope.row)">删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
+    <Table border :columns="columns" :data="cates" style="width:800px;">
+    </Table>
   </div>
 </template>
 <script>
@@ -61,7 +32,57 @@ export default {
       catename: '',
       orderid: '',
       editid: '',
-      cates: []
+      cates: [],
+      columns: [
+        {
+          title: 'id',
+          key: 'id',
+          width: 120,
+          render: (h, obj) => {
+            let row = obj.row
+            return h('span', this.formatter_id(row))
+          }
+        },
+        { title: '名称', key: 'catename' },
+        { title: '父id', key: 'pid' },
+        { title: '排序', key: 'orderid' },
+        {
+          title: '操作',
+          render: (h, obj) => {
+            let row = obj.row
+            let index = obj.index
+            return h(
+              'div',
+              [
+                h(
+                  'Button',
+                  {
+                    props: { size: 'mini' },
+                    on: {
+                      click: () => {
+                        this.handleEdit(index, row)
+                      }
+                    }
+                  },
+                  '编辑'
+                ),
+                h(
+                  'Button',
+                  {
+                    props: { size: 'mini', type: 'danger' },
+                    on: {
+                      click: () => {
+                        this.handleDelete(index, row)
+                      }
+                    }
+                  },
+                  '删除'
+                )
+              ]
+            )
+          }
+        }
+      ]
     }
   },
   created() {
